@@ -6,9 +6,9 @@ import React, { useState } from 'react'
 const SERVICOS = [
   { nome: 'Infraestrutura da Provedora', ok: false },
   { nome: 'Hospedagem Web (Netlify)', ok: true },
-  { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
+  { nome: 'Servidor de Áudio (Menu Theme)', ok: false },
   { nome: 'API de Dados / Personagens', ok: true },
-  { nome: 'Integração com Roblox', ok: true },
+  { nome: 'Integração com banco de dados', ok: false },
 ]
 
 export default function MaintenanceScreen() {
