@@ -16,7 +16,7 @@ import { useComingSoon } from './hooks/useComingSoon'
 // ⚙️ Troque para true quando o site precisar ficar em manutenção.
 // Com isso ativo, o site inteiro (intro, sons, tudo) para de
 // carregar e só a tela de aviso aparece.
-const IN_MAINTENANCE = false
+const IN_MAINTENANCE = true
 
 const SOCIAL_MESSAGES = {
   Discord:
