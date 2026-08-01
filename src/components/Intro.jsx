@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import scene1 from '../assets/images/scene1.png'
 import scene2 from '../assets/images/scene2.png'
+import scene3 from '../assets/images/scene3.png'
 import introTheme from '../assets/audio/intro-theme.mp3'
 import menuTheme from '../assets/audio/menu-theme.mp3'
 import LogoFull from './LogoFull'
@@ -84,7 +85,7 @@ export default function Intro({ audio }) {
             Carregando o bairro...
           </div>
           <div className="mt-10 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
-            Intro Theme &middot; Grande Theft Brodis (Remix)
+            Intro Theme &middot; Grand Theft Brodis (Remix)
           </div>
         </div>
 

@@ -1,0 +1,112 @@
+/* =========================================================
+   GTB — Grande Theft Brodis
+   custom.css — apenas o que o Tailwind (utilitário) não cobre:
+   fontes @font-face, efeitos de textura/vinheta e keyframes
+   que dependem de várias camadas de background.
+   O resto do layout inteiro é feito com classes Tailwind
+   direto no HTML (ver assets/js/tailwind.config.js pro tema).
+   ========================================================= */
+
+@font-face{
+  font-family:'Pricedown';
+  src:url('../fonts/pricedown.otf') format('opentype');
+  font-weight:normal;
+  font-style:normal;
+  font-display:block;
+}
+
+html{ scroll-behavior:smooth; }
+::selection{ background:#c026ff; color:#fff; }
+
+/* ---- Intro: slides de fundo cross-fade ---- */
+.intro-slide{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  filter:saturate(1.3) contrast(1.05);
+  transition:opacity 1.2s ease-in-out;
+}
+.intro-slide.active{ opacity:1; }
+.intro-slide::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.75) 100%);
+}
+
+/* ---- Intro: vinheta + scanline (textura de VHS/loading screen) ---- */
+.intro-vignette{
+  position:absolute;
+  inset:0;
+  box-shadow:inset 0 0 220px 60px rgba(0,0,0,.9);
+  pointer-events:none;
+}
+.intro-scanline{
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 3px);
+  mix-blend-mode:overlay;
+  pointer-events:none;
+}
+
+/* ---- Título GTB com contorno duplo (roxo + verde) ---- */
+.gtb-outline-title{
+  text-shadow:
+    3px 3px 0 #c026ff,
+    -3px -3px 0 #39d353;
+}
+.gtb-hero-title{
+  text-shadow:4px 4px 0 #39d353;
+}
+.gtb-hero-title em{
+  font-style:normal;
+  text-shadow:4px 4px 0 #c026ff;
+}
+.gtb-play-title{
+  text-shadow:3px 3px 0 #c026ff;
+}
+
+/* ---- Fade transition for intro overlay ---- */
+#intro{
+  transition:opacity 0.9s ease, visibility 0.9s ease;
+}
+#intro.hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+/* ---- Now playing toast ---- */
+.now-playing{
+  opacity:0;
+  transform:translateY(-10px);
+  transition:opacity .5s ease, transform .5s ease;
+  pointer-events:none;
+}
+.now-playing.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.now-playing.fade-out{
+  opacity:0;
+  transform:translateY(-10px);
+}
+
+/* ---- Hero background image ---- */
+.hero-bg{
+  background:
+    linear-gradient(180deg, rgba(13,13,16,.2) 0%, rgba(13,13,16,.55) 55%, #0d0d10 100%),
+    url('../images/scene2.png') center 20% / cover no-repeat;
+}
+
+/* ---- Character card image hover zoom ---- */
+.char-card img{
+  transition:transform .6s ease, filter .6s ease;
+  filter:grayscale(.15) contrast(1.05);
+}
+.char-card:hover img{
+  transform:scale(1.06);
+  filter:grayscale(0) contrast(1.1);
+}
