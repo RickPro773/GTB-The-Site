@@ -1,123 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grande Theft Brodis — GTB</title>
-<meta name="description" content="GTB — Grande Theft Brodis. Jogo de mundo aberto no Roblox, feito pela nossa turma.">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- CSS custom (fonte Pricedown via @font-face) carrega ANTES do Tailwind -->
-<link rel="stylesheet" href="assets/css/custom.css">
-
-<!-- Tailwind CSS via CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="assets/js/tailwind.config.js"></script>
-</head>
-<body class="bg-asphalt text-paper font-body overflow-x-hidden">
-
-<!-- ===================== STATUS BAR ===================== -->
-<div class="fixed top-0 left-0 right-0 z-[99] bg-warn-yellow text-neutral-900 text-center font-body font-bold tracking-[2px] text-[0.72rem] sm:text-xs uppercase py-2 px-4">
-  🚧 Jogo indisponível no momento &middot; Versão <b class="text-neon-purple-dim">v0.0.5 Alpha Fechada</b>
-</div>
-
-<!-- ===================== INTRO ===================== -->
-<div id="intro" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
-  <div class="intro-slide active" style="background-image:url('assets/images/scene1.png');" data-slide="1"></div>
-  <div class="intro-slide" style="background-image:url('assets/images/scene2.png');" data-slide="2"></div>
-  <div class="intro-scanline z-[2]"></div>
-  <div class="intro-vignette z-[3]"></div>
-
-  <div class="relative z-[5] text-center px-5">
-    <h1 class="gtb-outline-title font-display text-[clamp(3.5rem,15vw,10rem)] leading-[0.85] text-paper tracking-[4px] animate-flicker">GTB</h1>
-    <div class="font-body font-semibold tracking-[10px] text-[clamp(0.75rem,2vw,1.1rem)] text-hood-green mt-2 uppercase">Grande Theft Brodis</div>
-
-    <div class="mt-10 w-[min(420px,70vw)] h-1.5 bg-white/15 border border-white/30 mx-auto relative overflow-hidden">
-      <div class="h-full w-0 bg-gradient-to-r from-neon-purple to-hood-green animate-load"></div>
-    </div>
-    <div class="mt-4 text-[0.7rem] tracking-[3px] text-paper/50 uppercase">Carregando o bairro...</div>
-    <div class="mt-8 text-[0.65rem] tracking-[2px] text-paper/35 uppercase">Intro Theme &middot; Grande Theft Brodis (Remix)</div>
-  </div>
-
-  <button id="soundBtn" class="absolute bottom-6 left-6 z-[6] bg-transparent border border-paper/40 text-paper font-body tracking-[2px] text-xs uppercase py-2.5 px-4 cursor-pointer transition hover:bg-hood-green hover:text-black hover:border-hood-green">🔊 Som Ligado</button>
-  <button id="skipBtn" class="absolute bottom-6 right-6 z-[6] bg-transparent border border-paper/40 text-paper font-body tracking-[2px] text-xs uppercase py-2.5 px-4 cursor-pointer transition hover:bg-paper hover:text-black">Pular ▶</button>
-</div>
-
-<!-- ===================== ÁUDIO ===================== -->
-<audio id="introMusic" src="assets/audio/intro-theme.mp3" preload="auto"></audio>
-<audio id="menuMusic" src="assets/audio/menu-theme.mp3" loop preload="auto"></audio>
-
-<!-- ===================== NOW PLAYING TOAST ===================== -->
-<div id="nowPlaying" class="now-playing fixed top-[120px] left-[5vw] z-[150] flex items-center gap-2.5 bg-asphalt/85 border border-paper/15 border-l-[3px] border-l-hood-green py-2.5 px-4 font-body text-xs tracking-[1.5px] uppercase text-paper backdrop-blur-md">
-  <div class="flex items-end gap-0.5 h-3.5">
-    <span class="w-[3px] h-1.5 bg-hood-green animate-eq [animation-delay:0s]"></span>
-    <span class="w-[3px] h-3.5 bg-hood-green animate-eq [animation-delay:.2s]"></span>
-    <span class="w-[3px] h-2 bg-hood-green animate-eq [animation-delay:.4s]"></span>
-  </div>
-  <span id="nowPlayingText">TOCANDO AGORA &middot; <b class="text-hood-green font-semibold">Menu Theme</b></span>
-</div>
-
-<!-- ===================== NAV ===================== -->
-<header class="fixed top-[34px] left-0 right-0 z-[100] flex items-center justify-between py-[18px] px-[5vw] bg-gradient-to-b from-asphalt/95 to-transparent">
-  <div class="font-display text-2xl sm:text-3xl tracking-[3px] text-neon-purple gtb-outline-title" style="text-shadow:2px 2px 0 #39d353;">GTB</div>
-  <nav class="hidden sm:block">
-    <a href="#personagens" class="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green">Personagens</a>
-    <a href="#jogar" class="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green">Jogar</a>
-  </nav>
-</header>
-
-<!-- ===================== HERO ===================== -->
-<section class="hero-bg relative min-h-screen flex items-end">
-  <div class="px-[5vw] pb-[6vw] w-full">
-    <div class="text-warn-yellow text-sm tracking-[4px] uppercase mb-2">Roblox &middot; Mundo Aberto &middot; Feito pelos Brodis</div>
-    <h1 class="gtb-hero-title font-display text-[clamp(3.5rem,12vw,9.5rem)] leading-[0.85] text-neon-purple">GRANDE<br>THEFT <em class="text-hood-green">BRODIS</em></h1>
-    <p class="max-w-[520px] mt-5 text-base sm:text-lg text-paper/85 leading-relaxed">Um jogo de mundo aberto no Roblox, feito pela nossa turma. Rua, carro, moicano verde e muita zoeira estilo GTA — mas com a nossa cara.</p>
-    <div class="mt-8 flex gap-4 flex-wrap">
-      <a href="#personagens" class="inline-block py-3.5 px-7 font-body font-bold tracking-[2px] uppercase text-sm no-underline cursor-pointer border-2 border-transparent bg-hood-green text-[#04150a] transition hover:bg-[#4de368]">Ver Personagens</a>
-      <a href="#jogar" class="inline-block py-3.5 px-7 font-body font-bold tracking-[2px] uppercase text-sm no-underline cursor-pointer border-2 border-paper text-paper bg-transparent transition hover:border-neon-purple hover:text-neon-purple">Status do Jogo</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CHARACTERS ===================== -->
-<section id="personagens" class="bg-asphalt-2 border-t border-b border-white/[0.06] text-center py-28 px-[5vw]">
-  <h2 class="font-display text-[clamp(2.5rem,6.5vw,4.8rem)] leading-[0.9] mb-2">O <span class="text-neon-purple">Elenco</span> da Rua</h2>
-  <p class="max-w-[620px] mx-auto text-paper/70 leading-relaxed mb-10">Escolha seu brodi. Cada um tem sua própria história dentro do bairro.</p>
-
-  <div class="relative w-[min(480px,80vw)] mx-auto">
-    <img src="assets/images/characters-wheel.png" alt="Roleta de seleção de personagens do GTB, estilo GTA, com quatro brodis diferentes" class="w-full h-auto block animate-wheel-in" style="filter:drop-shadow(0 0 40px rgba(192,38,255,.25));">
-  </div>
-  <p class="mt-8 text-paper/60 text-sm max-w-[480px] mx-auto leading-relaxed">A seleção de personagens do GTB — cada quadrante representa um brodi jogável, com seu próprio estilo dentro do bairro.</p>
-
-  <div class="flex justify-center flex-wrap gap-4 mt-10">
-    <div class="border border-white/15 py-2.5 px-5 text-sm tracking-[1.5px] uppercase text-paper bg-white/[0.03]"><b class="text-hood-green">01</b> · O Incendiário</div>
-    <div class="border border-white/15 py-2.5 px-5 text-sm tracking-[1.5px] uppercase text-paper bg-white/[0.03]"><b class="text-hood-green">02</b> · Moicano</div>
-    <div class="border border-white/15 py-2.5 px-5 text-sm tracking-[1.5px] uppercase text-paper bg-white/[0.03]"><b class="text-hood-green">03</b> · Boné Roblox</div>
-    <div class="border border-white/15 py-2.5 px-5 text-sm tracking-[1.5px] uppercase text-paper bg-white/[0.03]"><b class="text-hood-green">04</b> · Camisa do Fortaleza</div>
-  </div>
-</section>
-
-<!-- ===================== PLAY ===================== -->
-<section id="jogar" class="text-center py-28 px-[5vw]" style="background:radial-gradient(circle at 50% 30%, rgba(192,38,255,.15), transparent 60%), #0d0d10;">
-  <div class="inline-block border border-neon-purple text-neon-purple text-xs tracking-[2px] uppercase py-2 px-5 mb-6">v0.0.5 &middot; Alpha Fechada</div>
-  <h2 class="gtb-play-title font-display text-[clamp(2.8rem,8.5vw,6.5rem)] text-hood-green">Bora pra Rua?</h2>
-  <p class="max-w-[520px] mx-auto mt-4 mb-6 text-paper/70">O GTB ainda está em desenvolvimento pela nossa turma. Assim que a build estiver pronta pra galera, o link do Roblox aparece aqui.</p>
-  <div class="inline-flex items-center gap-2.5 bg-white/[0.04] border border-white/10 py-4 px-7 text-sm tracking-[1px] uppercase text-paper/75">
-    <span class="w-2 h-2 rounded-full bg-red-500" style="box-shadow:0 0 8px #ff4d4d;"></span> Jogo indisponível no momento
-  </div>
-</section>
-
-<!-- ===================== FOOTER ===================== -->
-<footer class="py-12 px-[5vw] flex justify-between items-center border-t border-white/[0.08] text-sm text-paper/50 flex-wrap gap-4">
-  <div>GTB — Grande Theft Brodis © 2026</div>
-  <div>Fan project não oficial &middot; feito com 💜 no Roblox</div>
-</footer>
-
-<!-- ===================== SCRIPTS ===================== -->
-<script src="assets/js/intro.js"></script>
-<script src="assets/js/audio.js"></script>
-<script src="assets/js/ui.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grande Theft Brodis — GTB</title>
+    <meta name="description" content="GTB — Grande Theft Brodis. Jogo de mundo aberto no Roblox, feito pela nossa turma." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
