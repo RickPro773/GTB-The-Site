@@ -1,0 +1,41 @@
+import { useEffect } from 'react'
+
+/**
+ * Modal genérico "Em breve", usado tanto pelas redes sociais
+ * (Discord/Roblox) quanto pela aba "Quadro" no menu.
+ * Fecha ao clicar fora, no X, ou apertando Esc.
+ */
+export default function ComingSoonModal({ title, message, onClose }) {
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-[300] flex items-center justify-center bg-black/75 backdrop-blur-sm px-6"
+      onClick={onClose}
+    >
+      <div
+        className="relative bg-asphalt-2 border border-white/10 max-w-sm w-full p-8 text-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Fechar"
+          className="absolute top-3 right-3 text-paper/50 hover:text-paper transition text-lg leading-none w-8 h-8 flex items-center justify-center"
+        >
+          ✕
+        </button>
+        <div className="inline-block border border-neon-purple text-neon-purple text-[0.65rem] tracking-[2px] uppercase py-1.5 px-4 mb-4">
+          Em breve
+        </div>
+        <h3 className="font-display text-3xl text-hood-green mb-3">{title}</h3>
+        <p className="text-paper/70 text-sm leading-relaxed">{message}</p>
+      </div>
+    </div>
+  )
+}

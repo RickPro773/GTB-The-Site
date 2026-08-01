@@ -168,35 +168,92 @@ de verdade apontando pro link do Roblox.
 
 ## Elenco / Personagens
 
-Cada personagem é um objeto em `src/data/roster.js`:
+Cada personagem é um objeto em `src/data/roster.js`, com um array
+`photos` (não uma foto única) — isso é o que torna o sistema
+modular:
 
 ```js
 {
   id: '01',
   name: 'Rick',
   tag: 'Camisa do Fortaleza',
-  photo: rickPhoto,   // import de imagem, ou null se ainda não tem foto
-  effect: null,        // ou 'alive' para o efeito de respiração/movimento
+  photos: [rickPhoto],       // 1 foto: card fica parado
+  effect: null,               // ou 'alive' pro efeito de respiração
+  theme: '#c026ff',           // reservado pro sistema de tema por personagem
 }
 ```
 
 Elenco atual:
 - **Rick** — Camisa do Fortaleza
-- **Raf "Moicano"** — Moicano (com efeito `alive`: leve respiração/balanço
-  contínuo na foto, pra dar sensação de movimento — pausa automaticamente
-  no hover)
+- **Raf "Moicano"** — Moicano (efeito `alive`: respiração/balanço sutil
+  e contínuo na foto, pausa no hover)
 - **GTA2D** — Terno & Cofre
-- **Fox** — O Incendiário (ainda sem foto individual — aparece só na
-  roleta de seleção)
+- **Fox** — O Incendiário
 
-Pra adicionar um personagem novo: salve a foto em
-`src/assets/images/`, importe no topo de `src/data/roster.js` e
-adicione um novo objeto no array `roster`. O card aparece
-automaticamente na grade da seção Personagens — não precisa mexer
-em `Characters.jsx`.
+### Como funciona a troca de foto ao clicar
 
-Pra dar o efeito "vivo" (respiração sutil) em qualquer personagem,
-defina `effect: 'alive'` no objeto dele.
+Se um personagem tem **só 1 foto** no array `photos`, o card fica
+parado (comportamento atual de todos, por enquanto). Se tiver **2 ou
+mais fotos**, o card vira clicável: cada clique troca pra próxima
+foto do array, com um crossfade suave, e aparecem uns pontinhos no
+canto superior indicando quantas fotos existem e qual está ativa.
+
+**Pra adicionar mais fotos a um personagem que já existe** (deixando
+o clique-pra-trocar ativo pra ele):
+1. Salve a nova imagem em `src/assets/images/`
+2. Importe no topo de `src/data/roster.js`
+   (ex: `import rafNovaFoto from '../assets/images/raf-nova.png'`)
+3. Adicione essa variável no array `photos` do personagem:
+   `photos: [raf3Photo, rafNovaFoto]`
+
+Não precisa mexer em `Characters.jsx` — o componente já lê o
+tamanho do array e ativa a troca automaticamente.
+
+### Sistema de tema por personagem (reservado pro futuro)
+
+Cada personagem já tem um campo `theme` (cor em hex) no
+`roster.js`, mas ele ainda **não tem nenhum efeito visual** —
+é só o dado guardado, esperando a implementação. A ideia futura é
+usar essa cor pra, por exemplo, mudar o destaque visual do site
+quando um personagem específico está "selecionado" em algum lugar
+(tipo a tela de seleção da roleta). Quando for hora de implementar,
+o valor já está lá pronto pra usar.
+
+## Redes sociais e aba "Quadro" (em breve)
+
+O footer tem dois ícones — **Discord** e **Roblox** — e o menu tem
+uma aba **Quadro**. Nenhum dos três tem link real ainda: clicar em
+qualquer um abre um modal "Em breve" com uma mensagem específica.
+
+Isso é controlado pelo hook `src/hooks/useComingSoon.js` e pelo
+componente `src/components/ComingSoonModal.jsx`. As mensagens de
+cada rede social ficam no objeto `SOCIAL_MESSAGES` dentro de
+`src/App.jsx` — é só editar o texto ali quando quiser.
+
+**Quando tiver o link real do Discord ou Roblox:** troque o
+`onClick={() => onSocialClick('Discord')}` (ou `'Roblox'`) em
+`src/components/Footer.jsx` por um `<a href="...">` normal.
+
+**Quando a aba Quadro estiver pronta:** troque o `<button
+onClick={onQuadroClick}>` em `src/components/Header.jsx` por um
+link de verdade (`<a href="#quadro">` ou uma rota nova, dependendo
+de como a página for construída).
+
+## Duração e estilo da intro
+
+A intro agora dura cerca de **1 minuto** (60 segundos), com um
+slideshow mais lento entre as fotos (troca a cada 4.5s) — dá o
+clima de tela de abertura/créditos, estilo Rockstar, em vez de um
+loading screen rápido. A logo completa (`LogoFull`, "grand theft
+BRODIS") aparece grande no centro, com leve efeito de flicker.
+
+Pra ajustar a duração ou a velocidade do slideshow, edite as
+constantes no topo de `src/components/Intro.jsx`:
+
+```js
+const SLIDE_INTERVAL_MS = 4500  // troca de imagem a cada X ms
+const INTRO_DURATION_MS = 60000 // duração total da intro em ms
+```
 
 ## Logo GTB
 

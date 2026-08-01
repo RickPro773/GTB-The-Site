@@ -1,24 +1,38 @@
+import { useState } from 'react'
 import charactersWheel from '../assets/images/characters-wheel.png'
 import { roster } from '../data/roster'
 
 function CharacterCard({ char }) {
+  const [photoIndex, setPhotoIndex] = useState(0)
+  const hasMultiplePhotos = char.photos.length > 1
   const aliveClass = char.effect === 'alive' ? 'char-card--alive' : ''
 
+  function handleClick() {
+    if (!hasMultiplePhotos) return
+    setPhotoIndex((prev) => (prev + 1) % char.photos.length)
+  }
+
   return (
-    <div
-      className={`char-card relative overflow-hidden bg-asphalt aspect-[4/5] ${aliveClass}`}
+    <button
+      onClick={handleClick}
+      className={`char-card group relative overflow-hidden bg-asphalt aspect-[4/5] text-left w-full border-0 p-0 ${aliveClass} ${
+        hasMultiplePhotos ? 'cursor-pointer' : 'cursor-default'
+      }`}
+      style={{ '--char-theme': char.theme }}
     >
-      {char.photo ? (
+      {/* crossfade entre as fotos: todas ficam empilhadas, só a
+          ativa tem opacity 1, então a troca é suave */}
+      {char.photos.map((src, i) => (
         <img
-          src={char.photo}
+          key={src}
+          src={src}
           alt={`${char.name} — ${char.tag}`}
-          className="w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+            i === photoIndex ? 'opacity-100' : 'opacity-0'
+          }`}
         />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-asphalt-3">
-          <span className="font-display text-4xl text-white/10">?</span>
-        </div>
-      )}
+      ))}
+
       <div className="absolute left-0 right-0 bottom-0 p-5 bg-gradient-to-t from-black/90 to-transparent">
         <div className="text-[0.65rem] tracking-[3px] text-warn-yellow uppercase">
           Ficha #{char.id}
@@ -26,7 +40,25 @@ function CharacterCard({ char }) {
         <h3 className="font-display text-2xl text-paper leading-none mt-1">{char.name}</h3>
         <p className="text-sm text-paper/75 mt-1">{char.tag}</p>
       </div>
-    </div>
+
+      {hasMultiplePhotos && (
+        <div className="absolute top-3 right-3 flex gap-1.5">
+          {char.photos.map((_, i) => (
+            <span
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                i === photoIndex ? 'bg-hood-green' : 'bg-white/30'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+      {hasMultiplePhotos && (
+        <div className="absolute top-3 left-3 text-[0.6rem] tracking-[2px] uppercase text-paper/0 group-hover:text-paper/70 transition-colors bg-black/50 px-2 py-1">
+          Toque pra trocar
+        </div>
+      )}
+    </button>
   )
 }
 

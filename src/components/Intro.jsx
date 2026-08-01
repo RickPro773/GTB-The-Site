@@ -3,11 +3,11 @@ import scene1 from '../assets/images/scene1.png'
 import scene2 from '../assets/images/scene2.png'
 import introTheme from '../assets/audio/intro-theme.mp3'
 import menuTheme from '../assets/audio/menu-theme.mp3'
-import LogoGTB from './LogoGTB'
+import LogoFull from './LogoFull'
 
 const SLIDES = [scene1, scene2]
-const SLIDE_INTERVAL_MS = 2600
-const INTRO_DURATION_MS = 6200
+const SLIDE_INTERVAL_MS = 4500 // mais lento, estilo "cutscene" de créditos
+const INTRO_DURATION_MS = 60000 // ~1 minuto, como pedido
 
 export default function Intro({ audio }) {
   const [hidden, setHidden] = useState(false)
@@ -16,7 +16,7 @@ export default function Intro({ audio }) {
 
   const { introRef, menuRef, soundOn, toggleSound, switchToMenuTrack } = audio
 
-  // slideshow de imagens de fundo
+  // slideshow de imagens de fundo, em loop pelos 60s da intro
   useEffect(() => {
     if (SLIDES.length <= 1) return
     const id = setInterval(() => {
@@ -32,8 +32,8 @@ export default function Intro({ audio }) {
     switchToMenuTrack()
   }
 
-  // termina automaticamente quando a barra de load acaba, ou quando
-  // a própria faixa da intro chega ao fim (o que vier primeiro)
+  // termina automaticamente após ~1 minuto, ou quando a própria
+  // faixa da intro chega ao fim (o que vier primeiro), ou no skip
   useEffect(() => {
     const timeout = setTimeout(endIntro, INTRO_DURATION_MS)
     const introEl = introRef.current
@@ -65,21 +65,25 @@ export default function Intro({ audio }) {
         <div className="intro-scanline z-[2]" />
         <div className="intro-vignette z-[3]" />
 
-        <div className="relative z-[5] text-center px-5">
-          <div className="animate-flicker flex justify-center">
-            <LogoGTB className="h-24 sm:h-32 md:h-40 w-auto" />
-          </div>
-          <div className="font-body font-semibold tracking-[10px] text-[clamp(0.75rem,2vw,1.1rem)] text-hood-green mt-2 uppercase">
-            Grande Theft Brodis
+        <div className="relative z-[5] text-center px-5 flex flex-col items-center">
+          <div className="text-warn-yellow text-xs sm:text-sm tracking-[6px] uppercase mb-6 animate-fade-up">
+            Um Jogo Roblox De Mundo Aberto
           </div>
 
-          <div className="mt-10 w-[min(420px,70vw)] h-1.5 bg-white/15 border border-white/30 mx-auto relative overflow-hidden">
-            <div className="h-full w-0 bg-gradient-to-r from-neon-purple to-hood-green animate-loadbar" />
+          <div className="animate-flicker w-[min(680px,88vw)]">
+            <LogoFull className="w-full h-auto" />
           </div>
-          <div className="mt-4 text-[0.7rem] tracking-[3px] text-paper/50 uppercase">
+
+          <div className="mt-10 w-[min(460px,72vw)] h-[3px] bg-white/10 border border-white/20 relative overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-neon-purple to-hood-green"
+              style={{ animation: `loadbar-slow ${INTRO_DURATION_MS}ms linear forwards` }}
+            />
+          </div>
+          <div className="mt-4 text-[0.65rem] tracking-[4px] text-paper/45 uppercase">
             Carregando o bairro...
           </div>
-          <div className="mt-8 text-[0.65rem] tracking-[2px] text-paper/35 uppercase">
+          <div className="mt-10 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
             Intro Theme &middot; Grande Theft Brodis (Remix)
           </div>
         </div>
@@ -97,6 +101,13 @@ export default function Intro({ audio }) {
           Pular ▶
         </button>
       </div>
+
+      <style>{`
+        @keyframes loadbar-slow {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
     </>
   )
 }
