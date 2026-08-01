@@ -49,8 +49,8 @@ export const roster = [
   },
   {
     id: '04',
-    name: 'Fox',
-    tag: 'O Incendiário',
+    name: 'Fotafox',
+    tag: 'O Homem Uva',
     photos: [foxPhoto],
     effect: null,
     theme: '#c026ff',
