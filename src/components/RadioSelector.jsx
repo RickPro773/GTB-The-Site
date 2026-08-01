@@ -1,169 +1,160 @@
-import React, { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
+import { STATIONS_CONFIG } from '../data/radioConfig'
 
-// Imports das rádios
-import LosBrodisTrack from '../assets/radio/los-brodis/Na_quatro_por_merda.mp3'
-import radioCaosTrack from '../assets/radio/radio-caos/The_Hungry_Trombone.mp3'
-import samuraFmTrack from '../assets/radio/samura-fm/Maconha_Do_Samura.mp3'
+// Descobre TODOS os .mp3 dentro de src/assets/radio/<qualquer-pasta>/
+// automaticamente, em tempo de build. Não precisa importar nada à
+// mão — é só o Vite escaneando as pastas por conta própria.
+const audioModules = import.meta.glob('../assets/radio/*/*.mp3', {
+  eager: true,
+  import: 'default',
+})
 
-const STATIONS = [
-  { id: 'los-brodis', name: 'LOS BRODIS', genre: 'LOS BRODIS', src: LosBrodisTrack },
-  { id: 'radio-caos', name: 'RÁDIO CAOS GTB', genre: 'ROCK & CAOS', src: radioCaosTrack },
-  { id: 'samura-fm', name: 'SAMURA FM', genre: 'ESPECIAL SAMURA', src: samuraFmTrack },
-]
-
-export default function RadioSelector() {
-  const [currentStationIndex, setCurrentStationIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isChanging, setIsChanging] = useState(false)
-  const audioRef = useRef(null)
-
-  const station = STATIONS[currentStationIndex]
-
-  const togglePlay = () => {
-    if (!audioRef.current) return
-    if (isPlaying) {
-      audioRef.current.pause()
-      setIsPlaying(false)
-    } else {
-      audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {})
-    }
+// Agrupa as faixas encontradas por pasta (nome da estação), na
+// ordem em que o STATIONS_CONFIG define, e ignora pastas vazias.
+function buildStations() {
+  const tracksByFolder = {}
+  for (const path in audioModules) {
+    // path é algo como '../assets/radio/los-brodis/Musica.mp3'
+    const match = path.match(/radio\/([^/]+)\//)
+    if (!match) continue
+    const folder = match[1]
+    if (!tracksByFolder[folder]) tracksByFolder[folder] = []
+    tracksByFolder[folder].push(audioModules[path])
   }
 
-  const changeStation = (direction) => {
-    setIsChanging(true)
-    let nextIndex = currentStationIndex + direction
-    if (nextIndex < 0) nextIndex = STATIONS.length - 1
-    if (nextIndex >= STATIONS.length) nextIndex = 0
+  return STATIONS_CONFIG.filter((cfg) => tracksByFolder[cfg.folder]?.length > 0).map((cfg) => ({
+    ...cfg,
+    tracks: tracksByFolder[cfg.folder],
+  }))
+}
 
-    setCurrentStationIndex(nextIndex)
+export default function RadioSelector({ audio }) {
+  const stations = useMemo(buildStations, [])
+  const [isOpen, setIsOpen] = useState(false)
+  const [stationIndex, setStationIndex] = useState(0)
+  const [trackIndex, setTrackIndex] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const audioRef = useRef(null)
 
-    setTimeout(() => {
-      setIsChanging(false)
-      if (audioRef.current) {
-        audioRef.current.load()
-        if (isPlaying) {
-          audioRef.current.play().catch(() => {})
-        }
-      }
-    }, 200)
+  const station = stations[stationIndex]
+  const currentSrc = station?.tracks[trackIndex]
+
+  // sempre que a fonte muda (estação ou faixa diferente), recarrega
+  // o elemento de áudio de forma segura, sem race condition — o
+  // React já garante que `currentSrc` está atualizado antes deste
+  // efeito rodar.
+  useEffect(() => {
+    if (!audioRef.current) return
+    audioRef.current.load()
+    if (isPlaying) {
+      audioRef.current.play().catch(() => {})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSrc])
+
+  if (!station) return null // nenhuma estação com música ainda
+
+  function play() {
+    audio?.pauseMenuTrack?.() // garante só uma fonte de som tocando
+    audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {})
+  }
+
+  function pause() {
+    audioRef.current?.pause()
+    setIsPlaying(false)
+  }
+
+  function togglePlay() {
+    isPlaying ? pause() : play()
+  }
+
+  function changeStation(direction) {
+    const next = (stationIndex + direction + stations.length) % stations.length
+    setStationIndex(next)
+    setTrackIndex(0)
+  }
+
+  function changeTrack(direction) {
+    const total = station.tracks.length
+    setTrackIndex((prev) => (prev + direction + total) % total)
   }
 
   return (
-    <div style={styles.sectionContainer}>
-      <style>{`
-        @keyframes staticNoise {
-          0%, 100% { opacity: 0.8; }
-          50% { opacity: 0.3; }
-        }
-        .station-changing {
-          animation: staticNoise 0.2s infinite;
-        }
-      `}</style>
+    <>
+      <audio ref={audioRef} src={currentSrc} onEnded={() => changeTrack(1)} />
 
-      <audio ref={audioRef} src={station.src} loop />
+      {/* Botão de aba fixo — abre/fecha o painel da rádio */}
+      <button
+        onClick={() => setIsOpen((v) => !v)}
+        className={`fixed right-0 top-1/2 -translate-y-1/2 z-[140] flex items-center gap-2 py-3 px-3 border border-r-0 border-white/15 rounded-l-lg transition-colors ${
+          isOpen ? 'bg-asphalt-2' : 'bg-asphalt-2/80 hover:bg-asphalt-2'
+        }`}
+        aria-label={isOpen ? 'Fechar rádio' : 'Abrir rádio'}
+      >
+        <span className={`text-lg ${isPlaying ? 'animate-pulse' : ''}`}>📻</span>
+        <span className="hidden sm:inline text-[0.65rem] tracking-[2px] uppercase text-paper/70 [writing-mode:vertical-rl]">
+          Rádio
+        </span>
+      </button>
 
-      <div style={styles.radioCard}>
-        <div style={styles.topInfo}>
-          <span style={styles.badge}>📻 ESTAÇÃO DE RÁDIO</span>
-          <span style={styles.genreTag}>{station.genre}</span>
+      {/* Painel da rádio */}
+      <div
+        className={`fixed right-0 top-1/2 -translate-y-1/2 z-[139] w-[min(320px,85vw)] bg-asphalt-2 border border-white/10 border-r-0 rounded-l-xl p-5 shadow-2xl transition-transform duration-300 ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-[0.65rem] tracking-[2px] text-warn-yellow uppercase font-bold">
+            📻 Estação de Rádio
+          </span>
+          <span className="text-[0.6rem] text-paper/40 uppercase bg-white/5 px-2 py-0.5 rounded">
+            {station.genre}
+          </span>
         </div>
 
-        {/* Display estilo Rádio GTA */}
-        <div className={isChanging ? 'station-changing' : ''} style={styles.displayBox}>
-          <button style={styles.arrowBtn} onClick={() => changeStation(-1)}>◀</button>
-          
-          <div style={styles.stationTitleWrapper}>
-            <div className="font-pricedown" style={styles.stationName}>
-              {isChanging ? '⚡ BUSCANDO...' : station.name}
+        <div className="flex items-center justify-between bg-asphalt border border-white/10 rounded-lg py-3 px-3 mb-3">
+          <button
+            onClick={() => changeStation(-1)}
+            className="text-warn-yellow text-lg px-1 hover:scale-110 transition"
+            aria-label="Estação anterior"
+          >
+            ◀
+          </button>
+          <div className="text-center px-2 overflow-hidden">
+            <div className="font-display text-lg text-hood-green leading-none truncate">
+              {station.name}
             </div>
           </div>
-
-          <button style={styles.arrowBtn} onClick={() => changeStation(1)}>▶</button>
+          <button
+            onClick={() => changeStation(1)}
+            className="text-warn-yellow text-lg px-1 hover:scale-110 transition"
+            aria-label="Próxima estação"
+          >
+            ▶
+          </button>
         </div>
 
-        {/* Botão Tocar/Pausar em Roxo Néon */}
-        <button style={styles.playBtn} onClick={togglePlay}>
-          {isPlaying ? '⏸ PAUSAR MÚSICA' : '▶ TOCAR RÁDIO'}
+        {station.tracks.length > 1 && (
+          <div className="flex items-center justify-between text-xs text-paper/50 mb-3 px-1">
+            <button onClick={() => changeTrack(-1)} className="hover:text-paper transition">
+              ‹ faixa anterior
+            </button>
+            <span>
+              {trackIndex + 1}/{station.tracks.length}
+            </span>
+            <button onClick={() => changeTrack(1)} className="hover:text-paper transition">
+              próxima faixa ›
+            </button>
+          </div>
+        )}
+
+        <button
+          onClick={togglePlay}
+          className="w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-neon-purple-dim transition"
+        >
+          {isPlaying ? '⏸ Pausar Música' : '▶ Tocar Rádio'}
         </button>
       </div>
-    </div>
+    </>
   )
-}
-
-const styles = {
-  sectionContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '30px 20px',
-  },
-  radioCard: {
-    backgroundColor: 'rgba(18, 18, 26, 0.9)',
-    border: '1px solid rgba(139, 0, 255, 0.4)',
-    borderRadius: '16px',
-    padding: '24px 28px',
-    maxWidth: '460px',
-    width: '100%',
-    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(139, 0, 255, 0.15)',
-    backdropFilter: 'blur(10px)',
-  },
-  topInfo: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '14px',
-  },
-  badge: {
-    fontSize: '0.75rem',
-    fontWeight: '800',
-    color: '#ffb703',
-    letterSpacing: '1px',
-  },
-  genreTag: {
-    fontSize: '0.72rem',
-    color: '#a0a0b8',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    padding: '3px 8px',
-    borderRadius: '6px',
-    textTransform: 'uppercase',
-  },
-  displayBox: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#0c0c12',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    borderRadius: '12px',
-    padding: '12px 16px',
-    marginBottom: '16px',
-  },
-  arrowBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#ffb703',
-    fontSize: '1.2rem',
-    cursor: 'pointer',
-    padding: '4px 8px',
-  },
-  stationTitleWrapper: {
-    textAlign: 'center',
-  },
-  stationName: {
-    fontSize: '1.6rem',
-    color: '#00ff88',
-    letterSpacing: '1px',
-    textShadow: '0 0 10px rgba(0, 255, 136, 0.3)',
-  },
-  playBtn: {
-    width: '100%',
-    backgroundColor: '#8b00ff',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '10px',
-    padding: '12px',
-    fontSize: '0.9rem',
-    fontWeight: '800',
-    letterSpacing: '0.5px',
-    cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(139, 0, 255, 0.4)',
-  },
 }

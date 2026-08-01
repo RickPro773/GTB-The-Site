@@ -1,11 +1,16 @@
 /**
- * Logo "grand theft BRODIS" em SVG, reproduzindo o estilo da arte
- * original: "grand theft" em branco com contorno grosso preto
- * (fonte Pricedown), e "BRODIS" com letras alternando verde/roxo
- * do projeto, terminando em branco no S — igual à referência.
+ * Logo "grand theft BRODIS" em SVG, reproduzindo a arte de
+ * referência original com as cores exatas (amostradas pixel a
+ * pixel da imagem de referência): "grand theft" em branco com
+ * contorno preto grosso, e "BRODIS" com B=verde, R=azul, O=verde,
+ * D=roxo, I=verde, S=branco.
  *
  * Uso: <LogoFull className="w-64" />
  */
+const BRODIS_GREEN = '#52db0f'
+const BRODIS_BLUE = '#0016f5'
+const BRODIS_PURPLE = '#8f13eb'
+
 export default function LogoFull({ className = '' }) {
   return (
     <svg
@@ -40,7 +45,7 @@ export default function LogoFull({ className = '' }) {
         theft
       </text>
 
-      {/* BRODIS — cada letra com sua cor, alternando verde/roxo, S em branco */}
+      {/* BRODIS — cores exatas da referência, letra por letra */}
       <text
         y="182"
         fontFamily="Pricedown, Anton, sans-serif"
@@ -49,11 +54,11 @@ export default function LogoFull({ className = '' }) {
         strokeWidth="6"
         paintOrder="stroke"
       >
-        <tspan x="10" fill="#39d353">B</tspan>
-        <tspan fill="#c026ff">R</tspan>
-        <tspan fill="#39d353">O</tspan>
-        <tspan fill="#c026ff">D</tspan>
-        <tspan fill="#39d353">I</tspan>
+        <tspan x="10" fill={BRODIS_GREEN}>B</tspan>
+        <tspan fill={BRODIS_BLUE}>R</tspan>
+        <tspan fill={BRODIS_GREEN}>O</tspan>
+        <tspan fill={BRODIS_PURPLE}>D</tspan>
+        <tspan fill={BRODIS_GREEN}>I</tspan>
         <tspan fill="#ffffff">S</tspan>
       </text>
     </svg>

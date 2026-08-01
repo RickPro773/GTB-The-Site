@@ -65,38 +65,21 @@ npm run build     # gera a pasta dist/
 npm run preview   # testa a versão de produção localmente
 ```
 
-## ⚠️ Passo obrigatório antes de subir: ajustar o "base"
+## Deploy (Vercel)
 
-Abra `vite.config.js` e confira a linha `base:`. Ela precisa bater
-com o nome exato do seu repositório no GitHub:
+O projeto está configurado pra Vercel (`vercel.json` na raiz). Não
+precisa ajustar `base` no `vite.config.js` — na Vercel o site fica
+na raiz do domínio, então `base: '/'` já está correto e não deve
+ser mudado.
 
-- Se o repositório se chama `gtb-site` e a URL final vai ser
-  `https://seuusuario.github.io/gtb-site/` → deixe
-  `base: '/gtb-site/'` (já vem configurado assim).
-- Se o repositório se chama `seuusuario.github.io` (site pessoal
-  na raiz) → troque para `base: '/'`.
-
-Se esquecer esse passo, o site builda mas as imagens/CSS/JS não
-carregam quando publicado (ficam todos com 404).
-
-## Como publicar (deploy automático)
-
-1. Crie o repositório no GitHub (ex: `gtb-site`).
-2. `git init`, `git add .`, `git commit`, `git remote add origin ...`,
-   `git push -u origin main` (veja o histórico da conversa se
-   precisar relembrar os comandos exatos).
-3. No repositório do GitHub, vá em **Settings → Pages** e em
-   "Build and deployment" escolha **Source: GitHub Actions**
-   (não escolha "Deploy from a branch").
-4. Pronto. A cada `git push` na branch `main`, o workflow em
-   `.github/workflows/deploy.yml` builda o projeto (Tailwind incluso)
-   e publica sozinho. Acompanhe o progresso na aba **Actions** do
-   repositório.
-5. Depois do primeiro deploy, o site fica em
-   `https://seuusuario.github.io/gtb-site/`.
-
-Você não precisa mais rodar `npm run build` manualmente nem subir
-uma pasta `dist/` — o Actions faz isso a cada push.
+1. No painel da Vercel: **Add New → Project → Import** o
+   repositório do GitHub.
+2. A Vercel detecta Vite sozinha e usa as configs do `vercel.json`
+   (`npm run build`, saída em `dist/`). Não precisa mexer em nada
+   na tela de configuração.
+3. A cada `git push` na branch principal, a Vercel builda e publica
+   automaticamente. Deploys de outras branches viram "preview"
+   automáticos também.
 
 ## Por que React + build real (e não mais o Tailwind via CDN)?
 
@@ -262,10 +245,14 @@ reproduzindo a arte de referência do "grand theft BRODIS":
 
 - **`src/components/LogoFull.jsx`** — logo completa "grand theft
   BRODIS", com "grand theft" em branco/contorno preto e "BRODIS"
-  alternando verde (`--hood-green`) e roxo (`--neon-purple`), S final
-  branco — as mesmas cores da arte original. Usada no Hero.
+  usando as cores exatas amostradas pixel a pixel da arte de
+  referência original: B=verde, R=azul, O=verde, D=roxo, I=verde,
+  S=branco (`#52db0f`, `#0016f5`, `#8f13eb`, também disponíveis
+  como `logo-green`/`logo-blue`/`logo-purple` no Tailwind). Usada
+  no Hero e nos créditos de abertura da Intro.
 - **`src/components/LogoGTB.jsx`** — versão curta, só "GTB", roxo
-  com contorno verde. Usada no Header e na tela de Intro.
+  com contorno verde. Usada no Header, na Intro e na tela de
+  Manutenção.
 
 Ambas usam a fonte Pricedown (herdada do `@font-face` do
 `src/index.css`) e são vetoriais — escalam sem perder qualidade em
@@ -278,3 +265,59 @@ import LogoGTB from './components/LogoGTB'
 <LogoFull className="w-96" />
 <LogoGTB className="h-12" />
 ```
+
+## Sistema de rádio (modular)
+
+A rádio é uma aba flutuante na lateral direita da tela (clique no
+ícone 📻 pra abrir/fechar) em vez de ocupar espaço fixo na página.
+
+**Adicionar música é só arrastar o arquivo — não precisa editar
+nenhum componente.** As faixas de cada estação são descobertas
+automaticamente pelo Vite (`import.meta.glob`) direto das pastas em
+`src/assets/radio/<nome-da-estação>/`.
+
+- **Pra adicionar uma música a uma estação que já existe:** solte o
+  `.mp3` dentro da pasta da estação (ex:
+  `src/assets/radio/los-brodis/nova-musica.mp3`). Pronto.
+- **Pra criar uma estação nova:** crie uma pasta em
+  `src/assets/radio/`, coloque pelo menos um `.mp3` dentro, e
+  adicione uma linha em `src/data/radioConfig.js` com o nome da
+  pasta, nome de exibição e gênero. É o único arquivo que você
+  precisa tocar — nenhum componente muda.
+- Pastas sem nenhum `.mp3` são ignoradas automaticamente (não
+  aparecem na rádio, não quebram nada).
+
+A rádio nunca toca ao mesmo tempo que o Menu Theme — quando você dá
+play numa estação, o tema do menu para sozinho (coordenado via
+`pauseMenuTrack` do `useAudioPlayer`).
+
+## Modo manutenção
+
+Pra tirar o site do ar rapidamente (sem intro, sem som, só um aviso
+de manutenção), abra `src/App.jsx` e mude:
+
+```js
+const IN_MAINTENANCE = false
+```
+
+para
+
+```js
+const IN_MAINTENANCE = true
+```
+
+Com isso ativo, nenhum hook de áudio ou intro chega a rodar — só a
+`MaintenanceScreen` aparece, com um card explicando a instabilidade,
+um painel de status dos serviços (editável em
+`src/components/MaintenanceScreen.jsx`, no array `SERVICOS`) e um
+botão de recarregar.
+
+## Acesso ao site
+
+O site não tem mais nenhuma tela de "chave de acesso" — é aberto
+para qualquer visitante. Se um sistema de acesso restrito for
+necessário no futuro, vale lembrar que qualquer chave guardada só
+no código JavaScript do front-end fica visível para qualquer
+visitante que abrir o "Ver código-fonte" do navegador — não seria
+uma restrição de verdade, só uma barreira decorativa. Uma
+restrição real precisaria de alguma validação no servidor.

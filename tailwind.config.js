@@ -20,6 +20,14 @@ export default {
         brodis: {
           blue: '#2f6bff',
         },
+        // Cores exatas amostradas da arte de referência da logo
+        // "grand theft BRODIS" — usadas na logo e em qualquer lugar
+        // que precise bater 100% com a arte original.
+        logo: {
+          green: '#52db0f',
+          blue: '#0016f5',
+          purple: '#8f13eb',
+        },
         paper: '#e9e6df',
         warn: {
           yellow: '#ffcf3d',

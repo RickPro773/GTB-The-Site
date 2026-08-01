@@ -64,6 +64,13 @@ export function useAudioPlayer() {
     })
   }, [introEnded, showToastFor])
 
+  // Usado pelo RadioSelector: quando o usuário dá play numa rádio,
+  // o Menu Theme precisa parar — só uma fonte de som deve tocar
+  // por vez no site inteiro.
+  const pauseMenuTrack = useCallback(() => {
+    menuRef.current?.pause()
+  }, [])
+
   return {
     introRef,
     menuRef,
@@ -72,5 +79,6 @@ export function useAudioPlayer() {
     nowPlayingLabel,
     switchToMenuTrack,
     toggleSound,
+    pauseMenuTrack,
   }
 }

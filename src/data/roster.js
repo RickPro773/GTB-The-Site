@@ -1,7 +1,7 @@
 import rickPhoto from '../assets/images/char-rick.png'
 import raf3Photo from '../assets/images/char-raf-3.png'
 import gta2dPhoto from '../assets/images/char-gta2d.png'
-import foxPhoto from '../assets/images/scene1.png'
+import foxPhoto from '../assets/images/char-fox.png'
 
 /**
  * Cada personagem tem um array `photos` (não uma foto única).

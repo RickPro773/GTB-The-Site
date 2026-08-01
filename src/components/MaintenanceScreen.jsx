@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import LogoGTB from './LogoGTB'
 
 // ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ CAÍDO OU RODANDO:
-// true  = Operacional (Verde 🟢)
-// false = Com Falha (Vermelho 🔴)
+// true  = Operacional (verde)
+// false = Com Falha (vermelho)
 const SERVICOS = [
   { nome: 'Infraestrutura da Provedora', ok: false },
-  { nome: 'Hospedagem Web (Netlify)', ok: true },
+  { nome: 'Hospedagem Web (Vercel)', ok: true },
   { nome: 'Servidor de Áudio (Menu Theme)', ok: false },
   { nome: 'API de Dados / Personagens', ok: true },
   { nome: 'Integração com banco de dados', ok: false },
@@ -13,158 +14,114 @@ const SERVICOS = [
 
 export default function MaintenanceScreen() {
   const [showModal, setShowModal] = useState(false)
-  const [lastChecked, setLastChecked] = useState(() => 
+  const [lastChecked, setLastChecked] = useState(() =>
     new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
   )
 
-  const handleReload = () => {
+  function handleReload() {
     setLastChecked(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))
     window.location.reload()
   }
 
+  const failCount = SERVICOS.filter((s) => !s.ok).length
+
   return (
-    <div style={styles.overlay}>
-      <style>{`
-        @font-face {
-          font-family: 'Pricedown';
-          src: url('/pricedown.otf') format('opentype'),
-               url('/fonts/pricedown.otf') format('opentype');
-          font-weight: normal;
-          font-style: normal;
-        }
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-asphalt px-6 py-8"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 50% 20%, rgba(192,38,255,.12), transparent 55%)',
+      }}
+    >
+      <div className="max-w-md w-full text-center">
+        <LogoGTB className="h-14 w-auto mx-auto mb-8" />
 
-        .font-pricedown {
-          font-family: 'Pricedown', 'Impact', sans-serif;
-        }
-
-        @keyframes pulseAmber {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.4; transform: scale(0.85); }
-        }
-
-        .pulse {
-          animation: pulseAmber 1.6s infinite ease-in-out;
-        }
-
-        .btn-reload {
-          transition: all 0.2s ease-in-out;
-        }
-        .btn-reload:hover {
-          background-color: #6d28d9 !important;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
-        }
-
-        .btn-details {
-          transition: all 0.2s ease-in-out;
-        }
-        .btn-details:hover {
-          background-color: #f1f5f9 !important;
-          color: #0f172a !important;
-        }
-      `}</style>
-
-      <div style={styles.card}>
-        {/* Tag de Alerta Corporativo */}
-        <div style={styles.statusBadge}>
-          <span className="pulse" style={styles.badgeDot}></span>
-          <span>INSTABILIDADE NO PROVEDOR DE HOSPEDAGEM</span>
+        <div className="inline-flex items-center gap-2 bg-warn-yellow/10 border border-warn-yellow/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-warn-yellow uppercase mb-6">
+          <span className="w-2 h-2 rounded-full bg-warn-yellow animate-pulse" />
+          Instabilidade no provedor de hospedagem
         </div>
 
-        {/* Título Principal */}
-        <h1 className="font-pricedown" style={styles.title}>
-          MANUTENÇÃO
-        </h1>
+        <h1 className="font-display text-5xl text-paper mb-4">Manutenção</h1>
 
-        {/* Descrição Direta */}
-        <p style={styles.description}>
-          A plataforma encontra-se temporariamente indisponível devido a uma oscilação técnica nos <strong style={{ color: '#111827' }}>servidores da nossa provedora de infraestrutura</strong>.
+        <p className="text-paper/65 text-sm leading-relaxed mb-6">
+          A plataforma está temporariamente indisponível devido a uma oscilação técnica nos{' '}
+          <strong className="text-paper">servidores da nossa provedora de infraestrutura</strong>.
+          Estamos de olho e o site volta assim que normalizar.
         </p>
 
-        {/* Tabela de Diagnóstico Técnico */}
-        <div style={styles.infoBox}>
-          <div style={styles.infoRow}>
-            <span style={styles.infoLabel}>Causa</span>
-            <span style={styles.infoValue}>Falha Externa do Provedor</span>
-          </div>
-
-          <div style={styles.divider}></div>
-
-          <div style={styles.infoRow}>
-            <span style={styles.infoLabel}>Status Atual</span>
-            <span style={{ ...styles.infoValue, color: '#d97706' }}>Acompanhando Resolução</span>
-          </div>
-
-          <div style={styles.divider}></div>
-
-          <div style={styles.infoRow}>
-            <span style={styles.infoLabel}>Última Checagem</span>
-            <span style={styles.infoValue}>Hoje às {lastChecked}</span>
-          </div>
-
-          <div style={styles.divider}></div>
-
-          <div style={styles.infoRow}>
-            <span style={styles.infoLabel}>ID do Incidente</span>
-            <span style={styles.codeValue}>INC-503-PROV-OUTAGE</span>
-          </div>
+        <div className="bg-asphalt-2 border border-white/10 rounded-lg p-5 mb-4 text-left">
+          <Row label="Causa" value="Falha externa do provedor" />
+          <Divider />
+          <Row label="Status atual" value="Acompanhando resolução" valueClass="text-warn-yellow" />
+          <Divider />
+          <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
+          <Divider />
+          <Row label="ID do incidente" value="INC-503-PROV-OUTAGE" mono />
         </div>
 
-        {/* Botão de Abrir Detalhes dos Serviços */}
-        <button 
-          className="btn-details" 
-          onClick={() => setShowModal(true)} 
-          style={styles.detailsButton}
+        <button
+          onClick={() => setShowModal(true)}
+          className="w-full border border-white/15 text-paper/70 rounded-lg py-2.5 px-4 text-sm font-semibold mb-3 hover:bg-white/5 transition"
         >
-          🔍 Ver Status dos Serviços ({SERVICOS.filter(s => !s.ok).length} com falha)
+          🔍 Ver status dos serviços ({failCount} com falha)
         </button>
 
-        {/* Botão Tentar Novamente */}
-        <button className="btn-reload" onClick={handleReload} style={styles.button}>
-          🔄 Tentar Novamente
+        <button
+          onClick={handleReload}
+          className="w-full bg-neon-purple text-white rounded-lg py-3 px-4 text-sm font-bold tracking-[0.5px] mb-5 hover:bg-neon-purple-dim transition"
+        >
+          🔄 Tentar novamente
         </button>
 
-        {/* Mensagem de Encerramento */}
-        <p style={styles.subtext}>
-          O acesso será restabelecido automaticamente assim que os serviços da fornecedora forem normalizados.
+        <p className="text-paper/40 text-xs leading-relaxed">
+          O acesso será restabelecido automaticamente assim que os serviços da fornecedora forem
+          normalizados.
         </p>
 
-        {/* Rodapé */}
-        <div style={styles.footer}>
-          <span className="font-pricedown" style={styles.brand}>GRAND THEFT BRODI</span>
+        <div className="mt-6 pt-5 border-t border-white/10">
+          <span className="font-display text-lg text-neon-purple">GRAND THEFT BRODIS</span>
         </div>
       </div>
 
-      {/* 🟢 MODAL COM A LISTA DE SERVIÇOS (TRUE / FALSE) */}
       {showModal && (
-        <div style={styles.modalBackdrop} onClick={() => setShowModal(false)}>
-          <div style={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.modalHeader}>
-              <h3 style={styles.modalTitle}>Diagnóstico do Sistema</h3>
-              <button style={styles.closeButton} onClick={() => setShowModal(false)}>✕</button>
+        <div
+          className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/70 backdrop-blur-sm px-5"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="bg-asphalt-2 border border-white/10 rounded-lg p-6 max-w-sm w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-1">
+              <h3 className="text-paper font-bold text-lg">Diagnóstico do sistema</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-paper/50 hover:text-paper transition text-lg leading-none"
+              >
+                ✕
+              </button>
             </div>
-
-            <p style={styles.modalSubtext}>
-              Estado individual dos módulos do GRAND THEFT BRODI:
+            <p className="text-paper/55 text-sm mb-4">
+              Estado individual dos módulos do GRAND THEFT BRODIS:
             </p>
-
-            <div style={styles.servicesList}>
-              {SERVICOS.map((servico, index) => (
-                <div key={index} style={styles.serviceItem}>
-                  <span style={styles.serviceName}>{servico.nome}</span>
+            <div className="flex flex-col gap-2.5">
+              {SERVICOS.map((servico) => (
+                <div
+                  key={servico.nome}
+                  className="flex justify-between items-center bg-asphalt border border-white/5 rounded-md py-2.5 px-3.5 text-sm"
+                >
+                  <span className="text-paper/80">{servico.nome}</span>
                   {servico.ok ? (
-                    <span style={styles.statusOnline}>🟢 Operacional</span>
+                    <span className="text-hood-green text-xs font-bold">🟢 Operacional</span>
                   ) : (
-                    <span style={styles.statusOffline}>🔴 Com Falha</span>
+                    <span className="text-red-500 text-xs font-bold">🔴 Com falha</span>
                   )}
                 </div>
               ))}
             </div>
-
-            <button 
-              className="btn-reload" 
-              onClick={() => setShowModal(false)} 
-              style={{ ...styles.button, marginTop: '20px', marginBottom: 0 }}
+            <button
+              onClick={() => setShowModal(false)}
+              className="w-full bg-neon-purple text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-neon-purple-dim transition"
             >
               Fechar
             </button>
@@ -175,218 +132,19 @@ export default function MaintenanceScreen() {
   )
 }
 
-const styles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: '#f8fafc',
-    backgroundImage: 'radial-gradient(circle at 50% 0%, #ffffff 0%, #f1f5f9 100%)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 99999,
-    padding: '24px',
-    boxSizing: 'border-box',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-  },
-  card: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '16px',
-    padding: '40px 32px',
-    maxWidth: '480px',
-    width: '100%',
-    textAlign: 'center',
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02)',
-  },
-  statusBadge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '8px',
-    backgroundColor: '#fffbeb',
-    border: '1px solid #fef3c7',
-    padding: '6px 14px',
-    borderRadius: '9999px',
-    fontSize: '0.72rem',
-    fontWeight: '700',
-    color: '#b45309',
-    letterSpacing: '0.05em',
-    marginBottom: '24px',
-  },
-  badgeDot: {
-    width: '8px',
-    height: '8px',
-    backgroundColor: '#d97706',
-    borderRadius: '50%',
-  },
-  title: {
-    fontSize: '3.4rem',
-    color: '#0f172a',
-    margin: '0 0 16px 0',
-    letterSpacing: '0.02em',
-    lineHeight: '1',
-    textTransform: 'uppercase',
-  },
-  description: {
-    color: '#475569',
-    fontSize: '0.95rem',
-    lineHeight: '1.6',
-    margin: '0 0 24px 0',
-  },
-  infoBox: {
-    backgroundColor: '#f8fafc',
-    border: '1px solid #f1f5f9',
-    borderRadius: '12px',
-    padding: '16px 20px',
-    marginBottom: '16px',
-  },
-  infoRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: '0.85rem',
-  },
-  infoLabel: {
-    color: '#64748b',
-    fontWeight: '500',
-  },
-  infoValue: {
-    color: '#0f172a',
-    fontWeight: '600',
-  },
-  codeValue: {
-    color: '#475569',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-    fontSize: '0.8rem',
-    fontWeight: '700',
-    backgroundColor: '#e2e8f0',
-    padding: '2px 6px',
-    borderRadius: '4px',
-  },
-  divider: {
-    height: '1px',
-    backgroundColor: '#e2e8f0',
-    margin: '12px 0',
-  },
-  detailsButton: {
-    width: '100%',
-    backgroundColor: '#ffffff',
-    color: '#64748b',
-    border: '1px solid #e2e8f0',
-    borderRadius: '10px',
-    padding: '10px 16px',
-    fontSize: '0.85rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginBottom: '12px',
-  },
-  button: {
-    width: '100%',
-    backgroundColor: '#7c3aed',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '10px',
-    padding: '12px 20px',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    marginBottom: '16px',
-  },
-  subtext: {
-    fontSize: '0.825rem',
-    color: '#94a3b8',
-    margin: '0 0 24px 0',
-    lineHeight: '1.4',
-  },
-  footer: {
-    borderTop: '1px solid #f1f5f9',
-    paddingTop: '20px',
-  },
-  brand: {
-    color: '#7c3aed',
-    fontSize: '1.25rem',
-    letterSpacing: '0.05em',
-  },
+function Row({ label, value, valueClass = 'text-paper', mono = false }) {
+  return (
+    <div className="flex justify-between items-center text-sm py-0.5">
+      <span className="text-paper/50">{label}</span>
+      <span
+        className={`font-semibold ${valueClass} ${mono ? 'font-mono text-xs bg-white/5 px-1.5 py-0.5 rounded' : ''}`}
+      >
+        {value}
+      </span>
+    </div>
+  )
+}
 
-  /* ESTILOS DO MODAL */
-  modalBackdrop: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(15, 23, 42, 0.4)',
-    backdropFilter: 'blur(4px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 100000,
-    padding: '20px',
-  },
-  modalCard: {
-    backgroundColor: '#ffffff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '16px',
-    padding: '28px 24px',
-    maxWidth: '420px',
-    width: '100%',
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
-  },
-  modalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '8px',
-  },
-  modalTitle: {
-    margin: 0,
-    fontSize: '1.1rem',
-    color: '#0f172a',
-    fontWeight: '700',
-  },
-  closeButton: {
-    background: 'none',
-    border: 'none',
-    fontSize: '1.2rem',
-    color: '#94a3b8',
-    cursor: 'pointer',
-    padding: '4px',
-  },
-  modalSubtext: {
-    fontSize: '0.85rem',
-    color: '#64748b',
-    margin: '0 0 16px 0',
-  },
-  servicesList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '10px',
-  },
-  serviceItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    border: '1px solid #f1f5f9',
-    padding: '10px 14px',
-    borderRadius: '8px',
-    fontSize: '0.85rem',
-  },
-  serviceName: {
-    color: '#334155',
-    fontWeight: '500',
-  },
-  statusOnline: {
-    color: '#16a34a',
-    fontWeight: '600',
-    fontSize: '0.8rem',
-  },
-  statusOffline: {
-    color: '#dc2626',
-    fontWeight: '600',
-    fontSize: '0.8rem',
-  },
+function Divider() {
+  return <div className="h-px bg-white/10 my-2.5" />
 }

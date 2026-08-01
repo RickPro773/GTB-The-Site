@@ -5,24 +5,37 @@ import scene3 from '../assets/images/scene3.png'
 import introTheme from '../assets/audio/intro-theme.mp3'
 import menuTheme from '../assets/audio/menu-theme.mp3'
 import LogoFull from './LogoFull'
+import { roster } from '../data/roster'
 
-const SLIDES = [scene1, scene2]
-const SLIDE_INTERVAL_MS = 4500 // mais lento, estilo "cutscene" de créditos
-const INTRO_DURATION_MS = 60000 // ~1 minuto, como pedido
+const SLIDES = [scene1, scene2, scene3]
+const SLIDE_INTERVAL_MS = 4500 // ritmo de "cutscene" de créditos
+const INTRO_DURATION_MS = 60000 // ~1 minuto
+
+// nomes do elenco passando tipo créditos de abertura Rockstar,
+// alternando junto com os slides de fundo
+const CREDITS = roster.map((c) => c.name)
 
 export default function Intro({ audio }) {
   const [hidden, setHidden] = useState(false)
   const [activeSlide, setActiveSlide] = useState(0)
+  const [creditIndex, setCreditIndex] = useState(0)
   const endedRef = useRef(false)
 
   const { introRef, menuRef, soundOn, toggleSound, switchToMenuTrack } = audio
 
-  // slideshow de imagens de fundo, em loop pelos 60s da intro
   useEffect(() => {
     if (SLIDES.length <= 1) return
     const id = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % SLIDES.length)
     }, SLIDE_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [])
+
+  useEffect(() => {
+    if (CREDITS.length === 0) return
+    const id = setInterval(() => {
+      setCreditIndex((prev) => (prev + 1) % CREDITS.length)
+    }, 2600)
     return () => clearInterval(id)
   }, [])
 
@@ -33,8 +46,6 @@ export default function Intro({ audio }) {
     switchToMenuTrack()
   }
 
-  // termina automaticamente após ~1 minuto, ou quando a própria
-  // faixa da intro chega ao fim (o que vier primeiro), ou no skip
   useEffect(() => {
     const timeout = setTimeout(endIntro, INTRO_DURATION_MS)
     const introEl = introRef.current
@@ -72,20 +83,38 @@ export default function Intro({ audio }) {
           </div>
 
           <div className="animate-flicker w-[min(680px,88vw)]">
-            <LogoFull className="w-full h-auto" />
+            <LogoFull className="w-full h-auto drop-shadow-[0_0_35px_rgba(192,38,255,0.35)]" />
           </div>
 
-          <div className="mt-10 w-[min(460px,72vw)] h-[3px] bg-white/10 border border-white/20 relative overflow-hidden">
+          {/* créditos do elenco passando, estilo abertura Rockstar */}
+          {CREDITS.length > 0 && (
+            <div className="mt-8 h-6 overflow-hidden relative w-[min(400px,80vw)]">
+              {CREDITS.map((name, i) => (
+                <div
+                  key={name}
+                  className={`absolute inset-0 flex items-center justify-center text-[0.7rem] tracking-[3px] uppercase transition-opacity duration-700 ${
+                    i === creditIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                >
+                  <span className="text-paper/40">Estrelando</span>
+                  <span className="mx-2 text-hood-green">&middot;</span>
+                  <span className="text-paper/70 font-semibold">{name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="mt-8 w-[min(460px,72vw)] h-[3px] bg-white/10 border border-white/20 relative overflow-hidden rounded-full">
             <div
-              className="h-full bg-gradient-to-r from-neon-purple to-hood-green"
+              className="h-full bg-gradient-to-r from-neon-purple to-hood-green shadow-[0_0_12px_rgba(57,211,83,0.6)]"
               style={{ animation: `loadbar-slow ${INTRO_DURATION_MS}ms linear forwards` }}
             />
           </div>
           <div className="mt-4 text-[0.65rem] tracking-[4px] text-paper/45 uppercase">
             Carregando o bairro...
           </div>
-          <div className="mt-10 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
-            Intro Theme &middot; Grand Theft Brodis (Remix)
+          <div className="mt-8 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
+            Intro Theme &middot; Grande Theft Brodis (Remix)
           </div>
         </div>
 

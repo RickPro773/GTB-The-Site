@@ -1,20 +1,23 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
+// Adicione novas versões no topo do array — a mais recente aparece
+// primeiro. status: 'Atual' destaca em amarelo, qualquer outro
+// valor aparece neutro.
 const PATCH_LOGS = [
   {
     version: 'v0.0.5 Alpha',
-    date: '15 de Agosto, 2026',
+    date: '01 de Agosto, 2026',
     status: 'Atual',
     highlights: [
       '🚗 Física de veículos e derrapagem atualizada.',
       '🏙️ Expansão do centro da cidade de Los Brodis.',
-      '📻 Sistema de Rádios com canais exclusivos da comunidade.',
+      '📻 Sistema de rádios com canais exclusivos da comunidade.',
       '🔧 Correção de estabilidade no servidor.',
     ],
   },
   {
     version: 'v0.0.4 Alpha',
-    date: '01 de Agosto, 2026',
+    date: '01 de Julho, 2026',
     status: 'Anterior',
     highlights: [
       '🧢 Novos itens e roupas exclusivas.',
@@ -27,163 +30,71 @@ export default function PatchNotes() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <button onClick={() => setIsOpen(true)} style={styles.triggerButton}>
-        📜 NOTAS DE ATUALIZAÇÃO (PATCH NOTES)
+    <div className="text-center py-8">
+      <button
+        onClick={() => setIsOpen(true)}
+        className="bg-asphalt-2/80 border border-warn-yellow/40 text-warn-yellow rounded-xl py-3.5 px-6 text-sm font-bold tracking-[1px] backdrop-blur-sm hover:bg-asphalt-2 transition"
+      >
+        📜 Notas de Atualização (Patch Notes)
       </button>
 
       {isOpen && (
-        <div style={styles.backdrop} onClick={() => setIsOpen(false)}>
-          <div style={styles.modalCard} onClick={(e) => e.stopPropagation()}>
-            <div style={styles.modalHeader}>
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-black/75 backdrop-blur-sm px-5"
+          onClick={() => setIsOpen(false)}
+        >
+          <div
+            className="bg-asphalt-2 border border-neon-purple/40 rounded-2xl p-7 max-w-md w-full max-h-[80vh] overflow-y-auto text-left"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start border-b border-white/10 pb-3 mb-4">
               <div>
-                <span style={styles.subtext}>DIÁRIO DA ALPHA</span>
-                <h2 className="font-pricedown" style={styles.modalTitle}>ATUALIZAÇÕES</h2>
+                <span className="text-neon-purple text-xs font-bold tracking-[1px] uppercase">
+                  Diário da Alpha
+                </span>
+                <h2 className="font-display text-3xl text-hood-green leading-none mt-1">
+                  Atualizações
+                </h2>
               </div>
-              <button style={styles.closeX} onClick={() => setIsOpen(false)}>✕</button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-paper/50 hover:text-paper transition text-lg leading-none"
+              >
+                ✕
+              </button>
             </div>
 
-            <div style={styles.logsList}>
-              {PATCH_LOGS.map((patch, idx) => (
-                <div key={idx} style={styles.patchItem}>
-                  <div style={styles.patchHead}>
-                    <span className="font-pricedown" style={styles.version}>{patch.version}</span>
-                    <span style={patch.status === 'Atual' ? styles.tagCurrent : styles.tagOld}>
+            <div className="flex flex-col gap-3.5">
+              {PATCH_LOGS.map((patch) => (
+                <div key={patch.version} className="bg-asphalt border border-white/[0.06] rounded-lg p-3.5">
+                  <div className="flex justify-between items-center mb-2.5">
+                    <span className="font-display text-xl text-paper">{patch.version}</span>
+                    <span
+                      className={`text-[0.7rem] font-bold ${
+                        patch.status === 'Atual' ? 'text-warn-yellow' : 'text-paper/40'
+                      }`}
+                    >
                       {patch.date}
                     </span>
                   </div>
-                  <ul style={styles.bulletList}>
-                    {patch.highlights.map((item, itemIdx) => (
-                      <li key={itemIdx} style={{ marginBottom: '6px' }}>{item}</li>
+                  <ul className="text-paper/70 text-sm leading-relaxed pl-4 list-disc space-y-1.5">
+                    {patch.highlights.map((item) => (
+                      <li key={item}>{item}</li>
                     ))}
                   </ul>
                 </div>
               ))}
             </div>
 
-            <button onClick={() => setIsOpen(false)} style={styles.closeBtn}>
-              FECHAR
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-full bg-neon-purple text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-neon-purple-dim transition"
+            >
+              Fechar
             </button>
           </div>
         </div>
       )}
     </div>
   )
-}
-
-const styles = {
-  triggerButton: {
-    backgroundColor: 'rgba(18, 18, 26, 0.8)',
-    color: '#ffb703',
-    border: '1px solid rgba(255, 183, 3, 0.4)',
-    borderRadius: '12px',
-    padding: '14px 24px',
-    fontSize: '0.85rem',
-    fontWeight: '800',
-    letterSpacing: '1px',
-    cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.4)',
-    backdropFilter: 'blur(8px)',
-  },
-  backdrop: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100vw',
-    height: '100vh',
-    backgroundColor: 'rgba(5, 5, 10, 0.8)',
-    backdropFilter: 'blur(8px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 99999,
-    padding: '20px',
-  },
-  modalCard: {
-    backgroundColor: '#12121a',
-    border: '1px solid rgba(139, 0, 255, 0.4)',
-    borderRadius: '16px',
-    padding: '28px',
-    maxWidth: '480px',
-    width: '100%',
-    maxHeight: '80vh',
-    overflowY: 'auto',
-    boxShadow: '0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(139,0,255,0.2)',
-    textAlign: 'left',
-    color: '#ffffff',
-  },
-  modalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    borderBottom: '1px solid rgba(255,255,255,0.1)',
-    paddingBottom: '12px',
-    marginBottom: '16px',
-  },
-  subtext: {
-    fontSize: '0.7rem',
-    color: '#8b00ff',
-    fontWeight: '800',
-    letterSpacing: '1px',
-  },
-  modalTitle: {
-    margin: 0,
-    fontSize: '2rem',
-    color: '#00ff88',
-  },
-  closeX: {
-    background: 'none',
-    border: 'none',
-    color: '#a0a0b8',
-    fontSize: '1.2rem',
-    cursor: 'pointer',
-  },
-  logsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
-  },
-  patchItem: {
-    backgroundColor: '#0c0c12',
-    border: '1px solid rgba(255,255,255,0.06)',
-    borderRadius: '10px',
-    padding: '14px',
-  },
-  patchHead: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '10px',
-  },
-  version: {
-    fontSize: '1.2rem',
-    color: '#ffffff',
-  },
-  tagCurrent: {
-    color: '#ffb703',
-    fontSize: '0.72rem',
-    fontWeight: '700',
-  },
-  tagOld: {
-    color: '#6e6e82',
-    fontSize: '0.72rem',
-  },
-  bulletList: {
-    margin: 0,
-    paddingLeft: '18px',
-    color: '#c0c0d0',
-    fontSize: '0.85rem',
-    lineHeight: '1.5',
-  },
-  closeBtn: {
-    width: '100%',
-    backgroundColor: '#8b00ff',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '8px',
-    padding: '12px',
-    fontWeight: '800',
-    marginTop: '20px',
-    cursor: 'pointer',
-  },
 }
