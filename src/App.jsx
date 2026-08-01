@@ -1,4 +1,6 @@
 import React from 'react'
+
+// Componentes da Estrutura Principal
 import StatusBar from './components/StatusBar'
 import Header from './components/Header'
 import Intro from './components/Intro'
@@ -8,25 +10,29 @@ import Characters from './components/Characters'
 import PlaySection from './components/PlaySection'
 import Footer from './components/Footer'
 import ComingSoonModal from './components/ComingSoonModal'
-import MaintenanceScreen from './components/MaintenanceScreen' // 1. Importação da tela de manutenção
+import MaintenanceScreen from './components/MaintenanceScreen'
+
+// 🎵 Novos Componentes Integrados
+import RadioSelector from './components/RadioSelector'
+import PatchNotes from './components/PatchNotes'
+
+// Hooks
 import { useAudioPlayer } from './hooks/useAudioPlayer'
 import { useComingSoon } from './hooks/useComingSoon'
 
-// ⚙️ CHAVE DE MANUTENÇÃO: 
-// Altere para 'true' para ATIVAR a manutenção.
-// Altere para 'false' para VOLTAR o site ao ar normalmente.
+// ⚙️ Alterne para true apenas quando o servidor estiver em manutenção
 const IN_MAINTENANCE = false
 
 const SOCIAL_MESSAGES = {
-  Discord: 'Nosso servidor do Discord está a caminho. É lá que vai rolar novidade, teste fechado e papo direto com a turma.',
-  Roblox: 'A página do GTB no Roblox ainda não está no ar — assim que a build sair da alpha fechada, o link aparece aqui.',
+  Discord: 'Nosso servidor do Discord está a caminho.',
+  Roblox: 'A página do GTB no Roblox ainda não está no ar.',
 }
 
 export default function App() {
   const audio = useAudioPlayer()
   const { content, showComingSoon, closeComingSoon } = useComingSoon()
 
-  // Se a manutenção estiver ativa, renderiza apenas a tela de aviso
+  // Se a manutenção estiver ativa, exibe apenas a tela de aviso
   if (IN_MAINTENANCE) {
     return <MaintenanceScreen />
   }
@@ -36,10 +42,7 @@ export default function App() {
   }
 
   function handleQuadroClick() {
-    showComingSoon(
-      'Quadro',
-      'Um mural com atualizações, bastidores e ideias do desenvolvimento do GTB. Em construção pela nossa turma.'
-    )
+    showComingSoon('Quadro', 'Um mural com atualizações do GTB.')
   }
 
   return (
@@ -48,11 +51,26 @@ export default function App() {
       <Intro audio={audio} />
       <NowPlayingToast label={audio.nowPlayingLabel} />
       <Header onQuadroClick={handleQuadroClick} />
+
+      {/* 🚀 Seção Principal / Banner */}
       <Hero />
+
+      {/* 📻 Rádio GTB (Posicionada abaixo do Hero) */}
+      <RadioSelector />
+
+      {/* 🎭 Seção de Personagens */}
       <Characters />
+
+      {/* 📜 Notas de Atualização */}
+      <PatchNotes />
+
+      {/* 🎮 Seção de Jogar / Entrar no Servidor */}
       <PlaySection />
+
+      {/* 📌 Rodapé */}
       <Footer onSocialClick={handleSocialClick} />
 
+      {/* Modal de Recursos em Breve */}
       {content && (
         <ComingSoonModal
           title={content.title}
