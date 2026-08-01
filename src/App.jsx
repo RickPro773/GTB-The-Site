@@ -12,9 +12,12 @@ import Footer from './components/Footer'
 import ComingSoonModal from './components/ComingSoonModal'
 import MaintenanceScreen from './components/MaintenanceScreen'
 
-// 🎵 Novos Componentes Integrados
+// 🎵 Componentes Especiais (Rádio e Patch Notes)
 import RadioSelector from './components/RadioSelector'
 import PatchNotes from './components/PatchNotes'
+
+// 🔑 Portal de Acesso por Chave
+import AccessGate from './components/AccessGate'
 
 // Hooks
 import { useAudioPlayer } from './hooks/useAudioPlayer'
@@ -46,38 +49,40 @@ export default function App() {
   }
 
   return (
-    <div className="bg-asphalt text-paper font-body overflow-x-hidden">
-      <StatusBar />
-      <Intro audio={audio} />
-      <NowPlayingToast label={audio.nowPlayingLabel} />
-      <Header onQuadroClick={handleQuadroClick} />
+    <AccessGate>
+      <div className="bg-asphalt text-paper font-body overflow-x-hidden">
+        <StatusBar />
+        <Intro audio={audio} />
+        <NowPlayingToast label={audio.nowPlayingLabel} />
+        <Header onQuadroClick={handleQuadroClick} />
 
-      {/* 🚀 Seção Principal / Banner */}
-      <Hero />
+        {/* 🚀 Banner Principal */}
+        <Hero />
 
-      {/* 📻 Rádio GTB (Posicionada abaixo do Hero) */}
-      <RadioSelector />
+        {/* 📻 Seletor de Rádios */}
+        <RadioSelector />
 
-      {/* 🎭 Seção de Personagens */}
-      <Characters />
+        {/* 🎭 Seção de Personagens */}
+        <Characters />
 
-      {/* 📜 Notas de Atualização */}
-      <PatchNotes />
+        {/* 📜 Notas de Atualização (Patch Notes) */}
+        <PatchNotes />
 
-      {/* 🎮 Seção de Jogar / Entrar no Servidor */}
-      <PlaySection />
+        {/* 🎮 Seção de Jogar / Entrar no Servidor */}
+        <PlaySection />
 
-      {/* 📌 Rodapé */}
-      <Footer onSocialClick={handleSocialClick} />
+        {/* 📌 Rodapé */}
+        <Footer onSocialClick={handleSocialClick} />
 
-      {/* Modal de Recursos em Breve */}
-      {content && (
-        <ComingSoonModal
-          title={content.title}
-          message={content.message}
-          onClose={closeComingSoon}
-        />
-      )}
-    </div>
+        {/* Modal de Recursos em Breve */}
+        {content && (
+          <ComingSoonModal
+            title={content.title}
+            message={content.message}
+            onClose={closeComingSoon}
+          />
+        )}
+      </div>
+    </AccessGate>
   )
 }
