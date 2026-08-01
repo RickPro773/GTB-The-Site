@@ -15,7 +15,7 @@ import { useComingSoon } from './hooks/useComingSoon'
 // ⚙️ CHAVE DE MANUTENÇÃO: 
 // Altere para 'true' para ATIVAR a manutenção.
 // Altere para 'false' para VOLTAR o site ao ar normalmente.
-const IN_MAINTENANCE = true
+const IN_MAINTENANCE = false
 
 const SOCIAL_MESSAGES = {
   Discord: 'Nosso servidor do Discord está a caminho. É lá que vai rolar novidade, teste fechado e papo direto com a turma.',
