@@ -80,7 +80,7 @@ export default function AccessGate({ children }) {
           <input
             type="text"
             className="key-input"
-            placeholder="EX: BRODI-ALPHA-01"
+            placeholder="EX: 14 Caracteres"
             value={inputKey}
             onChange={(e) => setInputKey(e.target.value)}
             style={styles.input}
