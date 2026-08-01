@@ -165,3 +165,59 @@ de verdade apontando pro link do Roblox.
 - **Roleta de personagens**: imagem em
   `src/assets/images/characters-wheel.png`. Nomes dos personagens
   em `src/data/roster.js`.
+
+## Elenco / Personagens
+
+Cada personagem é um objeto em `src/data/roster.js`:
+
+```js
+{
+  id: '01',
+  name: 'Rick',
+  tag: 'Camisa do Fortaleza',
+  photo: rickPhoto,   // import de imagem, ou null se ainda não tem foto
+  effect: null,        // ou 'alive' para o efeito de respiração/movimento
+}
+```
+
+Elenco atual:
+- **Rick** — Camisa do Fortaleza
+- **Raf "Moicano"** — Moicano (com efeito `alive`: leve respiração/balanço
+  contínuo na foto, pra dar sensação de movimento — pausa automaticamente
+  no hover)
+- **GTA2D** — Terno & Cofre
+- **Fox** — O Incendiário (ainda sem foto individual — aparece só na
+  roleta de seleção)
+
+Pra adicionar um personagem novo: salve a foto em
+`src/assets/images/`, importe no topo de `src/data/roster.js` e
+adicione um novo objeto no array `roster`. O card aparece
+automaticamente na grade da seção Personagens — não precisa mexer
+em `Characters.jsx`.
+
+Pra dar o efeito "vivo" (respiração sutil) em qualquer personagem,
+defina `effect: 'alive'` no objeto dele.
+
+## Logo GTB
+
+Duas versões da logo, feitas em SVG (não são mais imagem estática),
+reproduzindo a arte de referência do "grand theft BRODIS":
+
+- **`src/components/LogoFull.jsx`** — logo completa "grand theft
+  BRODIS", com "grand theft" em branco/contorno preto e "BRODIS"
+  alternando verde (`--hood-green`) e roxo (`--neon-purple`), S final
+  branco — as mesmas cores da arte original. Usada no Hero.
+- **`src/components/LogoGTB.jsx`** — versão curta, só "GTB", roxo
+  com contorno verde. Usada no Header e na tela de Intro.
+
+Ambas usam a fonte Pricedown (herdada do `@font-face` do
+`src/index.css`) e são vetoriais — escalam sem perder qualidade em
+qualquer tamanho. Pra usar em outro lugar do site:
+
+```jsx
+import LogoFull from './components/LogoFull'
+import LogoGTB from './components/LogoGTB'
+
+<LogoFull className="w-96" />
+<LogoGTB className="h-12" />
+```

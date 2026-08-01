@@ -102,3 +102,18 @@ body {
   transform: scale(1.06);
   filter: grayscale(0) contrast(1.1);
 }
+
+/* ---- Efeito "vivo": leve respiração + balanço, pra personagem
+   que pediu pra parecer se mexendo. Sutil de propósito — não é
+   pra parecer bugado, é só um sinal de vida na foto estática. ---- */
+@keyframes alive-breathe {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.015) rotate(0.4deg); }
+}
+.char-card--alive img {
+  animation: alive-breathe 3.2s ease-in-out infinite;
+}
+.char-card--alive:hover img {
+  animation-play-state: paused;
+  transform: scale(1.06);
+}
