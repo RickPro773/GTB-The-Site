@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function MaintenanceScreen() {
+  // Pega o horário atual automaticamente para a verificação
+  const [lastChecked, setLastChecked] = useState(() => 
+    new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  )
+
+  const handleReload = () => {
+    setLastChecked(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))
+    window.location.reload()
+  }
+
   return (
     <div style={styles.overlay}>
-      {/* Importação da fonte Pricedown e animações sutis */}
       <style>{`
         @font-face {
           font-family: 'Pricedown';
@@ -25,6 +34,18 @@ export default function MaintenanceScreen() {
         .pulse {
           animation: pulseAmber 1.6s infinite ease-in-out;
         }
+
+        .btn-reload {
+          transition: all 0.2s ease-in-out;
+        }
+        .btn-reload:hover {
+          background-color: #6d28d9 !important;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+        .btn-reload:active {
+          transform: translateY(0);
+        }
       `}</style>
 
       <div style={styles.card}>
@@ -39,7 +60,7 @@ export default function MaintenanceScreen() {
           MANUTENÇÃO
         </h1>
 
-        {/* Descrição Direta e Profissional */}
+        {/* Descrição Direta */}
         <p style={styles.description}>
           A plataforma encontra-se temporariamente indisponível devido a uma oscilação técnica nos <strong style={{ color: '#111827' }}>servidores da nossa provedora de infraestrutura</strong>.
         </p>
@@ -50,19 +71,40 @@ export default function MaintenanceScreen() {
             <span style={styles.infoLabel}>Causa</span>
             <span style={styles.infoValue}>Falha Externa do Provedor</span>
           </div>
+
           <div style={styles.divider}></div>
+
           <div style={styles.infoRow}>
             <span style={styles.infoLabel}>Status Atual</span>
             <span style={{ ...styles.infoValue, color: '#d97706' }}>Acompanhando Resolução</span>
           </div>
+
+          <div style={styles.divider}></div>
+
+          <div style={styles.infoRow}>
+            <span style={styles.infoLabel}>Última Checagem</span>
+            <span style={styles.infoValue}>Hoje às {lastChecked}</span>
+          </div>
+
+          <div style={styles.divider}></div>
+
+          <div style={styles.infoRow}>
+            <span style={styles.infoLabel}>ID do Incidente</span>
+            <span style={styles.codeValue}>INC-503-PROV-OUTAGE</span>
+          </div>
         </div>
+
+        {/* Botão Tentar Novamente */}
+        <button className="btn-reload" onClick={handleReload} style={styles.button}>
+          🔄 Tentar Novamente
+        </button>
 
         {/* Mensagem de Encerramento */}
         <p style={styles.subtext}>
           O acesso será restabelecido automaticamente assim que os serviços da fornecedora forem normalizados.
         </p>
 
-        {/* Rodapé Clean */}
+        {/* Rodapé Corrigido */}
         <div style={styles.footer}>
           <span className="font-pricedown" style={styles.brand}>GRAND THEFT BRODI</span>
         </div>
@@ -78,7 +120,7 @@ const styles = {
     left: 0,
     width: '100vw',
     height: '100vh',
-    backgroundColor: '#f8fafc', // Fundo claro e moderno
+    backgroundColor: '#f8fafc',
     backgroundImage: 'radial-gradient(circle at 50% 0%, #ffffff 0%, #f1f5f9 100%)',
     display: 'flex',
     alignItems: 'center',
@@ -120,7 +162,7 @@ const styles = {
   },
   title: {
     fontSize: '3.4rem',
-    color: '#0f172a', // Escuro para alto contraste sobre o card branco
+    color: '#0f172a',
     margin: '0 0 16px 0',
     letterSpacing: '0.02em',
     lineHeight: '1',
@@ -153,10 +195,31 @@ const styles = {
     color: '#0f172a',
     fontWeight: '600',
   },
+  codeValue: {
+    color: '#475569',
+    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+    fontSize: '0.8rem',
+    fontWeight: '700',
+    backgroundColor: '#e2e8f0',
+    padding: '2px 6px',
+    borderRadius: '4px',
+  },
   divider: {
     height: '1px',
     backgroundColor: '#e2e8f0',
     margin: '12px 0',
+  },
+  button: {
+    width: '100%',
+    backgroundColor: '#7c3aed',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '10px',
+    padding: '12px 20px',
+    fontSize: '0.9rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    marginBottom: '16px',
   },
   subtext: {
     fontSize: '0.825rem',
@@ -169,7 +232,7 @@ const styles = {
     paddingTop: '20px',
   },
   brand: {
-    color: '#7c3aed', // Roxo marcante da identidade do site
+    color: '#7c3aed',
     fontSize: '1.25rem',
     letterSpacing: '0.05em',
   },
