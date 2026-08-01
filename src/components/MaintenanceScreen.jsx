@@ -64,7 +64,7 @@ export default function MaintenanceScreen() {
 
         {/* Rodapé Clean */}
         <div style={styles.footer}>
-          <span className="font-pricedown" style={styles.brand}>GRANDE THEFT BRODIS</span>
+          <span className="font-pricedown" style={styles.brand}>GRAND THEFT BRODI</span>
         </div>
       </div>
     </div>
