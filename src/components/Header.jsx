@@ -1,12 +1,9 @@
+import LogoGTB from './LogoGTB'
+
 export default function Header() {
   return (
     <header className="fixed top-[34px] left-0 right-0 z-[100] flex items-center justify-between py-[18px] px-[5vw] bg-gradient-to-b from-asphalt/95 to-transparent">
-      <div
-        className="font-display text-2xl sm:text-3xl tracking-[3px] text-neon-purple gtb-outline-title"
-        style={{ textShadow: '2px 2px 0 #39d353' }}
-      >
-        GTB
-      </div>
+      <LogoGTB className="h-8 sm:h-9 w-auto" />
       <nav className="hidden sm:block">
         <a
           href="#personagens"

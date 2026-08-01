@@ -1,3 +1,5 @@
+import LogoFull from './LogoFull'
+
 export default function Hero() {
   return (
     <section className="hero-bg relative min-h-screen flex items-end">
@@ -5,11 +7,8 @@ export default function Hero() {
         <div className="text-warn-yellow text-sm tracking-[4px] uppercase mb-2">
           Roblox &middot; Mundo Aberto &middot; Feito pelos Brodis
         </div>
-        <h1 className="gtb-hero-title font-display text-[clamp(3.5rem,12vw,9.5rem)] leading-[0.85] text-neon-purple">
-          GRANDE
-          <br />
-          THEFT <em className="text-hood-green">BRODIS</em>
-        </h1>
+        <h1 className="sr-only">Grande Theft Brodis</h1>
+        <LogoFull className="w-[min(560px,90vw)] h-auto -ml-1" />
         <p className="max-w-[520px] mt-5 text-base sm:text-lg text-paper/85 leading-relaxed">
           Um jogo de mundo aberto no Roblox, feito pela nossa turma. Rua, carro, moicano verde e
           muita zoeira estilo GTA — mas com a nossa cara.

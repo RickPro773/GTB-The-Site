@@ -3,6 +3,7 @@ import scene1 from '../assets/images/scene1.png'
 import scene2 from '../assets/images/scene2.png'
 import introTheme from '../assets/audio/intro-theme.mp3'
 import menuTheme from '../assets/audio/menu-theme.mp3'
+import LogoGTB from './LogoGTB'
 
 const SLIDES = [scene1, scene2]
 const SLIDE_INTERVAL_MS = 2600
@@ -65,9 +66,9 @@ export default function Intro({ audio }) {
         <div className="intro-vignette z-[3]" />
 
         <div className="relative z-[5] text-center px-5">
-          <h1 className="gtb-outline-title font-display text-[clamp(3.5rem,15vw,10rem)] leading-[0.85] text-paper tracking-[4px] animate-flicker">
-            GTB
-          </h1>
+          <div className="animate-flicker flex justify-center">
+            <LogoGTB className="h-24 sm:h-32 md:h-40 w-auto" />
+          </div>
           <div className="font-body font-semibold tracking-[10px] text-[clamp(0.75rem,2vw,1.1rem)] text-hood-green mt-2 uppercase">
             Grande Theft Brodis
           </div>
