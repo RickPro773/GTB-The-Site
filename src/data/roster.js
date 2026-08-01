@@ -26,15 +26,15 @@ export const roster = [
   {
     id: '01',
     name: 'Rick',
-    tag: 'Camisa do Fortaleza',
+    tag: 'Torcedor do Leão 1918',
     photos: [rickPhoto],
     effect: null,
     theme: '#c026ff',
   },
   {
     id: '02',
-    name: 'Raf "Moicano"',
-    tag: 'Moicano',
+    name: 'Dragon',
+    tag: 'As vezes homem de terno, as vezes Moicano',
     photos: [raf3Photo],
     effect: 'alive', // efeito de "vivo"/respirando na foto
     theme: '#39d353',
@@ -42,7 +42,7 @@ export const roster = [
   {
     id: '03',
     name: 'GTA2D',
-    tag: 'Terno & Cofre',
+    tag: 'Terno & Cabelo Azul',
     photos: [gta2dPhoto],
     effect: null,
     theme: '#2f6bff',
