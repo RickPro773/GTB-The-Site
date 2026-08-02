@@ -20,7 +20,7 @@ export default function ComingSoonModal({ title, message, onClose }) {
       onClick={onClose}
     >
       <div
-        className="relative bg-asphalt-2 border border-white/10 max-w-sm w-full p-8 text-center"
+        className="panel-3d relative bg-asphalt-2 border border-white/10 rounded-xl max-w-sm w-full p-8 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -30,10 +30,10 @@ export default function ComingSoonModal({ title, message, onClose }) {
         >
           ✕
         </button>
-        <div className="inline-block border border-neon-purple text-neon-purple text-[0.65rem] tracking-[2px] uppercase py-1.5 px-4 mb-4">
+        <div className="inline-block border border-logo-purple text-logo-purple text-[0.65rem] tracking-[2px] uppercase py-1.5 px-4 mb-4 rounded-full">
           Em breve
         </div>
-        <h3 className="font-display text-3xl text-hood-green mb-3">{title}</h3>
+        <h3 className="font-display text-3xl text-logo-green text-3d-green mb-3">{title}</h3>
         <p className="text-paper/70 text-sm leading-relaxed">{message}</p>
       </div>
     </div>

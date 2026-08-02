@@ -151,78 +151,99 @@ de verdade apontando pro link do Roblox.
 
 ## Elenco / Personagens
 
-Cada personagem é um objeto em `src/data/roster.js`, com um array
-`photos` (não uma foto única) — isso é o que torna o sistema
-modular:
+Cada personagem é um objeto em `src/data/roster.js`:
 
 ```js
 {
   id: '01',
+  slug: 'rick',                 // usado na URL: /personagem/rick
   name: 'Rick',
-  tag: 'Camisa do Fortaleza',
-  photos: [rickPhoto],       // 1 foto: card fica parado
-  effect: null,               // ou 'alive' pro efeito de respiração
-  theme: '#c026ff',           // reservado pro sistema de tema por personagem
+  tag: 'Torcedor do Leão 1918',
+  photos: [rickPhoto],          // galeria da bio — pode ter várias fotos
+  effect: null,                  // ou 'alive' pro efeito de respiração
+  theme: '#8f13eb',              // cor de destaque na ficha do personagem
+  musicFile: 'rick-theme.mp3',   // nome do arquivo de música tema (veja abaixo)
+  bio: 'Texto de história do personagem...',
+  stats: [
+    { label: 'Estilo', value: 'Discreto & Elegante' },
+    { label: 'Arma Preferida', value: 'Pistola' },
+    // adicione quantos quiser
+  ],
 }
 ```
 
-Elenco atual:
-- **Rick** — Camisa do Fortaleza
-- **Raf "Moicano"** — Moicano (efeito `alive`: respiração/balanço sutil
-  e contínuo na foto, pausa no hover)
-- **GTA2D** — Terno & Cofre
-- **Fox** — O Incendiário
+Elenco atual: **Rick**, **Dragon**, **GTA2D**, **Fotafox**.
 
-### Como funciona a troca de foto ao clicar
+### Clicar no card abre a ficha do personagem
 
-Se um personagem tem **só 1 foto** no array `photos`, o card fica
-parado (comportamento atual de todos, por enquanto). Se tiver **2 ou
-mais fotos**, o card vira clicável: cada clique troca pra próxima
-foto do array, com um crossfade suave, e aparecem uns pontinhos no
-canto superior indicando quantas fotos existem e qual está ativa.
+Cada card na seção Personagens agora leva pra uma página dedicada
+em `/personagem/<slug>` (ex: `/personagem/rick`), com:
+- Foto grande de fundo, hero temático na cor do personagem
+- Texto de história (`bio`)
+- Galeria de fotos (se o personagem tiver mais de uma em `photos`)
+- Ficha de atributos (`stats`)
+- Música tema própria do personagem tocando em loop (se o arquivo
+  já existir — veja a seção seguinte)
 
-**Pra adicionar mais fotos a um personagem que já existe** (deixando
-o clique-pra-trocar ativo pra ele):
-1. Salve a nova imagem em `src/assets/images/`
-2. Importe no topo de `src/data/roster.js`
-   (ex: `import rafNovaFoto from '../assets/images/raf-nova.png'`)
-3. Adicione essa variável no array `photos` do personagem:
-   `photos: [raf3Photo, rafNovaFoto]`
+Pra adicionar um personagem novo ao elenco: salve a foto em
+`src/assets/images/`, importe no topo de `src/data/roster.js` e
+adicione um objeto novo no array `roster` com todos os campos
+acima. O card e a página de bio aparecem automaticamente — não
+precisa mexer em `Characters.jsx` nem `CharacterBio.jsx`.
 
-Não precisa mexer em `Characters.jsx` — o componente já lê o
-tamanho do array e ativa a troca automaticamente.
+### Músicas dos personagens — nomes de arquivo esperados
 
-### Sistema de tema por personagem (reservado pro futuro)
+Cada personagem tem sua própria música tema, tocada em loop na
+página da bio dele. **Os arquivos ainda não existem no projeto** —
+quando você criar cada uma, salve com o nome exato abaixo dentro de
+`src/assets/character-music/`:
 
-Cada personagem já tem um campo `theme` (cor em hex) no
-`roster.js`, mas ele ainda **não tem nenhum efeito visual** —
-é só o dado guardado, esperando a implementação. A ideia futura é
-usar essa cor pra, por exemplo, mudar o destaque visual do site
-quando um personagem específico está "selecionado" em algum lugar
-(tipo a tela de seleção da roleta). Quando for hora de implementar,
-o valor já está lá pronto pra usar.
+| Personagem | Nome do arquivo esperado |
+|---|---|
+| Rick | `rick-theme.mp3` |
+| Dragon | `dragon-theme.mp3` |
+| GTA2D | `gta2d-theme.mp3` |
+| Fotafox | `fotafox-theme.mp3` |
+
+Não precisa importar nem editar nenhum componente — o arquivo é
+descoberto automaticamente pelo nome (`import.meta.glob` em
+`src/data/characterMusic.js`). Enquanto um arquivo ainda não
+existir, a bio daquele personagem funciona normalmente, só não
+toca música (aparece um aviso discreto "Tema musical ainda não
+disponível" no lugar).
+
+Se quiser usar um nome de arquivo diferente do sugerido, é só
+trocar o valor de `musicFile` no personagem correspondente em
+`src/data/roster.js`.
+
+### Sistema de tema por personagem
+
+O campo `theme` (cor em hex) de cada personagem já tem efeito
+visual real na página de bio — controla a cor do nome, da tag e do
+brilho do hero. No card da seção Personagens, ele também define a
+cor do botão "Ver Ficha" que aparece no hover.
 
 ## Redes sociais e aba "Quadro" (em breve)
 
-O footer tem dois ícones — **Discord** e **Roblox** — e o menu tem
-uma aba **Quadro**. Nenhum dos três tem link real ainda: clicar em
-qualquer um abre um modal "Em breve" com uma mensagem específica.
-
-Isso é controlado pelo hook `src/hooks/useComingSoon.js` e pelo
-componente `src/components/ComingSoonModal.jsx`. As mensagens de
-cada rede social ficam no objeto `SOCIAL_MESSAGES` dentro de
-`src/App.jsx` — é só editar o texto ali quando quiser.
+**Redes sociais** (Discord e Roblox, ícones no footer): como ainda
+não têm link real, clicar em qualquer um mostra uma mensagem de
+erro discreta no rodapé da tela (estilo aviso de sistema, não uma
+caixa grande) que some sozinha depois de alguns segundos. Isso é o
+componente `src/components/ErrorToast.jsx`, e as mensagens de cada
+rede ficam no objeto `SOCIAL_ERRORS` dentro de `src/App.jsx`.
 
 **Quando tiver o link real do Discord ou Roblox:** troque o
 `onClick={() => onSocialClick('Discord')}` (ou `'Roblox'`) em
 `src/components/Footer.jsx` por um `<a href="...">` normal.
 
-**Quando a aba Quadro estiver pronta:** troque o `<button
-onClick={onQuadroClick}>` em `src/components/Header.jsx` por um
-link de verdade (`<a href="#quadro">` ou uma rota nova, dependendo
-de como a página for construída).
+**Aba Quadro** (no menu): continua usando o modal maior
+`ComingSoonModal.jsx` (controlado por `useComingSoon.js`), já que é
+uma seção inteira do site, não um link externo. Quando estiver
+pronta, troque o `<button onClick={onQuadroClick}>` em
+`src/components/Header.jsx` por um link de verdade.
 
 ## Duração e estilo da intro
+
 
 A intro agora dura cerca de **1 minuto** (60 segundos), com um
 slideshow mais lento entre as fotos (troca a cada 4.5s) — dá o
@@ -312,6 +333,47 @@ um painel de status dos serviços (editável em
 `src/components/MaintenanceScreen.jsx`, no array `SERVICOS`) e um
 botão de recarregar.
 
+## Navegação (React Router)
+
+O site agora tem duas rotas:
+- **`/`** — página inicial, com intro, hero, lista de personagens,
+  rádio, patch notes, etc.
+- **`/personagem/:slug`** — ficha completa de um personagem (ex:
+  `/personagem/rick`, `/personagem/dragon`).
+
+Isso usa `react-router-dom` (`<BrowserRouter>` envolvendo tudo em
+`src/main.jsx`, e `<Routes>`/`<Route>` dentro de `src/App.jsx`). O
+`vercel.json` já está configurado com um rewrite genérico
+(`/(.*)  → /index.html`) pra que recarregar a página numa URL de
+personagem funcione direto na Vercel, sem dar 404.
+
+A Intro só roda na rota `/` — ela não aparece de novo quando o
+visitante entra numa ficha de personagem e volta.
+
+## Efeitos 3D e consistência visual
+
+**Cores de título:** todo texto que usa a fonte Pricedown
+(`font-display`) no site inteiro agora usa exclusivamente as
+cores exatas da logo oficial (`text-logo-green`, `text-logo-blue`,
+`text-logo-purple`, definidas em `tailwind.config.js`) combinadas
+com as classes `.text-3d-green`/`.text-3d-purple` do
+`src/index.css`, que dão a sombra em camadas. Antes, alguns
+componentes usavam variações levemente diferentes de verde/roxo
+(`hood-green`, `neon-purple`) nos títulos, o que criava
+inconsistência visual entre seções — isso foi padronizado.
+
+**Efeito 3D em cards e painéis:** três classes utilitárias novas em
+`src/index.css`, reutilizáveis em qualquer componente:
+- **`.char-card`** — inclinação 3D leve (`rotateX`/`rotateY`) e
+  elevação com sombra colorida no hover, usando a cor `theme` do
+  personagem. Usada nos cards da seção Personagens e nas fotos da
+  galeria da bio.
+- **`.panel-3d`** — sombra em camadas que dá sensação de painel
+  "flutuando" sobre a página. Usada nos modais, no painel da rádio,
+  na ficha de atributos da bio.
+- **`.btn-3d`** — relevo físico nos botões (sombra sólida embaixo
+  que "afunda" no clique). Usada nos CTAs principais do site.
+
 ## Acesso ao site
 
 O site não tem mais nenhuma tela de "chave de acesso" — é aberto
@@ -321,3 +383,133 @@ no código JavaScript do front-end fica visível para qualquer
 visitante que abrir o "Ver código-fonte" do navegador — não seria
 uma restrição de verdade, só uma barreira decorativa. Uma
 restrição real precisaria de alguma validação no servidor.
+
+## ⚠️ Trocar a URL placeholder antes de publicar
+
+Várias tags de SEO/Open Graph usam a URL provisória
+`https://gtb-site.vercel.app/` — troque pela URL real do seu
+projeto assim que souber. Está em 4 lugares:
+- `index.html`: `<link rel="canonical">`, `<meta property="og:image">`,
+  `<meta name="twitter:image">`
+- `public/robots.txt`: linha `Sitemap:`
+- `public/sitemap.xml`: todas as tags `<loc>`
+
+## Favicon
+
+Favicon completo com as cores exatas da logo (roxo `#8f13eb` com
+contorno verde `#52db0f`), em três formatos pra cobrir diferentes
+navegadores/dispositivos:
+- `public/favicon.svg` — vetorial, usado pela maioria dos
+  navegadores modernos
+- `public/favicon-32.png` — fallback para navegadores sem suporte
+  a favicon SVG
+- `public/apple-touch-icon.png` — ícone ao salvar o site na tela
+  inicial de iPhone/iPad
+
+Pra trocar por um favicon definitivo (ex: baseado na logo oficial
+quando você tiver a arte final), é só substituir esses três
+arquivos mantendo os mesmos nomes.
+
+## SEO básico
+
+- **Open Graph + Twitter Card** no `index.html`: título, descrição
+  e imagem de capa (`public/og-image.jpg`) aparecem automaticamente
+  ao compartilhar o link do site no Discord, WhatsApp, Twitter/X,
+  etc.
+- **`public/og-image.jpg`** é um placeholder gerado a partir de uma
+  das artes do site — troque pela capa oficial (`capa.jpg`) quando
+  ela estiver pronta. Tamanho recomendado: 1200×630px.
+- **Título dinâmico por página**: a home usa "GTB — Grande Theft
+  Brodis"; cada ficha de personagem usa "Nome — GTB" (ex: "Rick —
+  GTB"), controlado pelo hook `src/hooks/usePageTitle.js`.
+- **`public/robots.txt`** e **`public/sitemap.xml`**: permitem que
+  buscadores indexem o site e conheçam todas as páginas (home + as
+  4 fichas de personagem). Se adicionar mais personagens depois,
+  adicione a URL correspondente no `sitemap.xml` também.
+
+## Analytics
+
+Usa `@vercel/analytics`, que já vem pronto pra funcionar assim que
+o site for publicado na Vercel — não precisa criar conta em nenhum
+serviço externo nem configurar nada além de já estar deployado lá.
+Os dados aparecem direto no painel do projeto na Vercel, aba
+"Analytics".
+
+## Loading state nas imagens
+
+Todas as imagens de personagem (cards da Home, galeria da bio,
+enquete) usam o componente `src/components/LoadingImage.jsx`: mostra
+um skeleton pulsante na cor de destaque do personagem enquanto a
+imagem carrega, e faz um fade suave assim que ela aparece — evita o
+"pulo" de layout e a sensação de site travado em conexões lentas.
+
+Uso: `<LoadingImage src={foto} alt="..." className="..." accentColor={char.theme} />`
+
+## Sistema de votação — "Qual o melhor personagem?"
+
+Nova seção na home (`src/components/CharacterPoll.jsx`) onde
+qualquer visitante vota no personagem favorito. Um voto por pessoa
+(controlado por `localStorage` no navegador — a pessoa não consegue
+votar de novo no mesmo navegador, mas nada impede votar de novo
+limpando o navegador ou usando outro).
+
+### ⚠️ Passo obrigatório: criar o banco de dados na Vercel
+
+A votação real (contando os votos de **todo mundo**, não só do seu
+próprio navegador) depende da **Vercel KV**, um banco de dados que
+precisa ser criado uma vez no painel da Vercel — sem isso, a
+enquete aparece na tela mas mostra um aviso de "indisponível no
+momento" (o site não quebra, só a votação fica sem funcionar).
+
+**Passo a passo (só precisa fazer uma vez):**
+1. No painel da Vercel, abra o projeto do GTB
+2. Vá em **Storage** → **Create Database** → escolha **KV**
+   (Redis-compatible)
+3. Dê um nome (ex: `gtb-votes`) e crie
+4. A Vercel pergunta se quer conectar esse banco ao projeto —
+   confirme que sim (isso adiciona as variáveis de ambiente
+   necessárias automaticamente, não precisa copiar nada na mão)
+5. Faça um novo deploy (um `git push` qualquer já dispara) pra essas
+   variáveis serem aplicadas
+
+Depois disso a votação passa a funcionar de verdade, com o placar
+valendo pra todo mundo que acessa o site.
+
+### Como funciona por dentro
+
+- **`api/vote.js`** — recebe o voto (`POST /api/vote` com
+  `{ slug: 'rick' }`), incrementa o contador daquele personagem no
+  banco, devolve o total atualizado
+- **`api/votes.js`** — devolve o placar atual de todos os
+  personagens (`GET /api/votes`)
+- **`src/hooks/usePoll.js`** — hook que busca o placar ao carregar a
+  página, envia o voto, e atualiza a tela imediatamente (sem
+  esperar resposta do servidor) pra parecer instantâneo
+- Só os 4 slugs válidos (`rick`, `dragon`, `gta2d`, `fotafox`) são
+  aceitos pela API — qualquer outro valor é rejeitado, pra evitar
+  poluir o banco com votos inventados
+
+Pra adicionar um personagem novo à enquete: já é automático, os
+componentes leem a lista direto do `roster.js`. Só é preciso
+adicionar o novo `slug` no array `VALID_SLUGS` dentro de
+`api/vote.js` e `api/votes.js` — sem isso, a API rejeita votos pra
+esse personagem por segurança.
+
+### Testando a votação localmente
+
+Rodando só `npm run dev` (Vite puro), as rotas `/api/vote` e
+`/api/votes` não existem — isso é esperado, o Vite não sabe rodar
+serverless functions da Vercel sozinho. A enquete aparece na tela
+normalmente, mas mostra o aviso de indisponível (comportamento
+seguro, não quebra nada). Pra testar a votação de verdade no seu
+PC antes de publicar, use `vercel dev` no lugar de `npm run dev`
+(precisa instalar a Vercel CLI: `npm i -g vercel`, depois `vercel
+login` uma vez). Sem isso, o jeito mais simples é só testar depois
+de já ter feito o deploy real.
+
+## Aba de Trailer
+
+Seção placeholder (`src/components/TrailerSection.jsx`) marcada
+como "Em Breve", já linkada no menu. Quando tiver o vídeo, é só
+substituir o conteúdo do card por um `<video>` ou embed do
+YouTube/etc.

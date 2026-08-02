@@ -7,8 +7,8 @@ import LogoGTB from './LogoGTB'
 const SERVICOS = [
   { nome: 'Infraestrutura da Provedora', ok: false },
   { nome: 'Hospedagem Web (Vercel)', ok: true },
-  { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
-  { nome: 'API de Dados / Personagens', ok: false },
+  { nome: 'Servidor de Áudio (Menu Theme)', ok: false },
+  { nome: 'API de Dados / Personagens', ok: true },
   { nome: 'Integração com banco de dados', ok: false },
 ]
 
@@ -50,13 +50,13 @@ export default function MaintenanceScreen() {
         </p>
 
         <div className="bg-asphalt-2 border border-white/10 rounded-lg p-5 mb-4 text-left">
-          <Row label="Causa" value="Atualização do provedor" />
+          <Row label="Causa" value="Falha externa do provedor" />
           <Divider />
-          <Row label="Status atual" value="Acompanhando a atualização" valueClass="text-warn-yellow" />
+          <Row label="Status atual" value="Acompanhando resolução" valueClass="text-warn-yellow" />
           <Divider />
           <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
           <Divider />
-          <Row label="ID do incidente" value="CHG-503-PROV-UPGRADE" mono />
+          <Row label="ID do incidente" value="INC-503-PROV-OUTAGE" mono />
         </div>
 
         <button
@@ -79,7 +79,7 @@ export default function MaintenanceScreen() {
         </p>
 
         <div className="mt-6 pt-5 border-t border-white/10">
-          <span className="font-display text-lg text-neon-purple">GRAND THEFT BRODIS</span>
+          <span className="font-display text-lg text-logo-purple text-3d-purple">GRAND THEFT BRODIS</span>
         </div>
       </div>
 

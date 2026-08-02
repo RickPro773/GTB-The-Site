@@ -52,7 +52,7 @@ export default function PatchNotes() {
                 <span className="text-neon-purple text-xs font-bold tracking-[1px] uppercase">
                   Diário da Alpha
                 </span>
-                <h2 className="font-display text-3xl text-hood-green leading-none mt-1">
+                <h2 className="font-display text-3xl text-logo-green text-3d-green leading-none mt-1">
                   Atualizações
                 </h2>
               </div>

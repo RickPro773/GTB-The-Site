@@ -14,7 +14,6 @@ const audioModules = import.meta.glob('../assets/radio/*/*.mp3', {
 function buildStations() {
   const tracksByFolder = {}
   for (const path in audioModules) {
-    // path é algo como '../assets/radio/los-brodis/Musica.mp3'
     const match = path.match(/radio\/([^/]+)\//)
     if (!match) continue
     const folder = match[1]
@@ -28,29 +27,62 @@ function buildStations() {
   }))
 }
 
+// Formata segundos em "m:ss" (ex: 125 -> "2:05"). Retorna "0:00"
+// enquanto o tempo ainda não é um número válido (áudio carregando).
+function formatTime(seconds) {
+  if (!Number.isFinite(seconds)) return '0:00'
+  const m = Math.floor(seconds / 60)
+  const s = Math.floor(seconds % 60)
+  return `${m}:${s.toString().padStart(2, '0')}`
+}
+
 export default function RadioSelector({ audio }) {
   const stations = useMemo(buildStations, [])
   const [isOpen, setIsOpen] = useState(false)
   const [stationIndex, setStationIndex] = useState(0)
   const [trackIndex, setTrackIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
   const audioRef = useRef(null)
+  const progressBarRef = useRef(null)
 
   const station = stations[stationIndex]
   const currentSrc = station?.tracks[trackIndex]
 
   // sempre que a fonte muda (estação ou faixa diferente), recarrega
-  // o elemento de áudio de forma segura, sem race condition — o
-  // React já garante que `currentSrc` está atualizado antes deste
-  // efeito rodar.
+  // o elemento de áudio de forma segura — o React já garante que
+  // `currentSrc` está atualizado antes deste efeito rodar.
   useEffect(() => {
     if (!audioRef.current) return
     audioRef.current.load()
+    setCurrentTime(0)
+    setDuration(0)
     if (isPlaying) {
       audioRef.current.play().catch(() => {})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSrc])
+
+  // acompanha o progresso da faixa em tempo real
+  useEffect(() => {
+    const el = audioRef.current
+    if (!el) return
+
+    function handleTimeUpdate() {
+      setCurrentTime(el.currentTime)
+    }
+    function handleLoadedMetadata() {
+      setDuration(el.duration)
+    }
+
+    el.addEventListener('timeupdate', handleTimeUpdate)
+    el.addEventListener('loadedmetadata', handleLoadedMetadata)
+    return () => {
+      el.removeEventListener('timeupdate', handleTimeUpdate)
+      el.removeEventListener('loadedmetadata', handleLoadedMetadata)
+    }
+  }, [])
 
   if (!station) return null // nenhuma estação com música ainda
 
@@ -79,6 +111,17 @@ export default function RadioSelector({ audio }) {
     setTrackIndex((prev) => (prev + direction + total) % total)
   }
 
+  // clique/arraste na barra pula pra posição correspondente na música
+  function handleSeek(e) {
+    if (!audioRef.current || !progressBarRef.current || !duration) return
+    const rect = progressBarRef.current.getBoundingClientRect()
+    const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width))
+    audioRef.current.currentTime = ratio * duration
+    setCurrentTime(ratio * duration)
+  }
+
+  const progressPercent = duration ? (currentTime / duration) * 100 : 0
+
   return (
     <>
       <audio ref={audioRef} src={currentSrc} onEnded={() => changeTrack(1)} />
@@ -86,8 +129,8 @@ export default function RadioSelector({ audio }) {
       {/* Botão de aba fixo — abre/fecha o painel da rádio */}
       <button
         onClick={() => setIsOpen((v) => !v)}
-        className={`fixed right-0 top-1/2 -translate-y-1/2 z-[140] flex items-center gap-2 py-3 px-3 border border-r-0 border-white/15 rounded-l-lg transition-colors ${
-          isOpen ? 'bg-asphalt-2' : 'bg-asphalt-2/80 hover:bg-asphalt-2'
+        className={`btn-3d fixed right-0 top-1/2 -translate-y-1/2 z-[140] flex items-center gap-2 py-3 px-3 border border-r-0 border-white/15 rounded-l-lg transition-colors ${
+          isOpen ? 'bg-asphalt-2' : 'bg-asphalt-2/90 hover:bg-asphalt-2'
         }`}
         aria-label={isOpen ? 'Fechar rádio' : 'Abrir rádio'}
       >
@@ -99,7 +142,7 @@ export default function RadioSelector({ audio }) {
 
       {/* Painel da rádio */}
       <div
-        className={`fixed right-0 top-1/2 -translate-y-1/2 z-[139] w-[min(320px,85vw)] bg-asphalt-2 border border-white/10 border-r-0 rounded-l-xl p-5 shadow-2xl transition-transform duration-300 ${
+        className={`panel-3d fixed right-0 top-1/2 -translate-y-1/2 z-[139] w-[min(340px,88vw)] bg-asphalt-2 border border-white/10 border-r-0 rounded-l-xl p-5 transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -115,19 +158,19 @@ export default function RadioSelector({ audio }) {
         <div className="flex items-center justify-between bg-asphalt border border-white/10 rounded-lg py-3 px-3 mb-3">
           <button
             onClick={() => changeStation(-1)}
-            className="text-warn-yellow text-lg px-1 hover:scale-110 transition"
+            className="text-warn-yellow text-lg px-1 hover:scale-110 transition-transform"
             aria-label="Estação anterior"
           >
             ◀
           </button>
           <div className="text-center px-2 overflow-hidden">
-            <div className="font-display text-lg text-hood-green leading-none truncate">
+            <div className="font-display text-lg text-logo-green leading-none truncate text-3d-green">
               {station.name}
             </div>
           </div>
           <button
             onClick={() => changeStation(1)}
-            className="text-warn-yellow text-lg px-1 hover:scale-110 transition"
+            className="text-warn-yellow text-lg px-1 hover:scale-110 transition-transform"
             aria-label="Próxima estação"
           >
             ▶
@@ -148,9 +191,31 @@ export default function RadioSelector({ audio }) {
           </div>
         )}
 
+        {/* Barra de progresso com tempo real, clicável pra pular na música */}
+        <div className="mb-1.5">
+          <div
+            ref={progressBarRef}
+            onClick={handleSeek}
+            className="relative h-2 bg-asphalt border border-white/10 rounded-full cursor-pointer overflow-hidden group"
+          >
+            <div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-logo-purple to-hood-green rounded-full transition-[width] duration-150"
+              style={{ width: `${progressPercent}%` }}
+            />
+            <div
+              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_6px_rgba(0,0,0,0.6)] opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ left: `calc(${progressPercent}% - 6px)` }}
+            />
+          </div>
+          <div className="flex justify-between text-[0.65rem] text-paper/40 mt-1.5 font-mono">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration)}</span>
+          </div>
+        </div>
+
         <button
           onClick={togglePlay}
-          className="w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-neon-purple-dim transition"
+          className="btn-3d w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] mt-3 hover:bg-neon-purple-dim transition-colors"
         >
           {isPlaying ? '⏸ Pausar Música' : '▶ Tocar Rádio'}
         </button>

@@ -21,7 +21,7 @@ html {
 }
 
 ::selection {
-  background: #c026ff;
+  background: #8f13eb;
   color: #fff;
 }
 
@@ -71,19 +71,56 @@ body {
   pointer-events: none;
 }
 
-/* ---- Título GTB com contorno duplo (roxo + verde) ---- */
+/* ---- Títulos com efeito 3D "cartaz gravado": múltiplas camadas
+   de sombra empilhadas criam profundidade real (não é só um
+   contorno chapado), usando as cores exatas da logo oficial. ---- */
 .gtb-outline-title {
-  text-shadow: 3px 3px 0 #c026ff, -3px -3px 0 #39d353;
+  text-shadow:
+    1px 1px 0 #52db0f,
+    2px 2px 0 #52db0f,
+    3px 3px 0 #0016f5,
+    4px 4px 0 #0016f5,
+    5px 5px 8px rgba(0, 0, 0, 0.5);
 }
 .gtb-hero-title {
-  text-shadow: 4px 4px 0 #39d353;
+  text-shadow:
+    1px 1px 0 #52db0f,
+    2px 2px 0 #52db0f,
+    3px 3px 0 #52db0f,
+    4px 4px 0 #52db0f,
+    5px 5px 10px rgba(0, 0, 0, 0.6);
 }
 .gtb-hero-title em {
   font-style: normal;
-  text-shadow: 4px 4px 0 #c026ff;
+  text-shadow:
+    1px 1px 0 #8f13eb,
+    2px 2px 0 #8f13eb,
+    3px 3px 0 #8f13eb,
+    4px 4px 0 #8f13eb,
+    5px 5px 10px rgba(0, 0, 0, 0.6);
 }
 .gtb-play-title {
-  text-shadow: 3px 3px 0 #c026ff;
+  text-shadow:
+    1px 1px 0 #8f13eb,
+    2px 2px 0 #8f13eb,
+    3px 3px 0 #8f13eb,
+    4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* ---- Sombra 3D genérica pra qualquer título de seção — camadas
+   empilhadas dão sensação de profundidade/relevo, mais forte que
+   um simples drop-shadow plano. ---- */
+.text-3d-purple {
+  text-shadow:
+    1px 1px 0 #8f13eb,
+    2px 2px 0 #8f13eb,
+    3px 3px 6px rgba(0, 0, 0, 0.5);
+}
+.text-3d-green {
+  text-shadow:
+    1px 1px 0 #52db0f,
+    2px 2px 0 #52db0f,
+    3px 3px 6px rgba(0, 0, 0, 0.5);
 }
 
 /* ---- Hero: imagem de fundo com fallback garantido ---- */
@@ -116,4 +153,41 @@ body {
 .char-card--alive:hover img {
   animation-play-state: paused;
   transform: scale(1.06);
+}
+
+/* ---- Profundidade 3D nos cards de personagem: leve inclinação
+   e elevação no hover, com sombra que "flutua" junto — dá
+   sensação de cartão físico se levantando, não só um zoom plano. ---- */
+.char-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.char-card:hover {
+  transform: translateY(-6px) rotateX(3deg) rotateY(-2deg);
+  box-shadow: 0 24px 40px -12px rgba(0, 0, 0, 0.6), 0 0 30px -8px var(--char-theme, rgba(192, 38, 255, 0.4));
+}
+
+/* ---- Painel flutuante com profundidade: usado na rádio e em
+   outros elementos "de vidro" sobre a página. ---- */
+.panel-3d {
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+/* ---- Botão com relevo 3D: sombra inferior sólida que simula
+   espessura física, "afunda" no clique. ---- */
+.btn-3d {
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.35), 0 6px 14px rgba(0, 0, 0, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn-3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 10px 18px rgba(0, 0, 0, 0.45);
+}
+.btn-3d:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35), 0 3px 8px rgba(0, 0, 0, 0.35);
 }
