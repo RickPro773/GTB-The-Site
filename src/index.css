@@ -71,56 +71,40 @@ body {
   pointer-events: none;
 }
 
-/* ---- Títulos com efeito 3D "cartaz gravado": múltiplas camadas
-   de sombra empilhadas criam profundidade real (não é só um
-   contorno chapado), usando as cores exatas da logo oficial. ---- */
+/* ---- Títulos com contorno limpo + leve profundidade. Contorno
+   escuro fino garante contraste em qualquer cor de texto (a
+   sombra não repete a cor do texto — isso é o que causava o
+   efeito "borrado"/ilegível antes). ---- */
 .gtb-outline-title {
   text-shadow:
-    1px 1px 0 #52db0f,
-    2px 2px 0 #52db0f,
-    3px 3px 0 #0016f5,
-    4px 4px 0 #0016f5,
-    5px 5px 8px rgba(0, 0, 0, 0.5);
+    2px 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(0, 0, 0, 0.35);
 }
 .gtb-hero-title {
   text-shadow:
-    1px 1px 0 #52db0f,
-    2px 2px 0 #52db0f,
-    3px 3px 0 #52db0f,
-    4px 4px 0 #52db0f,
-    5px 5px 10px rgba(0, 0, 0, 0.6);
+    2px 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(0, 0, 0, 0.4);
 }
 .gtb-hero-title em {
   font-style: normal;
   text-shadow:
-    1px 1px 0 #8f13eb,
-    2px 2px 0 #8f13eb,
-    3px 3px 0 #8f13eb,
-    4px 4px 0 #8f13eb,
-    5px 5px 10px rgba(0, 0, 0, 0.6);
+    2px 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(0, 0, 0, 0.4);
 }
 .gtb-play-title {
   text-shadow:
-    1px 1px 0 #8f13eb,
-    2px 2px 0 #8f13eb,
-    3px 3px 0 #8f13eb,
-    4px 4px 8px rgba(0, 0, 0, 0.5);
+    2px 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(0, 0, 0, 0.4);
 }
 
-/* ---- Sombra 3D genérica pra qualquer título de seção — camadas
-   empilhadas dão sensação de profundidade/relevo, mais forte que
-   um simples drop-shadow plano. ---- */
-.text-3d-purple {
-  text-shadow:
-    1px 1px 0 #8f13eb,
-    2px 2px 0 #8f13eb,
-    3px 3px 6px rgba(0, 0, 0, 0.5);
-}
+/* ---- Profundidade sutil pra qualquer título de seção — só uma
+   sombra escura leve, sem repetir a cor do texto (evita o efeito
+   "borrado" de sombra colorida sobre texto da mesma cor). ---- */
+.text-3d-purple,
 .text-3d-green {
   text-shadow:
-    1px 1px 0 #52db0f,
-    2px 2px 0 #52db0f,
-    3px 3px 6px rgba(0, 0, 0, 0.5);
+    2px 2px 0 rgba(0, 0, 0, 0.5),
+    0 0 14px rgba(0, 0, 0, 0.3);
 }
 
 /* ---- Hero: imagem de fundo com fallback garantido ---- */

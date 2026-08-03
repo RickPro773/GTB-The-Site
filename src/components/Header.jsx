@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import LogoGTB from './LogoGTB'
 
 export default function Header({ onQuadroClick }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -12,7 +11,12 @@ export default function Header({ onQuadroClick }) {
   return (
     <header className="fixed top-[34px] left-0 right-0 z-[100] bg-gradient-to-b from-asphalt/95 to-transparent">
       <div className="flex items-center justify-between py-[18px] px-[5vw]">
-        <LogoGTB className="h-8 sm:h-9 w-auto drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]" />
+        <a
+          href="#"
+          className="font-body font-bold text-sm tracking-[3px] text-paper/80 no-underline hover:text-hood-green transition"
+        >
+          GTB
+        </a>
 
         <nav className="hidden sm:flex items-center">
           <a
@@ -20,6 +24,12 @@ export default function Header({ onQuadroClick }) {
             className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
           >
             Personagens
+          </a>
+          <a
+            href="#radio"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
+          >
+            Rádio
           </a>
           <a
             href="#trailer"
@@ -70,6 +80,13 @@ export default function Header({ onQuadroClick }) {
             className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
           >
             Personagens
+          </a>
+          <a
+            href="#radio"
+            onClick={() => setMobileOpen(false)}
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
+          >
+            Rádio
           </a>
           <a
             href="#trailer"

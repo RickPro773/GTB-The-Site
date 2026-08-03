@@ -66,10 +66,10 @@ function SiteRoutes() {
               <Intro audio={audio} />
               <NowPlayingToast label={audio.nowPlayingLabel} />
               <Header onQuadroClick={handleQuadroClick} />
-              <RadioSelector audio={audio} />
 
               <Hero />
               <Characters />
+              <RadioSelector audio={audio} />
               <CharacterPoll />
               <TrailerSection />
               <PatchNotes />

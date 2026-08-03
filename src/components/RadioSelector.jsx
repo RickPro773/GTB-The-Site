@@ -38,7 +38,6 @@ function formatTime(seconds) {
 
 export default function RadioSelector({ audio }) {
   const stations = useMemo(buildStations, [])
-  const [isOpen, setIsOpen] = useState(false)
   const [stationIndex, setStationIndex] = useState(0)
   const [trackIndex, setTrackIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -123,34 +122,22 @@ export default function RadioSelector({ audio }) {
   const progressPercent = duration ? (currentTime / duration) * 100 : 0
 
   return (
-    <>
+    <section id="radio" className="py-24 px-[5vw] text-center">
       <audio ref={audioRef} src={currentSrc} onEnded={() => changeTrack(1)} />
 
-      {/* Botão de aba fixo — abre/fecha o painel da rádio */}
-      <button
-        onClick={() => setIsOpen((v) => !v)}
-        className={`btn-3d fixed right-0 top-1/2 -translate-y-1/2 z-[140] flex items-center gap-2 py-3 px-3 border border-r-0 border-white/15 rounded-l-lg transition-colors ${
-          isOpen ? 'bg-asphalt-2' : 'bg-asphalt-2/90 hover:bg-asphalt-2'
-        }`}
-        aria-label={isOpen ? 'Fechar rádio' : 'Abrir rádio'}
-      >
-        <span className={`text-lg ${isPlaying ? 'animate-pulse' : ''}`}>📻</span>
-        <span className="hidden sm:inline text-[0.65rem] tracking-[2px] uppercase text-paper/70 [writing-mode:vertical-rl]">
-          Rádio
-        </span>
-      </button>
+      <h2 className="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] mb-2">
+        📻 <span className="text-logo-green">Rádio</span> GTB
+      </h2>
+      <p className="max-w-[520px] mx-auto text-paper/70 leading-relaxed mb-10">
+        Liga o som e curte a trilha sonora das ruas de Los Brodis.
+      </p>
 
-      {/* Painel da rádio */}
-      <div
-        className={`panel-3d fixed right-0 top-1/2 -translate-y-1/2 z-[139] w-[min(340px,88vw)] bg-asphalt-2 border border-white/10 border-r-0 rounded-l-xl p-5 transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
+      <div className="panel-3d max-w-md mx-auto bg-asphalt-2 border border-white/10 rounded-xl p-6">
         <div className="flex justify-between items-center mb-4">
           <span className="text-[0.65rem] tracking-[2px] text-warn-yellow uppercase font-bold">
-            📻 Estação de Rádio
+            Estação de Rádio
           </span>
-          <span className="text-[0.6rem] text-paper/40 uppercase bg-white/5 px-2 py-0.5 rounded">
+          <span className="text-[0.6rem] text-paper/50 uppercase bg-white/5 px-2 py-0.5 rounded">
             {station.genre}
           </span>
         </div>
@@ -158,19 +145,19 @@ export default function RadioSelector({ audio }) {
         <div className="flex items-center justify-between bg-asphalt border border-white/10 rounded-lg py-3 px-3 mb-3">
           <button
             onClick={() => changeStation(-1)}
-            className="text-warn-yellow text-lg px-1 hover:scale-110 transition-transform"
+            className="text-warn-yellow text-lg px-2 hover:scale-110 transition-transform"
             aria-label="Estação anterior"
           >
             ◀
           </button>
           <div className="text-center px-2 overflow-hidden">
-            <div className="font-display text-lg text-logo-green leading-none truncate text-3d-green">
+            <div className="font-display text-xl text-paper leading-none truncate">
               {station.name}
             </div>
           </div>
           <button
             onClick={() => changeStation(1)}
-            className="text-warn-yellow text-lg px-1 hover:scale-110 transition-transform"
+            className="text-warn-yellow text-lg px-2 hover:scale-110 transition-transform"
             aria-label="Próxima estação"
           >
             ▶
@@ -192,7 +179,7 @@ export default function RadioSelector({ audio }) {
         )}
 
         {/* Barra de progresso com tempo real, clicável pra pular na música */}
-        <div className="mb-1.5">
+        <div className="mb-4">
           <div
             ref={progressBarRef}
             onClick={handleSeek}
@@ -215,11 +202,11 @@ export default function RadioSelector({ audio }) {
 
         <button
           onClick={togglePlay}
-          className="btn-3d w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] mt-3 hover:bg-neon-purple-dim transition-colors"
+          className="btn-3d w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-neon-purple-dim transition-colors"
         >
           {isPlaying ? '⏸ Pausar Música' : '▶ Tocar Rádio'}
         </button>
       </div>
-    </>
+    </section>
   )
 }
