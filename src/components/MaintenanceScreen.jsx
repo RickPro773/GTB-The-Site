@@ -5,11 +5,11 @@ import LogoGTB from './LogoGTB'
 // true  = Operacional (verde)
 // false = Com Falha (vermelho)
 const SERVICOS = [
-  { nome: 'Infraestrutura da Provedora', ok: false },
+  { nome: 'Infraestrutura da Provedora', ok: true },
   { nome: 'Hospedagem Web (Vercel)', ok: true },
-  { nome: 'Servidor de Áudio (Menu Theme)', ok: false },
-  { nome: 'API de Dados / Personagens', ok: true },
-  { nome: 'Integração com banco de dados', ok: false },
+  { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
+  { nome: 'API de Dados / Personagens', ok: false },
+  { nome: 'Integração com banco de dados', ok: true },
 ]
 
 export default function MaintenanceScreen() {
@@ -38,14 +38,14 @@ export default function MaintenanceScreen() {
 
         <div className="inline-flex items-center gap-2 bg-warn-yellow/10 border border-warn-yellow/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-warn-yellow uppercase mb-6">
           <span className="w-2 h-2 rounded-full bg-warn-yellow animate-pulse" />
-          Instabilidade no provedor de hospedagem
+          Atualizações em andamento
         </div>
 
         <h1 className="font-display text-5xl text-paper mb-4">Manutenção</h1>
 
         <p className="text-paper/65 text-sm leading-relaxed mb-6">
-          A plataforma está temporariamente indisponível devido a uma oscilação técnica nos{' '}
-          <strong className="text-paper">servidores da nossa provedora de infraestrutura</strong>.
+          A plataforma está temporariamente indisponível por conta de atualizações de componentes{' '}
+          <strong className="text-paper">atualizações podem causar interrupções</strong>.
           Estamos de olho e o site volta assim que normalizar.
         </p>
 
@@ -56,7 +56,7 @@ export default function MaintenanceScreen() {
           <Divider />
           <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
           <Divider />
-          <Row label="ID do incidente" value="INC-503-PROV-OUTAGE" mono />
+          <Row label="ID do incidente" value="INC-205-UPD-OUTAGE" mono />
         </div>
 
         <button
@@ -74,8 +74,7 @@ export default function MaintenanceScreen() {
         </button>
 
         <p className="text-paper/40 text-xs leading-relaxed">
-          O acesso será restabelecido automaticamente assim que os serviços da fornecedora forem
-          normalizados.
+          O acesso será restabelecido automaticamente assim que as atualizações forem concluídas.
         </p>
 
         <div className="mt-6 pt-5 border-t border-white/10">
