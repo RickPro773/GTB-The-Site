@@ -9,10 +9,7 @@ const PATCH_LOGS = [
     date: '01 de Agosto, 2026',
     status: 'Atual',
     highlights: [
-      '🚗 Física de veículos e derrapagem atualizada.',
-      '🏙️ Expansão do centro da cidade de Los Brodis.',
-      '📻 Sistema de rádios com canais exclusivos da comunidade.',
-      '🔧 Correção de estabilidade no servidor.',
+     'Em Breve.',
     ],
   },
   {
@@ -20,8 +17,7 @@ const PATCH_LOGS = [
     date: '01 de Julho, 2026',
     status: 'Anterior',
     highlights: [
-      '🧢 Novos itens e roupas exclusivas.',
-      '🔫 Ajustes no sistema de armas e inventário.',
+      'Em Breve.',
     ],
   },
 ]

@@ -7,7 +7,7 @@ import menuTheme from '../assets/audio/menu-theme.mp3'
 import LogoFull from './LogoFull'
 import { roster } from '../data/roster'
 
-const SLIDES = [scene1, scene2, scene3]
+const SLIDES = [scene1, scene2, scene3,] // imagens de fundo da intro, tipo cutscene
 const SLIDE_INTERVAL_MS = 4500 // ritmo de "cutscene" de créditos
 const INTRO_DURATION_MS = 60000 // ~1 minuto
 

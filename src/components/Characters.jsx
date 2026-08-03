@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import charactersWheel from '../assets/images/characters-wheel.png'
-import { roster } from '../data/roster'
-import LoadingImage from './LoadingImage'
+import { roster } from '../data/roster.js'
+import LoadingImage from './LoadingImage.jsx'
 
 function CharacterCard({ char }) {
   const aliveClass = char.effect === 'alive' ? 'char-card--alive' : ''

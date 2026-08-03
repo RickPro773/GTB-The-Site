@@ -1,7 +1,7 @@
 import charactersWheel from '../assets/images/characters-wheel.png'
-import { roster } from '../data/roster'
-import { usePoll } from '../hooks/usePoll'
-import LoadingImage from './LoadingImage'
+import { roster } from '../data/roster.js'
+import { usePoll } from '../hooks/usePoll.js'
+import LoadingImage from './LoadingImage.jsx'
 
 export default function CharacterPoll() {
   const { results, totalVotes, votedSlug, isLoading, error, vote } = usePoll()
