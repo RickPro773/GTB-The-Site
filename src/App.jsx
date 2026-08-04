@@ -23,7 +23,7 @@ import { useState } from 'react'
 // ⚙️ Troque para true quando o site precisar ficar em manutenção.
 // Com isso ativo, o site inteiro (intro, sons, tudo) para de
 // carregar e só a tela de aviso aparece.
-const IN_MAINTENANCE = true
+const IN_MAINTENANCE = false
 
 const SOCIAL_ERRORS = {
   Discord: 'Servidor do Discord ainda não disponível. Volte em breve.',
