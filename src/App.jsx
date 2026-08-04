@@ -15,6 +15,7 @@ import MaintenanceScreen from './components/MaintenanceScreen'
 import RadioSelector from './components/RadioSelector'
 import PatchNotes from './components/PatchNotes'
 import CharacterBio from './components/CharacterBio'
+import Reveal from './components/Reveal'
 import { useAudioPlayer } from './hooks/useAudioPlayer'
 import { useComingSoon } from './hooks/useComingSoon'
 import { useState } from 'react'
@@ -68,12 +69,12 @@ function SiteRoutes() {
               <Header onQuadroClick={handleQuadroClick} />
 
               <Hero />
-              <Characters />
-              <RadioSelector audio={audio} />
-              <CharacterPoll />
-              <TrailerSection />
-              <PatchNotes />
-              <PlaySection />
+              <Reveal><Characters /></Reveal>
+              <Reveal><RadioSelector audio={audio} /></Reveal>
+              <Reveal><CharacterPoll /></Reveal>
+              <Reveal><TrailerSection /></Reveal>
+              <Reveal><PatchNotes /></Reveal>
+              <Reveal><PlaySection /></Reveal>
               <Footer onSocialClick={handleSocialClick} />
             </>
           }

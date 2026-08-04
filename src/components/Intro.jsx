@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react'
 import scene1 from '../assets/images/scene1.png'
 import scene2 from '../assets/images/scene2.png'
 import scene3 from '../assets/images/scene3.png'
+import scene4 from '../assets/images/scene4.png'
 import introTheme from '../assets/audio/intro-theme.mp3'
 import menuTheme from '../assets/audio/menu-theme.mp3'
 import LogoFull from './LogoFull'
 import { roster } from '../data/roster'
 
-const SLIDES = [scene1, scene2, scene3,] // imagens de fundo da intro, tipo cutscene
+const SLIDES = [scene1, scene2, scene3, scene4] // imagens de fundo da intro, tipo cutscene
 const SLIDE_INTERVAL_MS = 4500 // ritmo de "cutscene" de créditos
 const INTRO_DURATION_MS = 60000 // ~1 minuto
 
@@ -79,7 +80,7 @@ export default function Intro({ audio }) {
 
         <div className="relative z-[5] text-center px-5 flex flex-col items-center">
           <div className="text-warn-yellow text-xs sm:text-sm tracking-[6px] uppercase mb-6 animate-fade-up">
-            Um Jogo Roblox De Mundo Aberto
+            Um Jogo em Desenvolvimento &middot; 2026
           </div>
 
           <div className="animate-flicker w-[min(680px,88vw)]">
@@ -114,7 +115,7 @@ export default function Intro({ audio }) {
             Carregando o bairro...
           </div>
           <div className="mt-8 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
-            Intro Theme &middot; Grande Theft Brodis (Remix)
+            Intro Theme &middot; Grand Theft Brodis (Remix)
           </div>
         </div>
 

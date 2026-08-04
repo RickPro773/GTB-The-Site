@@ -52,7 +52,7 @@ export default function CharacterBio({ audio }) {
   }
 
   return (
-    <div className="min-h-screen bg-asphalt text-paper">
+    <div className="min-h-screen bg-asphalt text-paper animate-fade-up">
       {musicSrc && <audio ref={musicRef} src={musicSrc} loop />}
 
       {/* Hero da bio: foto grande de fundo com overlay temático.

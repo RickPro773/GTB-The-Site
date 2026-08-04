@@ -1,4 +1,4 @@
-import trailerImg from '../assets/images/trailer-img.png';
+import trailerImg from '../assets/images/trailer-img.png'
 
 export default function TrailerSection() {
   return (
@@ -10,12 +10,18 @@ export default function TrailerSection() {
         O primeiro vídeo do GTB tá sendo produzido.
       </p>
 
-      <div className="panel-3d max-w-2xl mx-auto aspect-video rounded-xl border border-white/10 bg-asphalt-2 overflow-hidden flex items-center justify-center p-4">
-        <img 
-          src={trailerImg} 
-          alt="Preview do Trailer Oficial" 
-          className="max-w-full max-h-full object-contain"
-        />
+      <div className="panel-3d max-w-2xl mx-auto rounded-xl border border-white/10 bg-asphalt-2 overflow-hidden">
+        <div className="aspect-video flex items-center justify-center p-6 bg-gradient-to-b from-asphalt-2 to-asphalt">
+          <img
+            src={trailerImg}
+            alt="Prévia dos personagens do GTB — Rick, Fotafox, GTA2D e Dragon em modelo Roblox"
+            className="max-w-full max-h-full object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)]"
+          />
+        </div>
+        <div className="border-t border-white/10 py-3 px-4 flex items-center justify-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-warn-yellow animate-pulse" />
+          <span className="font-display text-lg text-warn-yellow tracking-wide">Em Breve</span>
+        </div>
       </div>
     </section>
   )

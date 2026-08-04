@@ -1,8 +1,39 @@
 # GTB — Grande Theft Brodis (site oficial)
 
 Site do jogo GTB, construído com **React + Vite + Tailwind CSS**
-(build real, não CDN), com deploy automático pro GitHub Pages via
-**GitHub Actions**.
+(build real, não CDN), com deploy automático pra **Vercel**.
+
+## 🚨 Deu erro no `npm run build`? Leia isto primeiro
+
+Se aparecer um erro tipo `Cannot find module
+@rollup/rollup-linux-x64-gnu` (ou qualquer erro mencionando
+`@rollup/rollup-...`), **não é bug no código do site** — é um
+[bug conhecido do próprio npm](https://github.com/npm/cli/issues/4828)
+com pacotes opcionais, que acontece quando a pasta `node_modules`
+é copiada/zipada de um computador pra outro em vez de instalada do
+zero em cada lugar (isso corrompe silenciosamente alguns pacotes
+nativos do sistema).
+
+**Correção (funciona sempre):**
+```bash
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+No Windows (PowerShell), o primeiro comando é:
+```powershell
+Remove-Item -Recurse -Force node_modules, package-lock.json
+npm install
+npm run build
+```
+
+**Regra geral pra evitar isso de novo:** nunca copie a pasta
+`node_modules` entre computadores (nem dentro de um `.zip` do
+projeto). Ela é sempre gerada de novo rodando `npm install` — é
+por isso que `node_modules/` está no `.gitignore` e não deveria
+ir nem pro Git nem pra nenhum zip que você me manda ou sobe em
+outro lugar.
 
 ## Estrutura de pastas
 
@@ -396,19 +427,24 @@ projeto assim que souber. Está em 4 lugares:
 
 ## Favicon
 
-Favicon completo com as cores exatas da logo (roxo `#8f13eb` com
-contorno verde `#52db0f`), em três formatos pra cobrir diferentes
-navegadores/dispositivos:
-- `public/favicon.svg` — vetorial, usado pela maioria dos
-  navegadores modernos
-- `public/favicon-32.png` — fallback para navegadores sem suporte
-  a favicon SVG
+Favicon feito a partir da arte real da logo GTB (o arquivo que você
+adicionou em `src/assets/images/23_Sem_Titulo_20260709140216.png`),
+recortada e aplicada sobre um fundo escuro arredondado, em três
+tamanhos:
+- `public/favicon.png` (512×512) — ícone principal, usado pela
+  maioria dos navegadores modernos
+- `public/favicon-32.png` — versão pequena, para a aba do navegador
 - `public/apple-touch-icon.png` — ícone ao salvar o site na tela
   inicial de iPhone/iPad
+- `public/favicon.svg` — mantido como fallback simples (texto
+  "GTB" estilizado), usado apenas por navegadores muito antigos que
+  não leem PNG como favicon
 
-Pra trocar por um favicon definitivo (ex: baseado na logo oficial
-quando você tiver a arte final), é só substituir esses três
-arquivos mantendo os mesmos nomes.
+Pra trocar por uma versão nova no futuro (ex: quando tiver a arte
+oficial definitiva), salve a imagem em
+`src/assets/images/` e me avise, ou gere você mesmo os três
+tamanhos e substitua os arquivos em `public/` mantendo os mesmos
+nomes.
 
 ## SEO básico
 
@@ -509,7 +545,29 @@ de já ter feito o deploy real.
 
 ## Aba de Trailer
 
-Seção placeholder (`src/components/TrailerSection.jsx`) marcada
-como "Em Breve", já linkada no menu. Quando tiver o vídeo, é só
-substituir o conteúdo do card por um `<video>` ou embed do
-YouTube/etc.
+Seção com a prévia dos 4 personagens em modelo Roblox
+(`src/assets/images/trailer-img.png`), marcada com o selo "Em
+Breve" logo abaixo — já linkada no menu (`#trailer`). Quando o
+vídeo real estiver pronto, edite
+`src/components/TrailerSection.jsx` e substitua a `<img>` por um
+`<video>` ou embed do YouTube/etc, e pode remover o selo "Em Breve"
+nessa hora.
+
+## Scroll reveal (entrada suave das seções)
+
+Cada seção da home (Personagens, Rádio, Enquete, Trailer, Patch
+Notes, Bora pra Rua) agora aparece com um fade + leve deslocamento
+suave ao rolar a página até ela, em vez de simplesmente já estar
+visível desde o carregamento. Isso é feito pelo componente
+`src/components/Reveal.jsx`, que usa o hook
+`src/hooks/useScrollReveal.js` (baseado em `IntersectionObserver`,
+nativo do navegador — sem biblioteca externa).
+
+Pra aplicar esse efeito em uma seção nova, basta envolver ela:
+```jsx
+<Reveal><MinhaSecaoNova /></Reveal>
+```
+
+A página de bio do personagem (`CharacterBio.jsx`) também ganhou
+uma entrada suave (fade) ao navegar até ela, pra substituir o corte
+seco que tinha antes.

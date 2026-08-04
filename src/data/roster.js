@@ -40,11 +40,11 @@ export const roster = [
     effect: null,
     theme: '#8f13eb',
     musicFile: 'rick-theme.mp3',
-    bio: 'Rick é o cara de terno que ninguém sabe se é segurança, advogado ou o próprio dono do banco. Fala pouco, resolve rápido — e sempre com um sorriso torto de quem já viu de tudo em Los Brodis.',
+    bio: 'Rick é o cara de terno que ninguém sabe se é segurança, advogado ou o próprio dono do banco. Fala pouco, resolve rápido — e com sua Gold Deagle ninguem chega perto.',
     stats: [
       { label: 'Estilo', value: 'Discreto & Elegante' },
       { label: 'Time do Coração', value: 'Fortaleza' },
-      { label: 'Arma Preferida', value: 'Pistola' },
+      { label: 'Arma Preferida', value: 'Gold Deagle' },
       { label: 'Nível de Perigo', value: '★★★☆☆' },
     ],
   },
@@ -61,7 +61,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Imprevisível' },
       { label: 'Apelido', value: 'Moicano' },
-      { label: 'Arma Preferida', value: 'Submetralhadora' },
+      { label: 'Arma Preferida', value: 'AK-47 Gold' },
       { label: 'Nível de Perigo', value: '★★★★★' },
     ],
   },
@@ -78,7 +78,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Executivo' },
       { label: 'Marca Registrada', value: 'Cabelo Azul' },
-      { label: 'Arma Preferida', value: 'Pistola' },
+      { label: 'Arma Preferida', value: 'Sniper e Madeira' },
       { label: 'Nível de Perigo', value: '★★★★☆' },
     ],
   },
@@ -91,7 +91,7 @@ export const roster = [
     effect: null,
     theme: '#8f13eb',
     musicFile: 'fotafox-theme.mp3',
-    bio: 'Boné, isqueiro e um galão de gasolina — Fotafox não pergunta, ele já tá correndo. Ninguém sabe explicar direito por que ele é roxo, e ninguém tem coragem de perguntar duas vezes.',
+    bio: 'Boné, isqueiro e um galão de gasolina — Fotafox não pergunta, ele já tá correndo. Ninguém sabe explicar direito por que ele é roxo talvez por ser uva, e ninguém tem coragem de perguntar duas vezes.',
     stats: [
       { label: 'Estilo', value: 'Caótico' },
       { label: 'Marca Registrada', value: 'Galão de Gasolina' },

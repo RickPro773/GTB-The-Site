@@ -20,9 +20,11 @@
  * aparecem na rádio, não quebram nada).
  */
 export const STATIONS_CONFIG = [
-  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'LOS BRODIS' },
+  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'FUNK & FORRÓ' },
   { folder: 'radio-caos', name: 'RÁDIO CAOS GTB', genre: 'ROCK & CAOS' },
   { folder: 'samura-fm', name: 'SAMURA FM', genre: 'ESPECIAL SAMURA' },
+  { folder: 'metalurgico-beats', name: 'METALÚRGICO BEATS', genre: 'WAVE ATOMIC' },
+
   // Pra adicionar uma rádio nova, copie a linha de cima e ajuste:
   // { folder: 'brodi-fm', name: 'BRODI FM', genre: 'CLÁSSICOS' },
 ]
