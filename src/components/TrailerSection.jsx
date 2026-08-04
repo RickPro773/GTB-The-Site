@@ -7,7 +7,7 @@ export default function TrailerSection() {
         <span className="text-logo-blue text-3d-purple">Trailer</span> Oficial
       </h2>
       <p className="max-w-[520px] mx-auto text-paper/70 leading-relaxed mb-8">
-        O primeiro vídeo do GTB tá sendo produzido.
+        O primeiro vídeo do GTB tá sendo produzido pela nossa turma.
       </p>
 
       <div className="panel-3d max-w-2xl mx-auto rounded-xl border border-white/10 bg-asphalt-2 overflow-hidden">

@@ -3,7 +3,7 @@
  * referência original com as cores exatas (amostradas pixel a
  * pixel da imagem de referência): "grand theft" em branco com
  * contorno preto grosso, e "BRODIS" com B=verde, R=azul, O=verde,
- * D=roxo, I=verde, S=branco.
+ * D=roxo, I=roxo, S=branco.
  *
  * Uso: <LogoFull className="w-64" />
  */
@@ -58,7 +58,7 @@ export default function LogoFull({ className = '' }) {
         <tspan fill={BRODIS_BLUE}>R</tspan>
         <tspan fill={BRODIS_GREEN}>O</tspan>
         <tspan fill={BRODIS_PURPLE}>D</tspan>
-        <tspan fill={BRODIS_GREEN}>I</tspan>
+        <tspan fill={BRODIS_PURPLE}>I</tspan>
         <tspan fill="#ffffff">S</tspan>
       </text>
     </svg>

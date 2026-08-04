@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { STATIONS_CONFIG } from '../data/radioConfig'
 
 // Descobre TODOS os .mp3 dentro de src/assets/radio/<qualquer-pasta>/
-// automaticamente, em tempo de build. Não precisa importar nada à
-// mão — é só o Vite escaneando as pastas por conta própria.
+// automaticamente, em tempo de build — sem limite de quantidade
+// (pode ter 1, 10, 30 músicas por pasta, tanto faz). Não precisa
+// importar nem listar nada à mão, é só o Vite escaneando as pastas.
 const audioModules = import.meta.glob('../assets/radio/*/*.mp3', {
   eager: true,
   import: 'default',
@@ -49,9 +51,11 @@ export default function RadioSelector({ audio }) {
   const station = stations[stationIndex]
   const currentSrc = station?.tracks[trackIndex]
 
-  // sempre que a fonte muda (estação ou faixa diferente), recarrega
-  // o elemento de áudio de forma segura — o React já garante que
-  // `currentSrc` está atualizado antes deste efeito rodar.
+  // sempre que a fonte muda (estação ou faixa diferente — seja por
+  // troca de estação, skip manual, ou fim automático da faixa),
+  // recarrega o elemento de áudio de forma segura. O React já
+  // garante que `currentSrc` está atualizado antes deste efeito
+  // rodar, então não existe risco de tocar a faixa errada.
   useEffect(() => {
     if (!audioRef.current) return
     audioRef.current.load()
@@ -99,12 +103,24 @@ export default function RadioSelector({ audio }) {
     isPlaying ? pause() : play()
   }
 
+  // Troca de ESTAÇÃO — funciona a qualquer momento, mesmo com
+  // música tocando. Sempre volta pra primeira faixa da nova
+  // estação, e continua tocando automaticamente se já estava
+  // tocando antes da troca.
   function changeStation(direction) {
     const next = (stationIndex + direction + stations.length) % stations.length
     setStationIndex(next)
     setTrackIndex(0)
   }
 
+  function selectStation(index) {
+    if (index === stationIndex) return
+    setStationIndex(index)
+    setTrackIndex(0)
+  }
+
+  // Pula pra PRÓXIMA/ANTERIOR faixa dentro da mesma estação —
+  // funciona a qualquer momento, com a música tocando ou pausada.
   function changeTrack(direction) {
     const total = station.tracks.length
     setTrackIndex((prev) => (prev + direction + total) % total)
@@ -120,6 +136,7 @@ export default function RadioSelector({ audio }) {
   }
 
   const progressPercent = duration ? (currentTime / duration) * 100 : 0
+  const hasMultipleTracks = station.tracks.length > 1
 
   return (
     <section id="radio" className="py-24 px-[5vw] text-center">
@@ -133,16 +150,8 @@ export default function RadioSelector({ audio }) {
       </p>
 
       <div className="panel-3d max-w-md mx-auto bg-asphalt-2 border border-white/10 rounded-xl p-6">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-[0.65rem] tracking-[2px] text-warn-yellow uppercase font-bold">
-            Estação de Rádio
-          </span>
-          <span className="text-[0.6rem] text-paper/50 uppercase bg-white/5 px-2 py-0.5 rounded">
-            {station.genre}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between bg-asphalt border border-white/10 rounded-lg py-3 px-3 mb-3">
+        {/* Seletor de estação — sempre visível, funciona mesmo tocando */}
+        <div className="flex items-center justify-between bg-asphalt border border-white/10 rounded-lg py-3 px-3 mb-2">
           <button
             onClick={() => changeStation(-1)}
             className="text-warn-yellow text-lg px-2 hover:scale-110 transition-transform"
@@ -154,6 +163,9 @@ export default function RadioSelector({ audio }) {
             <div className="font-display text-xl text-paper leading-none truncate">
               {station.name}
             </div>
+            <div className="text-[0.6rem] text-paper/40 uppercase tracking-[1px] mt-1">
+              {station.genre}
+            </div>
           </div>
           <button
             onClick={() => changeStation(1)}
@@ -164,19 +176,31 @@ export default function RadioSelector({ audio }) {
           </button>
         </div>
 
-        {station.tracks.length > 1 && (
-          <div className="flex items-center justify-between text-xs text-paper/50 mb-3 px-1">
-            <button onClick={() => changeTrack(-1)} className="hover:text-paper transition">
-              ‹ faixa anterior
-            </button>
-            <span>
-              {trackIndex + 1}/{station.tracks.length}
-            </span>
-            <button onClick={() => changeTrack(1)} className="hover:text-paper transition">
-              próxima faixa ›
-            </button>
+        {/* Bolinhas indicando quantas estações existem e qual está ativa */}
+        {stations.length > 1 && (
+          <div className="flex items-center justify-center gap-1.5 mb-4">
+            {stations.map((s, i) => (
+              <button
+                key={s.folder}
+                onClick={() => selectStation(i)}
+                aria-label={`Ir para ${s.name}`}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === stationIndex ? 'w-5 bg-logo-green' : 'w-1.5 bg-white/20 hover:bg-white/40'
+                }`}
+              />
+            ))}
           </div>
         )}
+
+        {/* Nome da faixa atual + contador */}
+        <div className="mb-3">
+          <div className="text-[0.65rem] tracking-[2px] text-warn-yellow uppercase font-bold mb-1">
+            Tocando agora
+          </div>
+          <div className="text-sm text-paper/70">
+            Faixa {trackIndex + 1} de {station.tracks.length}
+          </div>
+        </div>
 
         {/* Barra de progresso com tempo real, clicável pra pular na música */}
         <div className="mb-4">
@@ -185,13 +209,15 @@ export default function RadioSelector({ audio }) {
             onClick={handleSeek}
             className="relative h-2 bg-asphalt border border-white/10 rounded-full cursor-pointer overflow-hidden group"
           >
-            <div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-logo-purple to-hood-green rounded-full transition-[width] duration-150"
-              style={{ width: `${progressPercent}%` }}
+            <motion.div
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-logo-purple to-hood-green rounded-full"
+              animate={{ width: `${progressPercent}%` }}
+              transition={{ duration: 0.15, ease: 'linear' }}
             />
-            <div
+            <motion.div
               className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_6px_rgba(0,0,0,0.6)] opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ left: `calc(${progressPercent}% - 6px)` }}
+              animate={{ left: `calc(${progressPercent}% - 6px)` }}
+              transition={{ duration: 0.15, ease: 'linear' }}
             />
           </div>
           <div className="flex justify-between text-[0.65rem] text-paper/40 mt-1.5 font-mono">
@@ -200,12 +226,43 @@ export default function RadioSelector({ audio }) {
           </div>
         </div>
 
-        <button
-          onClick={togglePlay}
-          className="btn-3d w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-neon-purple-dim transition-colors"
-        >
-          {isPlaying ? '⏸ Pausar Música' : '▶ Tocar Rádio'}
-        </button>
+        {/* Controles principais: pular faixa (anterior/próxima) + play/pause,
+            sempre visíveis e clicáveis — o botão de pular fica
+            desabilitado (mas visível) se a estação só tem 1 faixa. */}
+        <div className="flex items-center justify-center gap-3">
+          <motion.button
+            onClick={() => changeTrack(-1)}
+            disabled={!hasMultipleTracks}
+            aria-label="Faixa anterior"
+            whileTap={hasMultipleTracks ? { scale: 0.88 } : undefined}
+            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-hood-green enabled:hover:text-hood-green transition-colors"
+          >
+            ⏮
+          </motion.button>
+
+          <motion.button
+            onClick={togglePlay}
+            whileTap={{ scale: 0.9 }}
+            className="btn-3d w-16 h-16 flex items-center justify-center rounded-full bg-neon-purple text-white text-2xl hover:bg-neon-purple-dim transition-colors"
+            aria-label={isPlaying ? 'Pausar' : 'Tocar'}
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </motion.button>
+
+          <motion.button
+            onClick={() => changeTrack(1)}
+            disabled={!hasMultipleTracks}
+            aria-label="Pular para a próxima música"
+            whileTap={hasMultipleTracks ? { scale: 0.88 } : undefined}
+            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-hood-green enabled:hover:text-hood-green transition-colors"
+          >
+            ⏭
+          </motion.button>
+        </div>
+
+        <p className="text-[0.65rem] text-paper/35 uppercase tracking-[1px] mt-4">
+          Troque de estação a qualquer momento — mesmo com a música tocando
+        </p>
       </div>
     </section>
   )

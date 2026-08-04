@@ -35,6 +35,94 @@ por isso que `node_modules/` está no `.gitignore` e não deveria
 ir nem pro Git nem pra nenhum zip que você me manda ou sobe em
 outro lugar.
 
+## 🎬 Versão 1.1 — Fase 1: Framer Motion (concluída)
+
+O site está em processo de virar a versão 1.1, que vai incluir
+backend próprio (contas, chat, blog) em fases futuras. Esta
+primeira fase adicionou **Framer Motion** ao front-end que já
+existia, mantendo React + Tailwind + Vite como estavam — nada de
+infraestrutura mudou ainda, só as animações ficaram mais ricas.
+
+**O que mudou:**
+- **`Reveal.jsx`**: as seções da home (Rádio, Enquete, Trailer,
+  Patch Notes, Bora pra Rua) continuam aparecendo com fade ao rolar
+  a página até elas, mas agora com física de mola de verdade
+  (`whileInView` do Framer Motion) em vez de uma curva de easing
+  fixa em CSS.
+- **`Characters.jsx`**: os cards de personagem agora aparecem em
+  sequência (um logo depois do outro) ao rolar até a seção, em vez
+  de todos de uma vez — dá a sensação de "revelar o elenco".
+- **Transição de página**: navegar da Home pra ficha de um
+  personagem (e voltar) agora tem uma transição suave de verdade
+  (fade + leve deslocamento), coordenada por `AnimatePresence` no
+  `App.jsx`. Antes era só uma classe CSS estática, sem controle
+  real sobre o momento de saída.
+- **`ComingSoonModal.jsx`** e **`ErrorToast.jsx`**: agora animam
+  também ao **fechar** (antes só a entrada era suave — o fechamento
+  era um corte seco, porque CSS transition não consegue animar o
+  desmonte de um componente React sem ajuda).
+- **`RadioSelector.jsx`**: a barra de progresso e os botões de
+  play/pular ganharam resposta mais viva (`whileTap` nos botões,
+  barra de progresso animada em vez de só CSS transition).
+
+**Próximas fases da v1.1** (ainda não implementadas, aguardando
+decisões de infraestrutura):
+- Backend em TypeScript nas Vercel Functions (sistema de contas,
+  login por e-mail com código de verificação, senha com hash)
+- Banco de dados Postgres (via Neon, integrado à Vercel)
+- Envio de e-mail (via Resend)
+- Chat, blog, e sistema de moderação de imagem de avatar
+
+## 🔑 Variáveis de ambiente necessárias (Fase 2 — Backend)
+
+O sistema de contas (login, cadastro, avatar) **não funciona sem
+essas variáveis configuradas na Vercel**. Vá em
+**Settings → Environment Variables** dentro do projeto na Vercel e
+adicione cada uma:
+
+| Variável | De onde vem | Obrigatória pra |
+|---|---|---|
+| `DATABASE_URL` ou `POSTGRES_URL` | Criada sozinha quando você conecta o banco Postgres (Neon) pela aba Storage | Tudo que usa banco |
+| `JWT_SECRET` | Você gera (veja comando abaixo) | Login/sessão |
+| `RESEND_API_KEY` | Painel do Resend → API Keys | Envio de e-mail |
+| `EMAIL_FROM` | Ex: `GTB <contato@seudominio.com>` — precisa ser de um domínio verificado no Resend | Envio de e-mail |
+| `SIGHTENGINE_API_USER` | Painel do Sightengine | Upload de avatar |
+| `SIGHTENGINE_API_SECRET` | Painel do Sightengine | Upload de avatar |
+| `BLOB_READ_WRITE_TOKEN` | Criada sozinha quando você cria o Vercel Blob pela aba Storage | Upload de avatar |
+
+**Gerar o `JWT_SECRET`** (roda isso no terminal do seu PC, com Node
+instalado):
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+Copia o resultado e cola como valor dessa variável.
+
+⚠️ **Nunca cole nenhuma dessas chaves em conversa nenhuma (nem
+aqui, nem com IA nenhuma) — elas só devem existir dentro do painel
+de variáveis de ambiente da Vercel.** Se qualquer uma delas já foi
+exposta antes, gere uma nova no painel do serviço correspondente
+(Resend, Sightengine) antes de colar aqui.
+
+Depois de adicionar/alterar qualquer variável, é preciso fazer um
+novo deploy pra ela valer (`git push` qualquer coisa, ou
+**Deployments → ⋯ → Redeploy** no painel).
+
+## Rodando o SQL do banco (uma vez, antes do primeiro uso)
+
+O arquivo `db/schema.sql` tem a estrutura de tabelas necessária
+(usuários, códigos de verificação, rate limit). Antes do sistema de
+contas funcionar, você precisa rodar esse SQL uma vez dentro do seu
+banco Neon:
+
+1. No painel da Vercel, vá em **Storage** → clique no banco Postgres
+   que você criou
+2. Procure o botão/link pra abrir o **SQL Editor** (ou "Query", ou
+   "Neon Console" — a Vercel geralmente redireciona pro console do
+   Neon)
+3. Cola todo o conteúdo de `db/schema.sql` e executa
+4. Pronto — as tabelas já existem, o backend já pode ler/escrever
+   nelas
+
 ## Estrutura de pastas
 
 ```
@@ -320,17 +408,22 @@ import LogoGTB from './components/LogoGTB'
 
 ## Sistema de rádio (modular)
 
-A rádio é uma aba flutuante na lateral direita da tela (clique no
-ícone 📻 pra abrir/fechar) em vez de ocupar espaço fixo na página.
+A rádio é uma seção normal da página (`#radio`, linkada no menu),
+com um player completo: trocar de estação, pular pra próxima ou
+faixa anterior, barra de progresso clicável, tudo sempre visível e
+funcionando a qualquer momento — mesmo com uma música já tocando.
 
-**Adicionar música é só arrastar o arquivo — não precisa editar
+**Adicionar música é só soltar o arquivo — não precisa editar
 nenhum componente.** As faixas de cada estação são descobertas
 automaticamente pelo Vite (`import.meta.glob`) direto das pastas em
-`src/assets/radio/<nome-da-estação>/`.
+`src/assets/radio/<nome-da-estação>/`, sem limite de quantidade
+(1, 10, 30 músicas por pasta — tanto faz).
 
 - **Pra adicionar uma música a uma estação que já existe:** solte o
   `.mp3` dentro da pasta da estação (ex:
-  `src/assets/radio/los-brodis/nova-musica.mp3`). Pronto.
+  `src/assets/radio/los-brodis/nova-musica.mp3`). Pronto — o player
+  já mostra "Faixa X de Y" atualizado e os botões de pular
+  (⏮ ⏭) já funcionam pra ela.
 - **Pra criar uma estação nova:** crie uma pasta em
   `src/assets/radio/`, coloque pelo menos um `.mp3` dentro, e
   adicione uma linha em `src/data/radioConfig.js` com o nome da
@@ -338,6 +431,19 @@ automaticamente pelo Vite (`import.meta.glob`) direto das pastas em
   precisa tocar — nenhum componente muda.
 - Pastas sem nenhum `.mp3` são ignoradas automaticamente (não
   aparecem na rádio, não quebram nada).
+
+**Controles do player:**
+- **◀ ▶** no topo trocam de estação (volta pra primeira faixa da
+  nova estação, continua tocando se já estava tocando)
+- Bolinhas abaixo do nome da estação também trocam direto pra
+  qualquer estação com um clique
+- **⏮ ⏭** pulam pra faixa anterior/próxima dentro da mesma estação
+  (ficam desabilitados, mas visíveis, se a estação só tiver 1
+  faixa)
+- Quando uma faixa termina sozinha, já toca a próxima
+  automaticamente
+- Barra de progresso é clicável — clique em qualquer ponto dela pra
+  pular pra aquele momento da música
 
 A rádio nunca toca ao mesmo tempo que o Menu Theme — quando você dá
 play numa estação, o tema do menu para sozinho (coordenado via
@@ -559,9 +665,9 @@ Cada seção da home (Personagens, Rádio, Enquete, Trailer, Patch
 Notes, Bora pra Rua) agora aparece com um fade + leve deslocamento
 suave ao rolar a página até ela, em vez de simplesmente já estar
 visível desde o carregamento. Isso é feito pelo componente
-`src/components/Reveal.jsx`, que usa o hook
-`src/hooks/useScrollReveal.js` (baseado em `IntersectionObserver`,
-nativo do navegador — sem biblioteca externa).
+`src/components/Reveal.jsx`, que usa o `whileInView` do próprio
+Framer Motion (baseado em `IntersectionObserver` por baixo dos
+panos, com física de mola em vez de curva de easing fixa).
 
 Pra aplicar esse efeito em uma seção nova, basta envolver ela:
 ```jsx

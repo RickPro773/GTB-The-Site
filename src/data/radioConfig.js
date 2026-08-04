@@ -6,6 +6,12 @@
  * precisa importar nem listar arquivo nenhum aqui. É só jogar o
  * .mp3 dentro da pasta certa e ele já aparece na rádio.
  *
+ * Não existe limite de quantidade de músicas por estação no
+ * código — pode ter 1, 10, 30, tanto faz. O player já tem botões
+ * de pular pra próxima/anterior faixa e mostra "Faixa X de Y"
+ * automaticamente, e as faixas tocam em sequência sozinhas (ao
+ * acabar uma, já pula pra próxima).
+ *
  * PRA ADICIONAR UMA MÚSICA NOVA a uma estação que já existe:
  *   1. Solte o arquivo .mp3 dentro de src/assets/radio/<pasta-da-estacao>/
  *   2. Pronto. Não precisa editar nenhum código.
@@ -20,11 +26,9 @@
  * aparecem na rádio, não quebram nada).
  */
 export const STATIONS_CONFIG = [
-  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'FUNK & FORRÓ' },
+  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'LOS BRODIS' },
   { folder: 'radio-caos', name: 'RÁDIO CAOS GTB', genre: 'ROCK & CAOS' },
   { folder: 'samura-fm', name: 'SAMURA FM', genre: 'ESPECIAL SAMURA' },
-  { folder: 'metalurgico-beats', name: 'METALÚRGICO BEATS', genre: 'WAVE ATOMIC' },
-
   // Pra adicionar uma rádio nova, copie a linha de cima e ajuste:
   // { folder: 'brodi-fm', name: 'BRODI FM', genre: 'CLÁSSICOS' },
 ]

@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import ProfileButton from './ProfileButton'
 
-export default function Header({ onQuadroClick }) {
+export default function Header({ onQuadroClick, auth, onOpenAuth }) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   function handleQuadroClick() {
@@ -50,6 +51,16 @@ export default function Header({ onQuadroClick }) {
             Jogar
           </a>
         </nav>
+
+        <div className="hidden sm:block">
+          <ProfileButton
+            user={auth.user}
+            isLoading={auth.isLoading}
+            onOpenAuth={onOpenAuth}
+            onLogout={auth.logout}
+            onAvatarUpdated={auth.refreshUser}
+          />
+        </div>
 
         <button
           onClick={() => setMobileOpen((v) => !v)}
@@ -108,6 +119,30 @@ export default function Header({ onQuadroClick }) {
           >
             Jogar
           </a>
+
+          <div className="pt-2 border-t border-white/[0.06]">
+            {auth.user ? (
+              <button
+                onClick={() => {
+                  setMobileOpen(false)
+                  auth.logout()
+                }}
+                className="text-left text-red-400 text-sm tracking-[2px] uppercase opacity-80"
+              >
+                Sair ({auth.user.nickname}#{auth.user.discriminator})
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setMobileOpen(false)
+                  onOpenAuth()
+                }}
+                className="text-left text-logo-green text-sm tracking-[2px] uppercase opacity-90"
+              >
+                Entrar / Criar conta
+              </button>
+            )}
+          </div>
         </div>
       </nav>
     </header>

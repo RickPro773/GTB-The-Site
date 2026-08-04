@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { roster } from '../data/roster'
 import { getCharacterMusic } from '../data/characterMusic'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -52,7 +53,13 @@ export default function CharacterBio({ audio }) {
   }
 
   return (
-    <div className="min-h-screen bg-asphalt text-paper animate-fade-up">
+    <motion.div
+      className="min-h-screen bg-asphalt text-paper"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+      transition={{ duration: 0.35, ease: 'easeOut' }}
+    >
       {musicSrc && <audio ref={musicRef} src={musicSrc} loop />}
 
       {/* Hero da bio: foto grande de fundo com overlay temático.
@@ -103,7 +110,7 @@ export default function CharacterBio({ audio }) {
               <h3 className="font-display text-xl text-logo-purple text-3d-purple mb-3">
                 Galeria
               </h3>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {char.photos.map((src, i) => (
                   <button
                     key={src}
@@ -159,6 +166,6 @@ export default function CharacterBio({ audio }) {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }

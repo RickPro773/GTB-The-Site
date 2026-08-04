@@ -3,6 +3,30 @@ import raf3Photo from '../assets/images/char-raf-3.png'
 import gta2dPhoto from '../assets/images/char-gta2d.png'
 import foxPhoto from '../assets/images/char-fox.png'
 
+// ============================================================
+// COMO ADICIONAR MAIS FOTOS A UM PERSONAGEM (passo a passo)
+// ============================================================
+// O array `photos` de cada personagem aceita quantas fotos você
+// quiser — não é preciso mudar nenhum componente, a galeria da
+// bio já se ajusta sozinha (2 fotos por linha, tanto no PC quanto
+// no celular).
+//
+// 1. Salve a foto nova dentro de src/assets/images/
+//    (ex: rick-foto2.png)
+//
+// 2. Adicione um import aqui em cima, junto dos outros:
+//      import rickFoto2 from '../assets/images/rick-foto2.png'
+//
+// 3. Lá embaixo, ache o personagem certo e adicione a variável
+//    nova dentro do array `photos`:
+//      photos: [rickPhoto, rickFoto2],
+//
+// Pronto — a galeria na bio do personagem já mostra as duas fotos
+// automaticamente, com clique pra trocar a foto de fundo do topo.
+// Pode repetir esse processo pra quantas fotos quiser por
+// personagem.
+// ============================================================
+
 /**
  * Cada personagem tem um array `photos` — a galeria da bio mostra
  * todas elas. Hoje a maioria tem só 1, mas é só adicionar mais
@@ -30,6 +54,7 @@ import foxPhoto from '../assets/images/char-fox.png'
  * Enquanto o arquivo não existir, a bio mostra normalmente mas sem
  * tocar música (sem quebrar nada).
  */
+
 export const roster = [
   {
     id: '01',

@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
 import StatusBar from './components/StatusBar'
 import Header from './components/Header'
 import Intro from './components/Intro'
@@ -15,9 +16,12 @@ import MaintenanceScreen from './components/MaintenanceScreen'
 import RadioSelector from './components/RadioSelector'
 import PatchNotes from './components/PatchNotes'
 import CharacterBio from './components/CharacterBio'
+import PageTransition from './components/PageTransition'
 import Reveal from './components/Reveal'
+import AuthModal from './components/AuthModal'
 import { useAudioPlayer } from './hooks/useAudioPlayer'
 import { useComingSoon } from './hooks/useComingSoon'
+import { useAuth } from './hooks/useAuth'
 import { useState } from 'react'
 
 // ⚙️ Troque para true quando o site precisar ficar em manutenção.
@@ -42,6 +46,9 @@ export default function App() {
 
 function SiteRoutes() {
   const audio = useAudioPlayer()
+  const location = useLocation()
+  const auth = useAuth()
+  const [authModalOpen, setAuthModalOpen] = useState(false)
   const { content, showComingSoon, closeComingSoon } = useComingSoon()
   const [socialError, setSocialError] = useState(null)
 
@@ -58,39 +65,54 @@ function SiteRoutes() {
 
   return (
     <div className="bg-asphalt text-paper font-body overflow-x-hidden">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <StatusBar />
-              <Intro audio={audio} />
-              <NowPlayingToast label={audio.nowPlayingLabel} />
-              <Header onQuadroClick={handleQuadroClick} />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/"
+            element={
+              <PageTransition>
+                <StatusBar />
+                <Intro audio={audio} />
+                <NowPlayingToast label={audio.nowPlayingLabel} />
+                <Header onQuadroClick={handleQuadroClick} auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />
 
-              <Hero />
-              <Reveal><Characters /></Reveal>
-              <Reveal><RadioSelector audio={audio} /></Reveal>
-              <Reveal><CharacterPoll /></Reveal>
-              <Reveal><TrailerSection /></Reveal>
-              <Reveal><PatchNotes /></Reveal>
-              <Reveal><PlaySection /></Reveal>
-              <Footer onSocialClick={handleSocialClick} />
-            </>
-          }
-        />
-        <Route path="/personagem/:slug" element={<CharacterBio audio={audio} />} />
-      </Routes>
+                <Hero />
+                <Characters />
+                <Reveal><RadioSelector audio={audio} /></Reveal>
+                <Reveal><CharacterPoll /></Reveal>
+                <Reveal><TrailerSection /></Reveal>
+                <Reveal><PatchNotes /></Reveal>
+                <Reveal><PlaySection /></Reveal>
+                <Footer onSocialClick={handleSocialClick} />
+              </PageTransition>
+            }
+          />
+          <Route path="/personagem/:slug" element={<CharacterBio audio={audio} />} />
+        </Routes>
+      </AnimatePresence>
 
-      {content && (
-        <ComingSoonModal
-          title={content.title}
-          message={content.message}
-          onClose={closeComingSoon}
-        />
-      )}
+      <AnimatePresence>
+        {content && (
+          <ComingSoonModal
+            key="coming-soon"
+            title={content.title}
+            message={content.message}
+            onClose={closeComingSoon}
+          />
+        )}
+      </AnimatePresence>
 
-      {socialError && <ErrorToast message={socialError} onClose={() => setSocialError(null)} />}
+      <AnimatePresence>
+        {authModalOpen && (
+          <AuthModal key="auth-modal" auth={auth} onClose={() => setAuthModalOpen(false)} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {socialError && (
+          <ErrorToast key="error-toast" message={socialError} onClose={() => setSocialError(null)} />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

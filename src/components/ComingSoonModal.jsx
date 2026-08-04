@@ -1,9 +1,15 @@
+import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 
 /**
  * Modal genérico "Em breve", usado tanto pelas redes sociais
  * (Discord/Roblox) quanto pela aba "Quadro" no menu.
  * Fecha ao clicar fora, no X, ou apertando Esc.
+ *
+ * Precisa ficar dentro de um <AnimatePresence> no componente pai
+ * (veja App.jsx) pra animação de SAÍDA funcionar — sem isso, o
+ * React desmonta o componente na hora que a condição vira falsa,
+ * sem dar tempo da animação rodar.
  */
 export default function ComingSoonModal({ title, message, onClose }) {
   useEffect(() => {
@@ -15,13 +21,21 @@ export default function ComingSoonModal({ title, message, onClose }) {
   }, [onClose])
 
   return (
-    <div
+    <motion.div
       className="fixed inset-0 z-[300] flex items-center justify-center bg-black/75 backdrop-blur-sm px-6"
       onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
     >
-      <div
+      <motion.div
         className="panel-3d relative bg-asphalt-2 border border-white/10 rounded-xl max-w-sm w-full p-8 text-center"
         onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.9, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 16 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 22 }}
       >
         <button
           onClick={onClose}
@@ -35,7 +49,7 @@ export default function ComingSoonModal({ title, message, onClose }) {
         </div>
         <h3 className="font-display text-3xl text-logo-green text-3d-green mb-3">{title}</h3>
         <p className="text-paper/70 text-sm leading-relaxed">{message}</p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
