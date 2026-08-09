@@ -60,11 +60,10 @@ export const TRACK_METADATA = {
   'spring cagado.mp3': { title: 'Spring Cagado', artist: 'Não indentificado' },
   'Verso 1.mp3': { title: 'Funk da macumba (2026)', artist: 'Ninguem sabe' },
   'Ô santo samurai 3.mp3': { title: 'Ô Santo Samurai', artist: 'Samura FM' },
-  'Hijo_de_puta_argentinomp3': { title: 'Hijo de Puta Argentino', artist: 'Sabemos que não é argentino' }
-  'O_Santo_Africa.mp3': {title: 'O Santo África', artist: 'Samura FM' },
+  'Hijo_de_puta_argentino.mp3': { title: 'Hijo de Puta Argentino', artist: 'Sabemos que não é argentino' },
+  'O_Santo_Africa.mp3': { title: 'O Santo África', artist: 'Samura FM' },
   'لا أعرف ما هذا بحق الجحيم!.mp3': { title: 'Não sei o que é isso!', artist: 'Arabe FM' },
   'Folha concentrada (reverb + meme).mp3': { title: 'Folha Concentrada', artist: 'Phonk dos brabo' },
-
 }
 
 /**
