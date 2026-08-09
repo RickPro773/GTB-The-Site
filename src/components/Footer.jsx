@@ -4,7 +4,7 @@ export default function Footer({ onSocialClick }) {
   return (
     <footer className="py-12 px-[5vw] flex justify-between items-center border-t border-white/[0.08] text-sm text-paper/50 flex-wrap gap-6">
       <div>
-        <div>GTB — Grande Theft Brodis © 2026</div>
+        <div>GTB — Grand Theft Brodis 2026</div>
         <div className="text-xs mt-1">Fan project não oficial &middot; feito com 💜 no Roblox</div>
       </div>
 

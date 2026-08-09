@@ -56,9 +56,9 @@ export default function LogoFull({ className = '' }) {
       >
         <tspan x="10" fill={BRODIS_GREEN}>B</tspan>
         <tspan fill={BRODIS_BLUE}>R</tspan>
-        <tspan fill={BRODIS_GREEN}>O</tspan>
-        <tspan fill={BRODIS_PURPLE}>D</tspan>
-        <tspan fill={BRODIS_PURPLE}>I</tspan>
+        <tspan fill={BRODIS_PURPLE}>O</tspan>
+        <tspan fill={BRODIS_GREEN}>D</tspan>
+        <tspan fill={BRODIS_BLUE}>I</tspan>
         <tspan fill={BRODIS_PURPLE}>S</tspan>
       </text>
     </svg>
