@@ -76,7 +76,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Discreto & Elegante' },
       { label: 'Time do Coração', value: 'Fortaleza' },
-      { label: 'Arma Preferida', value: 'Pistola' },
+      { label: 'Arma Preferida', value: 'Deagle Gold' },
       { label: 'Nível de Perigo', value: '★★★☆☆' },
     ],
   },
@@ -94,7 +94,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Imprevisível' },
       { label: 'Apelido', value: 'Moicano' },
-      { label: 'Arma Preferida', value: 'Submetralhadora' },
+      { label: 'Arma Preferida', value: 'AK-47 Gold' },
       { label: 'Nível de Perigo', value: '★★★★★' },
     ],
   },
@@ -111,7 +111,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Executivo' },
       { label: 'Marca Registrada', value: 'Cabelo Azul' },
-      { label: 'Arma Preferida', value: 'Pistola' },
+      { label: 'Arma Preferida', value: 'Graveto' },
       { label: 'Nível de Perigo', value: '★★★★☆' },
     ],
   },

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import LogoGTB from './LogoGTB'
 
-// ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ CAÍDO OU RODANDO:
+// ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ OK OU EM ATUALIZAÇÃO:
 // true  = Operacional (verde)
-// false = Com Falha (vermelho)
+// false = Em Atualização (amarelo)
 const SERVICOS = [
-  { nome: 'Infraestrutura da Provedora', ok: true },
+  { nome: 'Infraestrutura da Plataforma', ok: true },
   { nome: 'Hospedagem Web (Vercel)', ok: true },
   { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
   { nome: 'API de Dados / Personagens', ok: false },
@@ -23,7 +23,7 @@ export default function MaintenanceScreen() {
     window.location.reload()
   }
 
-  const failCount = SERVICOS.filter((s) => !s.ok).length
+  const updatingCount = SERVICOS.filter((s) => !s.ok).length
 
   return (
     <div
@@ -38,32 +38,31 @@ export default function MaintenanceScreen() {
 
         <div className="inline-flex items-center gap-2 bg-warn-yellow/10 border border-warn-yellow/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-warn-yellow uppercase mb-6">
           <span className="w-2 h-2 rounded-full bg-warn-yellow animate-pulse" />
-          Atualizações em andamento
+          Atualização do sistema em andamento
         </div>
 
         <h1 className="font-display text-5xl text-paper mb-4">Manutenção</h1>
 
         <p className="text-paper/65 text-sm leading-relaxed mb-6">
-          A plataforma está temporariamente indisponível por conta de atualizações de componentes{' '}
-          <strong className="text-paper">atualizações podem causar interrupções</strong>.
-          Estamos de olho e o site volta assim que normalizar.
+          Estamos aplicando novas melhorias na plataforma.{' '}
+          <strong className="text-paper">Isso não é uma falha na provedora</strong>, mas sim uma atualização programada do site. Voltamos em breve!
         </p>
 
         <div className="bg-asphalt-2 border border-white/10 rounded-lg p-5 mb-4 text-left">
-          <Row label="Causa" value="Falha externa do provedor" />
+          <Row label="Causa" value="Atualização e deploy de recursos" />
           <Divider />
-          <Row label="Status atual" value="Acompanhando resolução" valueClass="text-warn-yellow" />
+          <Row label="Status atual" value="Aplicando novos componentes" valueClass="text-warn-yellow" />
           <Divider />
           <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
           <Divider />
-          <Row label="ID do incidente" value="INC-205-UPD-OUTAGE" mono />
+          <Row label="ID do evento" value="UPD-2026-SYS-MAINT" mono />
         </div>
 
         <button
           onClick={() => setShowModal(true)}
           className="w-full border border-white/15 text-paper/70 rounded-lg py-2.5 px-4 text-sm font-semibold mb-3 hover:bg-white/5 transition"
         >
-          🔍 Ver status dos serviços ({failCount} com falha)
+          🔍 Ver status dos serviços ({updatingCount} em atualização)
         </button>
 
         <button
@@ -74,7 +73,7 @@ export default function MaintenanceScreen() {
         </button>
 
         <p className="text-paper/40 text-xs leading-relaxed">
-          O acesso será restabelecido automaticamente assim que as atualizações forem concluídas.
+          O acesso será restabelecido automaticamente assim que os novos recursos forem publicados.
         </p>
 
         <div className="mt-6 pt-5 border-t border-white/10">
@@ -113,7 +112,7 @@ export default function MaintenanceScreen() {
                   {servico.ok ? (
                     <span className="text-hood-green text-xs font-bold">🟢 Operacional</span>
                   ) : (
-                    <span className="text-red-500 text-xs font-bold">🔴 Com falha</span>
+                    <span className="text-warn-yellow text-xs font-bold">🟡 Em atualização</span>
                   )}
                 </div>
               ))}
