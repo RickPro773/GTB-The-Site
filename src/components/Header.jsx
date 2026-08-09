@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import ProfileButton from './ProfileButton'
 
 export default function Header({ onQuadroClick, auth, onOpenAuth }) {
@@ -38,6 +39,18 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           >
             Trailer
           </a>
+          <Link
+            to="/blog"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-logo-purple"
+          >
+            Blog
+          </Link>
+          <Link
+            to="/chat"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
+          >
+            Chat
+          </Link>
           <button
             onClick={onQuadroClick}
             className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-neon-purple bg-transparent border-0 cursor-pointer font-body"
@@ -106,6 +119,20 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           >
             Trailer
           </a>
+          <Link
+            to="/blog"
+            onClick={() => setMobileOpen(false)}
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-logo-purple"
+          >
+            Blog
+          </Link>
+          <Link
+            to="/chat"
+            onClick={() => setMobileOpen(false)}
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
+          >
+            Chat
+          </Link>
           <button
             onClick={handleQuadroClick}
             className="text-left text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-neon-purple bg-transparent border-0 cursor-pointer font-body"

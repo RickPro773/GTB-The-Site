@@ -35,6 +35,38 @@ por isso que `node_modules/` está no `.gitignore` e não deveria
 ir nem pro Git nem pra nenhum zip que você me manda ou sobe em
 outro lugar.
 
+## 🚨 Deu erro "No more than 12 Serverless Functions" no deploy?
+
+Isso já está corrigido no projeto atual, mas vale entender o
+porquê pra não recriar o problema ao adicionar endpoints novos.
+
+**A causa:** o plano gratuito (Hobby) da Vercel permite no máximo
+**12 Serverless Functions** por deploy. A Vercel conta **qualquer**
+arquivo `.ts`/`.js` dentro da pasta `api/` como uma function
+separada — inclusive arquivos que não são endpoints de verdade,
+só código compartilhado (tipo a conexão com o banco, funções de
+hash de senha, etc). Isso estourou o limite rapidinho.
+
+**A correção:** todo o código compartilhado (que não é um endpoint
+chamável por URL) mora numa pasta separada, **fora** de `api/`,
+chamada **`_api-lib/`** (na raiz do projeto, do lado de fora de
+`api/`). A Vercel só escaneia dentro de `api/` pra contar
+functions, então tudo que está em `_api-lib/` não conta pro limite.
+
+**Ao adicionar um endpoint novo:**
+- Se é um endpoint de verdade (algo que o front-end vai chamar via
+  `fetch('/api/...')`), coloque dentro de `api/` — mas fique de
+  olho no total (hoje temos 10, o limite é 12, sobra espaço pra só
+  mais 2 sem precisar reorganizar de novo)
+- Se é código compartilhado (uma função auxiliar, uma conexão, uma
+  validação reutilizável), coloque em `_api-lib/`, nunca em
+  `api/lib/`
+
+**Ao importar algo de `_api-lib/` dentro de um endpoint em
+`api/auth/*.ts` ou `api/account/*.ts`:** o caminho relativo é
+`../../_api-lib/nome-do-arquivo.js` (dois níveis pra cima, porque
+esses endpoints estão em subpastas dentro de `api/`).
+
 ## 🎬 Versão 1.1 — Fase 1: Framer Motion (concluída)
 
 O site está em processo de virar a versão 1.1, que vai incluir
@@ -73,22 +105,36 @@ decisões de infraestrutura):
 - Envio de e-mail (via Resend)
 - Chat, blog, e sistema de moderação de imagem de avatar
 
-## 🔑 Variáveis de ambiente necessárias (Fase 2 — Backend)
+## 🔑 Variáveis de ambiente necessárias (Fases 2, 3 e 4 — Backend)
 
-O sistema de contas (login, cadastro, avatar) **não funciona sem
-essas variáveis configuradas na Vercel**. Vá em
+O sistema de contas, blog e chat **não funcionam sem essas
+variáveis configuradas na Vercel**. Vá em
 **Settings → Environment Variables** dentro do projeto na Vercel e
 adicione cada uma:
 
 | Variável | De onde vem | Obrigatória pra |
 |---|---|---|
-| `DATABASE_URL` ou `POSTGRES_URL` | Criada sozinha quando você conecta o banco Postgres (Neon) pela aba Storage | Tudo que usa banco |
+| `DATABASE_URL` ou `POSTGRES_URL` | Criada sozinha quando você conecta o banco Postgres (Neon) pela aba Storage | Tudo que usa banco (contas, blog, chat) |
 | `JWT_SECRET` | Você gera (veja comando abaixo) | Login/sessão |
 | `RESEND_API_KEY` | Painel do Resend → API Keys | Envio de e-mail |
-| `EMAIL_FROM` | Ex: `GTB <contato@seudominio.com>` — precisa ser de um domínio verificado no Resend | Envio de e-mail |
+| `EMAIL_FROM` | `GTB <onboarding@resend.dev>` por enquanto (veja nota abaixo) | Envio de e-mail |
 | `SIGHTENGINE_API_USER` | Painel do Sightengine | Upload de avatar |
 | `SIGHTENGINE_API_SECRET` | Painel do Sightengine | Upload de avatar |
 | `BLOB_READ_WRITE_TOKEN` | Criada sozinha quando você cria o Vercel Blob pela aba Storage | Upload de avatar |
+| `PUSHER_APP_ID` | Painel do Pusher → seu App → App Keys | Chat (Fase 4) |
+| `PUSHER_KEY` | Painel do Pusher → seu App → App Keys | Chat (Fase 4) |
+| `PUSHER_SECRET` | Painel do Pusher → seu App → App Keys | Chat (Fase 4) |
+| `PUSHER_CLUSTER` | Painel do Pusher → seu App → App Keys (ex: `us2`, `sa1`) | Chat (Fase 4) |
+| `VITE_PUSHER_KEY` | **Mesmo valor** de `PUSHER_KEY` acima | Chat (Fase 4) — front-end |
+| `VITE_PUSHER_CLUSTER` | **Mesmo valor** de `PUSHER_CLUSTER` acima | Chat (Fase 4) — front-end |
+
+⚠️ **Sobre as duas variáveis `VITE_PUSHER_*` duplicadas:** isso não
+é engano — o Vite só expõe pro código do navegador (front-end) as
+variáveis que começam com `VITE_`. As variáveis `PUSHER_KEY` e
+`PUSHER_CLUSTER` (sem o prefixo) são usadas só pelo backend
+(`_api-lib/pusherServer.ts`); as versões com `VITE_` são usadas
+pelo `ChatPage.jsx` no navegador pra conectar ao Pusher
+diretamente. Cadastre as duas variáveis com o mesmo valor.
 
 **Gerar o `JWT_SECRET`** (roda isso no terminal do seu PC, com Node
 instalado):
@@ -96,6 +142,27 @@ instalado):
 node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 ```
 Copia o resultado e cola como valor dessa variável.
+
+**Criando o App no Pusher:**
+1. Crie conta em [pusher.com](https://pusher.com) (sem cartão)
+2. No dashboard, **Create app** → escolha um nome (ex: `gtb-chat`)
+   e um **cluster** perto de você (ex: `sa1` pra América do Sul)
+3. Vá em **App Keys** — lá estão os 4 valores (`app_id`, `key`,
+   `secret`, `cluster`) que você vai colar nas variáveis acima
+
+**Sobre o `EMAIL_FROM` usando `resend.dev`:** o Resend só permite
+mandar e-mail de um endereço com **domínio verificado** — não dá
+pra usar um Gmail (nem qualquer outro provedor de e-mail comum)
+como remetente, é uma restrição de segurança do próprio serviço
+(evita que qualquer um finja mandar e-mail "como se fosse" do
+Gmail de outra pessoa). Enquanto você não tiver um domínio próprio
+verificado no Resend, use `GTB <onboarding@resend.dev>` — é um
+endereço de teste que o próprio Resend disponibiliza e que já
+funciona de verdade, só aparece esse remetente genérico em vez de
+algo com a cara do GTB. Quando tiver um domínio (mesmo um barato,
+tipo `.xyz`), volte no painel do Resend → Domains → adicione e
+verifique ele, e troque o valor de `EMAIL_FROM` pra algo como
+`GTB <contato@seudominio.com>`.
 
 ⚠️ **Nunca cole nenhuma dessas chaves em conversa nenhuma (nem
 aqui, nem com IA nenhuma) — elas só devem existir dentro do painel

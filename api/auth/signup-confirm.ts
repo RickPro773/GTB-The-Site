@@ -1,11 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sql } from '../lib/db.js'
-import { hashPassword, verifyCode } from '../lib/crypto.js'
-import { generateDiscriminator } from '../lib/discriminator.js'
-import { createSessionToken } from '../lib/session.js'
-import { checkRateLimit } from '../lib/rateLimit.js'
-import { signupConfirmSchema } from '../lib/validation.js'
-import { containsBlockedWord } from '../lib/blocklist.js'
+import { sql } from '../../_api-lib/db.js'
+import { hashPassword, verifyCode } from '../../_api-lib/crypto.js'
+import { generateDiscriminator } from '../../_api-lib/discriminator.js'
+import { createSessionToken } from '../../_api-lib/session.js'
+import { checkRateLimit } from '../../_api-lib/rateLimit.js'
+import { signupConfirmSchema } from '../../_api-lib/validation.js'
+import { containsBlockedWord } from '../../_api-lib/blocklist.js'
 import { serialize } from 'cookie'
 
 /**

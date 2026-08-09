@@ -70,7 +70,7 @@ export default function CharacterBio({ audio }) {
       <div
         className="relative min-h-[60vh] flex items-end"
         style={{
-          background: `linear-gradient(180deg, rgba(13,13,16,.15) 0%, rgba(13,13,16,.65) 60%, #0d0d10 100%), url(${char.photos[activePhoto]}) center 15% / cover no-repeat`,
+          background: `linear-gradient(180deg, rgba(13,13,16,.15) 0%, rgba(13,13,16,.65) 60%, #0d0d10 100%), url(${char.photos[activePhoto]}) ${char.heroPosition || 'center 15%'} / cover no-repeat`,
         }}
       >
         <Link

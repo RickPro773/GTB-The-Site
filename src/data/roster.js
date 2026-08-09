@@ -53,8 +53,15 @@ import foxPhoto from '../assets/images/char-fox.png'
  * seção "Músicas dos personagens" pra saber onde colocar cada um.
  * Enquanto o arquivo não existir, a bio mostra normalmente mas sem
  * tocar música (sem quebrar nada).
+ *
+ * `heroPosition` (opcional) ajusta o enquadramento da foto grande
+ * de fundo na página de bio do personagem — usa a mesma sintaxe do
+ * CSS `background-position` (ex: `'center 8%'`, `'center top'`).
+ * Se não definir, usa `'center 15%'` como padrão. Só precisa
+ * mexer nisso se a foto de algum personagem aparecer cortada
+ * (cabeça sumindo, por exemplo) — geralmente acontece quando a
+ * foto tem proporção bem diferente das outras.
  */
-
 export const roster = [
   {
     id: '01',
@@ -65,11 +72,11 @@ export const roster = [
     effect: null,
     theme: '#8f13eb',
     musicFile: 'rick-theme.mp3',
-    bio: 'Rick é o cara de terno que ninguém sabe se é segurança, advogado ou o próprio dono do banco. Fala pouco, resolve rápido — e com sua Gold Deagle ninguem chega perto.',
+    bio: 'Rick é o cara de terno que ninguém sabe se é segurança, advogado ou o próprio dono do banco. Fala pouco, resolve rápido — e sempre com um sorriso torto de quem já viu de tudo em Los Brodis.',
     stats: [
       { label: 'Estilo', value: 'Discreto & Elegante' },
       { label: 'Time do Coração', value: 'Fortaleza' },
-      { label: 'Arma Preferida', value: 'Gold Deagle' },
+      { label: 'Arma Preferida', value: 'Pistola' },
       { label: 'Nível de Perigo', value: '★★★☆☆' },
     ],
   },
@@ -79,6 +86,7 @@ export const roster = [
     name: 'Dragon',
     tag: 'As vezes homem de terno, as vezes Moicano',
     photos: [raf3Photo],
+    heroPosition: 'center 8%', // a foto dele é mais alta, "center 15%" cortava o rosto
     effect: 'alive',
     theme: '#52db0f',
     musicFile: 'dragon-theme.mp3',
@@ -86,7 +94,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Imprevisível' },
       { label: 'Apelido', value: 'Moicano' },
-      { label: 'Arma Preferida', value: 'AK-47 Gold' },
+      { label: 'Arma Preferida', value: 'Submetralhadora' },
       { label: 'Nível de Perigo', value: '★★★★★' },
     ],
   },
@@ -103,7 +111,7 @@ export const roster = [
     stats: [
       { label: 'Estilo', value: 'Executivo' },
       { label: 'Marca Registrada', value: 'Cabelo Azul' },
-      { label: 'Arma Preferida', value: 'Sniper e Madeira' },
+      { label: 'Arma Preferida', value: 'Pistola' },
       { label: 'Nível de Perigo', value: '★★★★☆' },
     ],
   },
@@ -116,7 +124,7 @@ export const roster = [
     effect: null,
     theme: '#8f13eb',
     musicFile: 'fotafox-theme.mp3',
-    bio: 'Boné, isqueiro e um galão de gasolina — Fotafox não pergunta, ele já tá correndo. Ninguém sabe explicar direito por que ele é roxo talvez por ser uva, e ninguém tem coragem de perguntar duas vezes.',
+    bio: 'Boné, isqueiro e um galão de gasolina — Fotafox não pergunta, ele já tá correndo. Ninguém sabe explicar direito por que ele é roxo, e ninguém tem coragem de perguntar duas vezes.',
     stats: [
       { label: 'Estilo', value: 'Caótico' },
       { label: 'Marca Registrada', value: 'Galão de Gasolina' },

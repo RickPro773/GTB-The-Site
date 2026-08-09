@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { STATIONS_CONFIG } from '../data/radioConfig'
+import { STATIONS_CONFIG, TRACK_METADATA, STATION_ADS, AD_FREQUENCY } from '../data/radioConfig'
 
 // Descobre TODOS os .mp3 dentro de src/assets/radio/<qualquer-pasta>/
 // automaticamente, em tempo de build — sem limite de quantidade
@@ -13,19 +13,37 @@ const audioModules = import.meta.glob('../assets/radio/*/*.mp3', {
 
 // Agrupa as faixas encontradas por pasta (nome da estação), na
 // ordem em que o STATIONS_CONFIG define, e ignora pastas vazias.
+// Cada faixa já sai com título/artista resolvidos a partir de
+// TRACK_METADATA (ou usa o nome cru do arquivo como fallback, se
+// a faixa ainda não tiver metadado preenchido).
 function buildStations() {
   const tracksByFolder = {}
   for (const path in audioModules) {
-    const match = path.match(/radio\/([^/]+)\//)
+    const match = path.match(/radio\/([^/]+)\/([^/]+\.mp3)$/)
     if (!match) continue
-    const folder = match[1]
+    const [, folder, filename] = match
     if (!tracksByFolder[folder]) tracksByFolder[folder] = []
-    tracksByFolder[folder].push(audioModules[path])
+
+    const metadata = TRACK_METADATA[filename]
+    const fallbackTitle = filename.replace(/\.mp3$/i, '').replace(/[_-]+/g, ' ')
+
+    tracksByFolder[folder].push({
+      src: audioModules[path],
+      title: metadata?.title || fallbackTitle,
+      artist: metadata?.artist || null,
+      isAd: false,
+    })
   }
 
   return STATIONS_CONFIG.filter((cfg) => tracksByFolder[cfg.folder]?.length > 0).map((cfg) => ({
     ...cfg,
     tracks: tracksByFolder[cfg.folder],
+    ads: (STATION_ADS[cfg.folder] || []).map((ad) => ({
+      src: ad.file,
+      title: ad.label,
+      artist: 'Publicidade',
+      isAd: true,
+    })),
   }))
 }
 
@@ -42,6 +60,7 @@ export default function RadioSelector({ audio }) {
   const stations = useMemo(buildStations, [])
   const [stationIndex, setStationIndex] = useState(0)
   const [trackIndex, setTrackIndex] = useState(0)
+  const [isPlayingAd, setIsPlayingAd] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -49,13 +68,15 @@ export default function RadioSelector({ audio }) {
   const progressBarRef = useRef(null)
 
   const station = stations[stationIndex]
-  const currentSrc = station?.tracks[trackIndex]
+  const currentTrack = isPlayingAd
+    ? station?.ads[trackIndex % Math.max(station.ads.length, 1)]
+    : station?.tracks[trackIndex]
+  const currentSrc = currentTrack?.src
 
-  // sempre que a fonte muda (estação ou faixa diferente — seja por
-  // troca de estação, skip manual, ou fim automático da faixa),
-  // recarrega o elemento de áudio de forma segura. O React já
-  // garante que `currentSrc` está atualizado antes deste efeito
-  // rodar, então não existe risco de tocar a faixa errada.
+  // sempre que a fonte muda (estação, faixa, ou entrada/saída de
+  // anúncio), recarrega o elemento de áudio de forma segura. O
+  // React já garante que `currentSrc` está atualizado antes deste
+  // efeito rodar, então não existe risco de tocar a faixa errada.
   useEffect(() => {
     if (!audioRef.current) return
     audioRef.current.load()
@@ -105,25 +126,56 @@ export default function RadioSelector({ audio }) {
 
   // Troca de ESTAÇÃO — funciona a qualquer momento, mesmo com
   // música tocando. Sempre volta pra primeira faixa da nova
-  // estação, e continua tocando automaticamente se já estava
-  // tocando antes da troca.
+  // estação (nunca pra um anúncio), e continua tocando
+  // automaticamente se já estava tocando antes da troca.
   function changeStation(direction) {
     const next = (stationIndex + direction + stations.length) % stations.length
     setStationIndex(next)
     setTrackIndex(0)
+    setIsPlayingAd(false)
   }
 
   function selectStation(index) {
     if (index === stationIndex) return
     setStationIndex(index)
     setTrackIndex(0)
+    setIsPlayingAd(false)
   }
 
   // Pula pra PRÓXIMA/ANTERIOR faixa dentro da mesma estação —
   // funciona a qualquer momento, com a música tocando ou pausada.
+  // Pular manualmente sempre volta pra música (sai do anúncio, se
+  // estiver nele), porque é uma ação explícita da pessoa.
   function changeTrack(direction) {
+    setIsPlayingAd(false)
     const total = station.tracks.length
     setTrackIndex((prev) => (prev + direction + total) % total)
+  }
+
+  // Quando uma faixa termina sozinha: decide se toca um anúncio
+  // (só se a estação tiver algum cadastrado) com a probabilidade
+  // definida em AD_FREQUENCY, ou simplesmente segue pra próxima
+  // música normalmente.
+  function handleTrackEnded() {
+    if (isPlayingAd) {
+      // um anúncio acabou de tocar — volta pra música normal,
+      // avançando pra próxima faixa
+      setIsPlayingAd(false)
+      const total = station.tracks.length
+      setTrackIndex((prev) => (prev + 1) % total)
+      return
+    }
+
+    const hasAds = station.ads.length > 0
+    const shouldPlayAd = hasAds && Math.random() < AD_FREQUENCY
+
+    if (shouldPlayAd) {
+      setIsPlayingAd(true)
+      setTrackIndex(Math.floor(Math.random() * station.ads.length))
+    } else {
+      const total = station.tracks.length
+      setTrackIndex((prev) => (prev + 1) % total)
+    }
   }
 
   // clique/arraste na barra pula pra posição correspondente na música
@@ -140,7 +192,7 @@ export default function RadioSelector({ audio }) {
 
   return (
     <section id="radio" className="py-24 px-[5vw] text-center">
-      <audio ref={audioRef} src={currentSrc} onEnded={() => changeTrack(1)} />
+      <audio ref={audioRef} src={currentSrc} onEnded={handleTrackEnded} />
 
       <h2 className="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] mb-2">
         📻 <span className="text-logo-green">Rádio</span> GTB
@@ -192,14 +244,24 @@ export default function RadioSelector({ audio }) {
           </div>
         )}
 
-        {/* Nome da faixa atual + contador */}
-        <div className="mb-3">
-          <div className="text-[0.65rem] tracking-[2px] text-warn-yellow uppercase font-bold mb-1">
-            Tocando agora
+        {/* Nome da faixa/anúncio tocando agora */}
+        <div className="mb-3 min-h-[3.2rem]">
+          <div
+            className={`text-[0.65rem] tracking-[2px] uppercase font-bold mb-1 ${
+              isPlayingAd ? 'text-logo-blue' : 'text-warn-yellow'
+            }`}
+          >
+            {isPlayingAd ? '📢 Publicidade' : 'Tocando agora'}
           </div>
-          <div className="text-sm text-paper/70">
-            Faixa {trackIndex + 1} de {station.tracks.length}
-          </div>
+          <div className="text-sm text-paper font-semibold truncate">{currentTrack?.title}</div>
+          {currentTrack?.artist && (
+            <div className="text-xs text-paper/50 truncate">{currentTrack.artist}</div>
+          )}
+          {!isPlayingAd && (
+            <div className="text-[0.65rem] text-paper/35 mt-0.5">
+              Faixa {trackIndex + 1} de {station.tracks.length}
+            </div>
+          )}
         </div>
 
         {/* Barra de progresso com tempo real, clicável pra pular na música */}
@@ -210,7 +272,9 @@ export default function RadioSelector({ audio }) {
             className="relative h-2 bg-asphalt border border-white/10 rounded-full cursor-pointer overflow-hidden group"
           >
             <motion.div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-logo-purple to-hood-green rounded-full"
+              className={`absolute inset-y-0 left-0 rounded-full ${
+                isPlayingAd ? 'bg-logo-blue' : 'bg-gradient-to-r from-logo-purple to-hood-green'
+              }`}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.15, ease: 'linear' }}
             />

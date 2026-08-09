@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { parse } from 'cookie'
-import { verifySessionToken } from '../lib/session.js'
-import { sql } from '../lib/db.js'
+import { verifySessionToken } from '../../_api-lib/session.js'
+import { sql } from '../../_api-lib/db.js'
 
 /**
  * GET /api/auth/me

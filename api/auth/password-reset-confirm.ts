@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sql } from '../lib/db.js'
-import { hashPassword, verifyCode } from '../lib/crypto.js'
-import { checkRateLimit } from '../lib/rateLimit.js'
-import { passwordResetConfirmSchema } from '../lib/validation.js'
+import { sql } from '../../_api-lib/db.js'
+import { hashPassword, verifyCode } from '../../_api-lib/crypto.js'
+import { checkRateLimit } from '../../_api-lib/rateLimit.js'
+import { passwordResetConfirmSchema } from '../../_api-lib/validation.js'
 
 /**
  * POST /api/auth/password-reset-confirm

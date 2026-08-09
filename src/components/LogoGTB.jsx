@@ -19,8 +19,8 @@ export default function LogoGTB({ className = '' }) {
         y="95"
         fontFamily="Pricedown, Anton, sans-serif"
         fontSize="90"
-        fill="#c026ff"
-        stroke="#39d353"
+        fill="#8f13eb"
+        stroke="#52db0f"
         strokeWidth="4"
         paintOrder="stroke"
       >

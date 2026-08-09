@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { serialize } from 'cookie'
-import { sql } from '../lib/db.js'
-import { verifyPassword } from '../lib/crypto.js'
-import { createSessionToken } from '../lib/session.js'
-import { checkRateLimit } from '../lib/rateLimit.js'
-import { loginSchema } from '../lib/validation.js'
+import { sql } from '../../_api-lib/db.js'
+import { verifyPassword } from '../../_api-lib/crypto.js'
+import { createSessionToken } from '../../_api-lib/session.js'
+import { checkRateLimit } from '../../_api-lib/rateLimit.js'
+import { loginSchema } from '../../_api-lib/validation.js'
 
 /**
  * POST /api/auth/login

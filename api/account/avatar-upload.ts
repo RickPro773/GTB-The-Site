@@ -1,10 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { parse } from 'cookie'
 import { put, del } from '@vercel/blob'
-import { verifySessionToken } from '../lib/session.js'
-import { sql } from '../lib/db.js'
-import { moderateImage } from '../lib/moderation.js'
-import { checkRateLimit } from '../lib/rateLimit.js'
+import { verifySessionToken } from '../../_api-lib/session.js'
+import { sql } from '../../_api-lib/db.js'
+import { moderateImage } from '../../_api-lib/moderation.js'
+import { checkRateLimit } from '../../_api-lib/rateLimit.js'
 
 // Configuração pra Vercel aceitar o corpo da requisição como
 // binário bruto (a imagem em si), em vez de tentar interpretar

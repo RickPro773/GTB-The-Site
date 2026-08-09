@@ -16,6 +16,9 @@ import MaintenanceScreen from './components/MaintenanceScreen'
 import RadioSelector from './components/RadioSelector'
 import PatchNotes from './components/PatchNotes'
 import CharacterBio from './components/CharacterBio'
+import BlogList from './components/BlogList'
+import BlogPost from './components/BlogPost'
+import ChatPage from './components/ChatPage'
 import PageTransition from './components/PageTransition'
 import Reveal from './components/Reveal'
 import AuthModal from './components/AuthModal'
@@ -88,6 +91,15 @@ function SiteRoutes() {
             }
           />
           <Route path="/personagem/:slug" element={<CharacterBio audio={audio} />} />
+          <Route path="/blog" element={<BlogList />} />
+          <Route
+            path="/blog/:slug"
+            element={<BlogPost auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />}
+          />
+          <Route
+            path="/chat"
+            element={<ChatPage auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />}
+          />
         </Routes>
       </AnimatePresence>
 

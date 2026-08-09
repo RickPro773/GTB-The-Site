@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { sql } from '../lib/db.js'
-import { generateVerificationCode, hashVerificationCode } from '../lib/crypto.js'
-import { sendVerificationCodeEmail } from '../lib/email.js'
-import { checkRateLimit } from '../lib/rateLimit.js'
-import { passwordResetRequestSchema } from '../lib/validation.js'
+import { sql } from '../../_api-lib/db.js'
+import { generateVerificationCode, hashVerificationCode } from '../../_api-lib/crypto.js'
+import { sendVerificationCodeEmail } from '../../_api-lib/email.js'
+import { checkRateLimit } from '../../_api-lib/rateLimit.js'
+import { passwordResetRequestSchema } from '../../_api-lib/validation.js'
 
 /**
  * POST /api/auth/password-reset-request
