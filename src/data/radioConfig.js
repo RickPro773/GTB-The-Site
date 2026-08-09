@@ -29,9 +29,14 @@
  * aparecem na rádio, não quebram nada).
  */
 export const STATIONS_CONFIG = [
-  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'LOS BRODIS' },
+  { folder: 'los-brodis', name: 'LOS BRODIS', genre: 'LOS BRODIS & REGGAE' },
   { folder: 'radio-caos', name: 'RÁDIO CAOS GTB', genre: 'ROCK & CAOS' },
   { folder: 'samura-fm', name: 'SAMURA FM', genre: 'ESPECIAL SAMURA' },
+  { folder: 'clorofila-fm', name: 'CLOROFILA FM', genre: 'CLOROFILA' },
+  { folder: 'metalurgico-beats', name: 'METALURGICO BEATS', genre: 'METALURGICO' },
+  { folder: 'brodi-fm', name: 'BRODI FM', genre: 'CLÁSSICOS' },
+  { folder: 'arabe-fm', name: 'ARABE FM', genre: 'ARABE' },
+  { folder: 'metal-edits', name: 'METAL EDITS', genre: 'Phonk & Metal' },
   // Pra adicionar uma rádio nova, copie a linha de cima e ajuste:
   // { folder: 'brodi-fm', name: 'BRODI FM', genre: 'CLÁSSICOS' },
 ]
@@ -51,6 +56,15 @@ export const TRACK_METADATA = {
   'Na_quatro_por_merda.mp3': { title: 'Na Quatro Por Merda', artist: 'Los Brodis' },
   'The_Hungry_Trombone.mp3': { title: 'The Hungry Trombone', artist: 'Rádio Caos GTB' },
   'Maconha_Do_Samura.mp3': { title: 'Maconha Do Samura', artist: 'Samura FM' },
+  'Planta_O.mp3': { title: 'Planta ô', artist: 'Instrumental de planta' },
+  'spring cagado.mp3': { title: 'Spring Cagado', artist: 'Não indentificado' },
+  'Verso 1.mp3': { title: 'Funk da macumba (2026)', artist: 'Ninguem sabe' },
+  'Ô santo samurai 3.mp3': { title: 'Ô Santo Samurai', artist: 'Samura FM' },
+  'Hijo_de_puta_argentinomp3': { title: 'Hijo de Puta Argentino', artist: 'Sabemos que não é argentino' }
+  'O_Santo_Africa.mp3': {title: 'O Santo África', artist: 'Samura FM' },
+  'لا أعرف ما هذا بحق الجحيم!.mp3': { title: 'Não sei o que é isso!', artist: 'Arabe FM' },
+  'Folha concentrada (reverb + meme).mp3': { title: 'Folha Concentrada', artist: 'Phonk dos brabo' },
+
 }
 
 /**
@@ -77,6 +91,9 @@ export const TRACK_METADATA = {
  */
 export const AD_FREQUENCY = 0.25
 
+  import AmmoRickAd from '../assets/radio-ads/Ammo.mp3'
+
+  
 // Exemplo de como registrar anúncios (deixe comentado até você ter
 // os arquivos de áudio prontos — sem isso, nenhum anúncio toca,
 // sem quebrar nada):
@@ -88,4 +105,8 @@ export const AD_FREQUENCY = 0.25
 //     { file: fotafoxBurgerAd, label: 'Publicidade — Fotafox Burger' },
 //   ],
 // }
-export const STATION_ADS = {}
+export const STATION_ADS = {
+  'los-brodis': [
+    { file: AmmoRickAd, label: 'Publicidade — Ammo Rick' },
+  ],
+}
