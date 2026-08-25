@@ -5,13 +5,13 @@ export default function PlaySection() {
       className="text-center py-28 px-[5vw]"
       style={{
         background:
-          'radial-gradient(circle at 50% 20%, rgba(255,47,149,.18), transparent 55%), radial-gradient(circle at 50% 60%, rgba(107,47,214,.16), transparent 60%), #0d0d10',
+          'linear-gradient(180deg, rgba(107,47,214,.12) 0%, transparent 30%), radial-gradient(circle at 50% 20%, rgba(255,47,149,.2), transparent 55%), radial-gradient(circle at 50% 60%, rgba(107,47,214,.18), transparent 60%), #0d0d10',
       }}
     >
       <div className="inline-block border border-gta6-pink text-gta6-pink text-xs tracking-[2px] uppercase py-2 px-5 mb-6 rounded-full">
         v0.0.5 &middot; Alpha Fechada
       </div>
-      <h2 className="gtb-play-title font-display text-[clamp(2.8rem,8.5vw,6.5rem)] text-logo-green">
+      <h2 className="gtb-play-title font-display text-[clamp(2.8rem,8.5vw,6.5rem)] text-gta6-pink">
         Bora pra Rua?
       </h2>
       <p className="max-w-[520px] mx-auto mt-4 mb-6 text-paper/70">

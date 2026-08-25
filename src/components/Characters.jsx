@@ -76,7 +76,7 @@ export default function Characters() {
       className="bg-asphalt-2 border-t border-b border-white/[0.06] text-center py-28 px-[5vw]"
     >
       <h2 className="font-display text-[clamp(2.5rem,6.5vw,4.8rem)] leading-[0.9] mb-2">
-        O <span className="text-logo-purple text-3d-purple">Elenco</span> da Rua
+        O <span className="text-gta6-pink text-3d-purple">Elenco</span> da Rua
       </h2>
       <p className="max-w-[620px] mx-auto text-paper/70 leading-relaxed mb-14">
         Escolha seu brodi. Clique num card pra ver a ficha completa de cada um.

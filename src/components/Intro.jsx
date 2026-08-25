@@ -83,7 +83,7 @@ export default function Intro({ audio }) {
           </div>
 
           <div className="animate-flicker w-[min(680px,88vw)]">
-            <LogoFull className="w-full h-auto drop-shadow-[0_0_35px_rgba(192,38,255,0.35)]" />
+            <LogoFull className="w-full h-auto drop-shadow-[0_0_35px_rgba(255,47,149,0.35)]" />
           </div>
 
           {/* créditos do elenco passando, estilo abertura Rockstar */}
@@ -97,7 +97,7 @@ export default function Intro({ audio }) {
                   }`}
                 >
                   <span className="text-paper/40">Estrelando</span>
-                  <span className="mx-2 text-hood-green">&middot;</span>
+                  <span className="mx-2 text-gta6-pink">&middot;</span>
                   <span className="text-paper/70 font-semibold">{name}</span>
                 </div>
               ))}
@@ -106,7 +106,7 @@ export default function Intro({ audio }) {
 
           <div className="mt-8 w-[min(460px,72vw)] h-[3px] bg-white/10 border border-white/20 relative overflow-hidden rounded-full">
             <div
-              className="h-full bg-gradient-to-r from-neon-purple to-hood-green shadow-[0_0_12px_rgba(57,211,83,0.6)]"
+              className="h-full bg-gradient-to-r from-gta6-pink to-gta6-purple shadow-[0_0_12px_rgba(255,47,149,0.6)]"
               style={{ animation: `loadbar-slow ${INTRO_DURATION_MS}ms linear forwards` }}
             />
           </div>
@@ -120,7 +120,7 @@ export default function Intro({ audio }) {
 
         <button
           onClick={toggleSound}
-          className="absolute bottom-6 left-6 z-[6] bg-transparent border border-paper/40 text-paper font-body tracking-[2px] text-xs uppercase py-2.5 px-4 cursor-pointer transition hover:bg-hood-green hover:text-black hover:border-hood-green"
+          className="absolute bottom-6 left-6 z-[6] bg-transparent border border-paper/40 text-paper font-body tracking-[2px] text-xs uppercase py-2.5 px-4 cursor-pointer transition hover:bg-gta6-pink hover:text-black hover:border-gta6-pink"
         >
           {soundOn ? '🔊 Som Ligado' : '🔇 Som Desligado'}
         </button>

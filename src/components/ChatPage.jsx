@@ -142,7 +142,7 @@ export default function ChatPage({ auth, onOpenAuth }) {
               onClick={() => setActiveRoom(room.slug)}
               className={`w-full text-left px-3 py-2.5 rounded-lg mb-1 transition-colors ${
                 activeRoom === room.slug
-                  ? 'bg-neon-purple/20 text-paper border border-neon-purple/40'
+                  ? 'bg-gta6-pink/20 text-paper border border-gta6-pink/40'
                   : 'text-paper/60 hover:bg-white/5 border border-transparent'
               }`}
             >
@@ -161,7 +161,7 @@ export default function ChatPage({ auth, onOpenAuth }) {
               <p className="text-paper/60 text-sm mb-4">Entre na sua conta pra participar do chat.</p>
               <button
                 onClick={onOpenAuth}
-                className="btn-3d bg-neon-purple text-white rounded-lg py-2.5 px-6 text-sm font-bold hover:bg-neon-purple-dim transition-colors"
+                className="btn-3d bg-gta6-pink text-white rounded-lg py-2.5 px-6 text-sm font-bold hover:bg-gta6-purple transition-colors"
               >
                 Entrar / Criar conta
               </button>
@@ -211,12 +211,12 @@ export default function ChatPage({ auth, onOpenAuth }) {
                   onChange={(e) => setMessageText(e.target.value)}
                   placeholder="Escreva uma mensagem..."
                   maxLength={1000}
-                  className="flex-1 bg-asphalt-2 border border-white/10 rounded-lg py-2.5 px-4 text-sm text-paper outline-none focus:border-hood-green transition-colors"
+                  className="flex-1 bg-asphalt-2 border border-white/10 rounded-lg py-2.5 px-4 text-sm text-paper outline-none focus:border-gta6-pink transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={isSending}
-                  className="btn-3d bg-neon-purple text-white rounded-lg px-5 text-sm font-bold hover:bg-neon-purple-dim transition-colors disabled:opacity-60"
+                  className="btn-3d bg-gta6-pink text-white rounded-lg px-5 text-sm font-bold hover:bg-gta6-purple transition-colors disabled:opacity-60"
                 >
                   Enviar
                 </button>

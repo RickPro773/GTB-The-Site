@@ -8,9 +8,9 @@ export default function NowPlayingToast({ label }) {
       }`}
     >
       <div className="flex items-end gap-[3px] h-3.5">
-        <span className="w-[3px] h-1.5 bg-hood-green rounded-full animate-eq [animation-delay:0s]" />
-        <span className="w-[3px] h-3.5 bg-hood-green rounded-full animate-eq [animation-delay:.2s]" />
-        <span className="w-[3px] h-2 bg-hood-green rounded-full animate-eq [animation-delay:.4s]" />
+        <span className="w-[3px] h-1.5 bg-gta6-pink rounded-full animate-eq [animation-delay:0s]" />
+        <span className="w-[3px] h-3.5 bg-gta6-pink rounded-full animate-eq [animation-delay:.2s]" />
+        <span className="w-[3px] h-2 bg-gta6-pink rounded-full animate-eq [animation-delay:.4s]" />
       </div>
       <span className="text-paper/60">
         Tocando agora &middot; <b className="text-paper font-semibold normal-case">{label}</b>

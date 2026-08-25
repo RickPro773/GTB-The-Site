@@ -40,12 +40,12 @@ export default function PatchNotes() {
           onClick={() => setIsOpen(false)}
         >
           <div
-            className="bg-asphalt-2 border border-neon-purple/40 rounded-2xl p-7 max-w-md w-full max-h-[80vh] overflow-y-auto text-left"
+            className="bg-asphalt-2 border border-gta6-pink/40 rounded-2xl p-7 max-w-md w-full max-h-[80vh] overflow-y-auto text-left"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-start border-b border-white/10 pb-3 mb-4">
               <div>
-                <span className="text-neon-purple text-xs font-bold tracking-[1px] uppercase">
+                <span className="text-gta6-pink text-xs font-bold tracking-[1px] uppercase">
                   Diário da Alpha
                 </span>
                 <h2 className="font-display text-3xl text-logo-green text-3d-green leading-none mt-1">
@@ -84,7 +84,7 @@ export default function PatchNotes() {
 
             <button
               onClick={() => setIsOpen(false)}
-              className="w-full bg-neon-purple text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-neon-purple-dim transition"
+              className="w-full bg-gta6-pink text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-gta6-purple transition"
             >
               Fechar
             </button>

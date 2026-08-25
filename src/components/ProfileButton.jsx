@@ -80,7 +80,7 @@ export default function ProfileButton({ user, isLoading, onOpenAuth, onLogout, o
       <button
         onClick={onOpenAuth}
         aria-label="Entrar ou criar conta"
-        className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-paper/70 hover:text-hood-green hover:border-hood-green transition-colors"
+        className="w-9 h-9 rounded-full bg-white/5 border border-white/15 flex items-center justify-center text-paper/70 hover:text-gta6-pink hover:border-gta6-pink transition-colors"
       >
         <svg viewBox="0 0 24 24" className="w-4.5 h-4.5" fill="currentColor">
           <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.24-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.76-3.6-5-8-5Z" />
@@ -96,7 +96,7 @@ export default function ProfileButton({ user, isLoading, onOpenAuth, onLogout, o
       <button
         onClick={() => setMenuOpen((v) => !v)}
         aria-label="Menu da conta"
-        className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/15 hover:border-hood-green transition-colors flex items-center justify-center bg-asphalt-2"
+        className="w-9 h-9 rounded-full overflow-hidden border-2 border-white/15 hover:border-gta6-pink transition-colors flex items-center justify-center bg-asphalt-2"
       >
         {user.avatarUrl && user.avatarStatus === 'approved' ? (
           <img src={user.avatarUrl} alt={user.nickname} className="w-full h-full object-cover" />
@@ -141,7 +141,7 @@ export default function ProfileButton({ user, isLoading, onOpenAuth, onLogout, o
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className="w-full text-left px-2 py-1.5 text-sm text-paper/70 hover:text-hood-green hover:bg-white/5 rounded transition-colors disabled:opacity-50"
+              className="w-full text-left px-2 py-1.5 text-sm text-paper/70 hover:text-gta6-pink hover:bg-white/5 rounded transition-colors disabled:opacity-50"
             >
               {isUploading ? 'Enviando...' : 'Trocar avatar'}
             </button>

@@ -12,14 +12,14 @@ export default function Footer({ onSocialClick }) {
         <button
           onClick={() => onSocialClick('Discord')}
           aria-label="Discord (em breve)"
-          className="w-10 h-10 flex items-center justify-center border border-white/15 text-paper/60 hover:text-hood-green hover:border-hood-green transition"
+          className="w-10 h-10 flex items-center justify-center border border-white/15 text-paper/60 hover:text-gta6-pink hover:border-gta6-pink transition"
         >
           <DiscordIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => onSocialClick('Roblox')}
           aria-label="Roblox (em breve)"
-          className="w-10 h-10 flex items-center justify-center border border-white/15 text-paper/60 hover:text-neon-purple hover:border-neon-purple transition"
+          className="w-10 h-10 flex items-center justify-center border border-white/15 text-paper/60 hover:text-gta6-pink hover:border-gta6-pink transition"
         >
           <RobloxIcon className="w-5 h-5" />
         </button>

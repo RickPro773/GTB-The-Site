@@ -309,7 +309,7 @@ function Field({ label, type, value, onChange, required, autoFocus, maxLength, i
         autoFocus={autoFocus}
         maxLength={maxLength}
         inputMode={inputMode}
-        className={`w-full bg-asphalt border border-white/10 rounded-lg py-2.5 px-3.5 text-sm text-paper outline-none focus:border-hood-green transition-colors ${
+        className={`w-full bg-asphalt border border-white/10 rounded-lg py-2.5 px-3.5 text-sm text-paper outline-none focus:border-gta6-pink transition-colors ${
           centered ? 'text-center tracking-[6px] text-lg' : ''
         }`}
       />
@@ -322,7 +322,7 @@ function SubmitButton({ children, isSubmitting }) {
     <button
       type="submit"
       disabled={isSubmitting}
-      className="btn-3d w-full bg-neon-purple text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-neon-purple-dim transition-colors disabled:opacity-60"
+      className="btn-3d w-full bg-gta6-pink text-white rounded-lg py-3 text-sm font-bold tracking-[0.5px] hover:bg-gta6-purple transition-colors disabled:opacity-60"
     >
       {isSubmitting ? 'Aguarde...' : children}
     </button>

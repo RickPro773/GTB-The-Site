@@ -273,7 +273,7 @@ export default function RadioSelector({ audio }) {
           >
             <motion.div
               className={`absolute inset-y-0 left-0 rounded-full ${
-                isPlayingAd ? 'bg-logo-blue' : 'bg-gradient-to-r from-logo-purple to-hood-green'
+                isPlayingAd ? 'bg-logo-blue' : 'bg-gradient-to-r from-logo-purple to-gta6-pink'
               }`}
               animate={{ width: `${progressPercent}%` }}
               transition={{ duration: 0.15, ease: 'linear' }}
@@ -299,7 +299,7 @@ export default function RadioSelector({ audio }) {
             disabled={!hasMultipleTracks}
             aria-label="Faixa anterior"
             whileTap={hasMultipleTracks ? { scale: 0.88 } : undefined}
-            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-hood-green enabled:hover:text-hood-green transition-colors"
+            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-gta6-pink enabled:hover:text-gta6-pink transition-colors"
           >
             ⏮
           </motion.button>
@@ -307,7 +307,7 @@ export default function RadioSelector({ audio }) {
           <motion.button
             onClick={togglePlay}
             whileTap={{ scale: 0.9 }}
-            className="btn-3d w-16 h-16 flex items-center justify-center rounded-full bg-neon-purple text-white text-2xl hover:bg-neon-purple-dim transition-colors"
+            className="btn-3d w-16 h-16 flex items-center justify-center rounded-full bg-gta6-pink text-white text-2xl hover:bg-gta6-purple transition-colors"
             aria-label={isPlaying ? 'Pausar' : 'Tocar'}
           >
             {isPlaying ? '⏸' : '▶'}
@@ -318,7 +318,7 @@ export default function RadioSelector({ audio }) {
             disabled={!hasMultipleTracks}
             aria-label="Pular para a próxima música"
             whileTap={hasMultipleTracks ? { scale: 0.88 } : undefined}
-            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-hood-green enabled:hover:text-hood-green transition-colors"
+            className="btn-3d w-12 h-12 flex items-center justify-center rounded-full bg-asphalt border border-white/10 text-paper text-lg disabled:opacity-30 disabled:cursor-not-allowed enabled:hover:border-gta6-pink enabled:hover:text-gta6-pink transition-colors"
           >
             ⏭
           </motion.button>

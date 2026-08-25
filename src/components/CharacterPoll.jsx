@@ -43,7 +43,7 @@ export default function CharacterPoll() {
               onClick={() => vote(char.slug)}
               disabled={hasVoted || isLoading}
               className={`char-card group relative overflow-hidden rounded-lg aspect-[3/4] text-left disabled:cursor-default ${
-                isVoted ? 'ring-2 ring-hood-green' : ''
+                isVoted ? 'ring-2 ring-gta6-pink' : ''
               }`}
               style={{ '--char-theme': char.theme }}
             >

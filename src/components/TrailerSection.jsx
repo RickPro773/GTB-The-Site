@@ -4,7 +4,7 @@ export default function TrailerSection() {
   return (
     <section id="trailer" className="py-24 px-[5vw] text-center">
       <h2 className="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] mb-2">
-        <span className="text-logo-blue text-3d-purple">Trailer</span> Oficial
+        <span className="text-gta6-pink-deep text-3d-purple">Trailer</span> Oficial
       </h2>
       <p className="max-w-[520px] mx-auto text-paper/70 leading-relaxed mb-8">
         O primeiro vídeo do GTB tá sendo produzido pela nossa turma.

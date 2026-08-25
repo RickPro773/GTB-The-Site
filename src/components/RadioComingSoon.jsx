@@ -10,7 +10,7 @@ export default function RadioComingSoon() {
   return (
     <section id="radio" className="py-24 px-[5vw] text-center">
       <h2 className="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[0.9] mb-2">
-        📻 <span className="text-logo-green">Rádio</span> GTB
+        📻 <span className="text-gta6-pink">Rádio</span> GTB
       </h2>
       <p className="max-w-[520px] mx-auto text-paper/70 leading-relaxed mb-10">
         Liga o som e curte a trilha sonora das ruas de Los Brodis. Em breve.

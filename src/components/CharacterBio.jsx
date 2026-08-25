@@ -44,7 +44,7 @@ export default function CharacterBio({ audio }) {
         <p className="text-paper/60 text-sm mb-6">Esse brodi ainda não existe no elenco.</p>
         <Link
           to="/"
-          className="btn-3d bg-neon-purple text-white rounded-lg py-3 px-6 text-sm font-bold hover:bg-neon-purple-dim transition-colors"
+          className="btn-3d bg-gta6-pink text-white rounded-lg py-3 px-6 text-sm font-bold hover:bg-gta6-purple transition-colors"
         >
           Voltar pro site
         </Link>
@@ -75,7 +75,7 @@ export default function CharacterBio({ audio }) {
       >
         <Link
           to="/"
-          className="btn-3d absolute top-6 left-6 z-10 bg-asphalt-2/80 backdrop-blur-sm border border-white/15 text-paper text-xs tracking-[1.5px] uppercase py-2.5 px-4 rounded-lg hover:border-hood-green hover:text-hood-green transition-colors"
+          className="btn-3d absolute top-6 left-6 z-10 bg-asphalt-2/80 backdrop-blur-sm border border-white/15 text-paper text-xs tracking-[1.5px] uppercase py-2.5 px-4 rounded-lg hover:border-gta6-pink hover:text-gta6-pink transition-colors"
         >
           ← Voltar
         </Link>
@@ -116,7 +116,7 @@ export default function CharacterBio({ audio }) {
                     key={src}
                     onClick={() => setActivePhoto(i)}
                     className={`char-card aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
-                      i === activePhoto ? 'border-hood-green' : 'border-transparent'
+                      i === activePhoto ? 'border-gta6-pink' : 'border-transparent'
                     }`}
                   >
                     <LoadingImage

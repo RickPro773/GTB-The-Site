@@ -107,7 +107,7 @@ export const roster = [
     effect: null,
     theme: '#0016f5',
     musicFile: 'gta2d-theme.mp3',
-    bio: 'Cabelo azul, terno impecável e uma calma suspeita perto de carro-forte. GTA2D é o tipo de brodi que aparece no lugar certo, na hora errada — pro resto de todo mundo.',
+    bio: 'no GTA eu sou foda não tenta me matar quando estou com meu trio a chacina vai rolar.',
     stats: [
       { label: 'Estilo', value: 'Executivo' },
       { label: 'Marca Registrada', value: 'Cabelo Azul' },
@@ -124,7 +124,7 @@ export const roster = [
     effect: null,
     theme: '#8f13eb',
     musicFile: 'fotafox-theme.mp3',
-    bio: 'Boné, isqueiro e um galão de gasolina — Fotafox não pergunta, ele já tá correndo. Ninguém sabe explicar direito por que ele é roxo, e ninguém tem coragem de perguntar duas vezes.',
+    bio: 'Maluco Mora dentro do esgoto é pobre e não tem ninguém pra contar inicialmente, ninguém sabe realmente como que sua pele se tornou roxa, mas foda-se porque junto a seus parceiros ele quer dominar essa cidade. suas habilidades são uma durabilidade totalmente fora do normal, força e uma percepção de quem pode manipular ou não.',
     stats: [
       { label: 'Estilo', value: 'Caótico' },
       { label: 'Marca Registrada', value: 'Galão de Gasolina' },

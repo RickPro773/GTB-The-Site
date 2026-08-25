@@ -107,17 +107,56 @@ body {
     0 0 14px rgba(0, 0, 0, 0.3);
 }
 
-/* ---- Hero: imagem de fundo com fallback garantido ---- */
+/* ---- Grão de filme + linhas VHS sutis por cima do site inteiro,
+   estilo trailer promocional: dá textura de "gravação", não deve
+   atrapalhar a leitura. Fixo, não bloqueia clique. ---- */
+.site-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.4) 0px,
+      transparent 1px,
+      transparent 2px
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 100% 3px, 180px 180px;
+}
+
+@keyframes vhsFlicker {
+  0%, 96%, 100% { opacity: 0.05; }
+  97% { opacity: 0.09; }
+  98% { opacity: 0.03; }
+}
+.site-grain {
+  animation: vhsFlicker 6s steps(1) infinite;
+}
 .hero-bg {
   background:
     linear-gradient(
       180deg,
-      rgba(58, 26, 120, 0.35) 0%,
-      rgba(255, 47, 149, 0.12) 45%,
-      rgba(13, 13, 16, 0.65) 80%,
+      rgba(58, 26, 120, 0.45) 0%,
+      rgba(255, 47, 149, 0.22) 40%,
+      rgba(107, 47, 214, 0.25) 65%,
+      rgba(13, 13, 16, 0.8) 88%,
       #0d0d10 100%
     ),
     url('./assets/images/scene2.png') center 20% / cover no-repeat;
+}
+
+/* ---- Faixa de sol/entardecer no topo do hero, tipo arte
+   promocional de GTA VI: gradiente quente cruzando a tela ---- */
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 95, 174, 0.18) 0%, transparent 35%, transparent 65%, rgba(107, 47, 214, 0.22) 100%);
+  pointer-events: none;
 }
 
 /* ---- Botão "pílula" no estilo do material promocional de GTA VI:
@@ -174,7 +213,7 @@ body {
 }
 .char-card:hover {
   transform: translateY(-6px) rotateX(3deg) rotateY(-2deg);
-  box-shadow: 0 24px 40px -12px rgba(0, 0, 0, 0.6), 0 0 30px -8px var(--char-theme, rgba(192, 38, 255, 0.4));
+  box-shadow: 0 24px 40px -12px rgba(0, 0, 0, 0.6), 0 0 30px -8px var(--char-theme, rgba(139, 47, 235, 0.4));
 }
 
 /* ---- Painel flutuante com profundidade: usado na rádio e em

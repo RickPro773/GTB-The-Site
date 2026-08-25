@@ -79,7 +79,7 @@ export default function BlogPost({ auth, onOpenAuth }) {
         <h1 className="font-display text-3xl text-paper mb-3">Post não encontrado</h1>
         <Link
           to="/blog"
-          className="btn-3d bg-neon-purple text-white rounded-lg py-3 px-6 text-sm font-bold hover:bg-neon-purple-dim transition-colors"
+          className="btn-3d bg-gta6-pink text-white rounded-lg py-3 px-6 text-sm font-bold hover:bg-gta6-purple transition-colors"
         >
           Voltar pro blog
         </Link>
@@ -136,14 +136,14 @@ export default function BlogPost({ auth, onOpenAuth }) {
                 disabled={!auth.user}
                 maxLength={2000}
                 rows={3}
-                className="w-full bg-asphalt-2 border border-white/10 rounded-lg py-3 px-4 text-sm text-paper outline-none focus:border-hood-green transition-colors disabled:opacity-50 resize-none"
+                className="w-full bg-asphalt-2 border border-white/10 rounded-lg py-3 px-4 text-sm text-paper outline-none focus:border-gta6-pink transition-colors disabled:opacity-50 resize-none"
               />
               {commentError && <p className="text-red-400 text-xs mt-2">{commentError}</p>}
               <button
                 type={auth.user ? 'submit' : 'button'}
                 onClick={!auth.user ? onOpenAuth : undefined}
                 disabled={isSubmitting}
-                className="btn-3d mt-3 bg-neon-purple text-white rounded-lg py-2.5 px-6 text-sm font-bold hover:bg-neon-purple-dim transition-colors disabled:opacity-60"
+                className="btn-3d mt-3 bg-gta6-pink text-white rounded-lg py-2.5 px-6 text-sm font-bold hover:bg-gta6-purple transition-colors disabled:opacity-60"
               >
                 {auth.user ? (isSubmitting ? 'Enviando...' : 'Comentar') : 'Entrar pra comentar'}
               </button>

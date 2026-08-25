@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import ProfileButton from './ProfileButton'
 
 export default function Header({ onQuadroClick, auth, onOpenAuth }) {
@@ -15,7 +14,7 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
       <div className="flex items-center justify-between py-[18px] px-[5vw]">
         <a
           href="#"
-          className="font-body font-bold text-sm tracking-[3px] text-paper/80 no-underline hover:text-hood-green transition"
+          className="font-body font-bold text-sm tracking-[3px] text-paper/80 no-underline hover:text-gta6-pink transition"
         >
           GTB
         </a>
@@ -23,13 +22,13 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
         <nav className="hidden sm:flex items-center">
           <a
             href="#personagens"
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-gta6-pink"
           >
             Personagens
           </a>
           <a
             href="#radio"
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-gta6-pink"
           >
             Rádio
           </a>
@@ -39,21 +38,15 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           >
             Trailer
           </a>
-          <Link
-            to="/chat"
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
-          >
-            Chat
-          </Link>
           <button
             onClick={onQuadroClick}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-neon-purple bg-transparent border-0 cursor-pointer font-body"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-gta6-pink bg-transparent border-0 cursor-pointer font-body"
           >
             Quadro
           </button>
           <a
             href="#jogar"
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-gta6-pink"
           >
             Jogar
           </a>
@@ -95,14 +88,14 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           <a
             href="#personagens"
             onClick={() => setMobileOpen(false)}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-gta6-pink"
           >
             Personagens
           </a>
           <a
             href="#radio"
             onClick={() => setMobileOpen(false)}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-gta6-pink"
           >
             Rádio
           </a>
@@ -113,23 +106,16 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           >
             Trailer
           </a>
-          <Link
-            to="/chat"
-            onClick={() => setMobileOpen(false)}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
-          >
-            Chat
-          </Link>
           <button
             onClick={handleQuadroClick}
-            className="text-left text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-neon-purple bg-transparent border-0 cursor-pointer font-body"
+            className="text-left text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-gta6-pink bg-transparent border-0 cursor-pointer font-body"
           >
             Quadro
           </button>
           <a
             href="#jogar"
             onClick={() => setMobileOpen(false)}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-hood-green"
+            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-gta6-pink"
           >
             Jogar
           </a>

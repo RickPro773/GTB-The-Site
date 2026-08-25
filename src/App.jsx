@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import StatusBar from './components/StatusBar'
+import ExperimentalBadge from './components/ExperimentalBadge'
 import Header from './components/Header'
 import Intro from './components/Intro'
 import NowPlayingToast from './components/NowPlayingToast'
@@ -68,6 +69,8 @@ function SiteRoutes() {
 
   return (
     <div className="bg-asphalt text-paper font-body overflow-x-hidden">
+      <div className="site-grain" aria-hidden="true" />
+      <ExperimentalBadge />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
@@ -80,7 +83,7 @@ function SiteRoutes() {
                 <Header onQuadroClick={handleQuadroClick} auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />
 
                 <Hero />
-                <Characters />
+                <Reveal><Characters /></Reveal>
                 <Reveal><RadioComingSoon /></Reveal>
                 <Reveal><CharacterPoll /></Reveal>
                 <Reveal><TrailerSection /></Reveal>

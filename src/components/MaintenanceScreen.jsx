@@ -30,7 +30,7 @@ export default function MaintenanceScreen() {
       className="fixed inset-0 z-[99999] flex items-center justify-center bg-asphalt px-6 py-8"
       style={{
         backgroundImage:
-          'radial-gradient(circle at 50% 20%, rgba(192,38,255,.12), transparent 55%)',
+          'radial-gradient(circle at 50% 20%, rgba(255,47,149,.14), transparent 55%)',
       }}
     >
       <div className="max-w-md w-full text-center">
@@ -68,7 +68,7 @@ export default function MaintenanceScreen() {
 
         <button
           onClick={handleReload}
-          className="w-full bg-neon-purple text-white rounded-lg py-3 px-4 text-sm font-bold tracking-[0.5px] mb-5 hover:bg-neon-purple-dim transition"
+          className="w-full bg-gta6-pink text-white rounded-lg py-3 px-4 text-sm font-bold tracking-[0.5px] mb-5 hover:bg-gta6-purple transition"
         >
           🔄 Tentar novamente
         </button>
@@ -111,7 +111,7 @@ export default function MaintenanceScreen() {
                 >
                   <span className="text-paper/80">{servico.nome}</span>
                   {servico.ok ? (
-                    <span className="text-hood-green text-xs font-bold">🟢 Operacional</span>
+                    <span className="text-gta6-pink text-xs font-bold">🟢 Operacional</span>
                   ) : (
                     <span className="text-red-500 text-xs font-bold">🔴 Com falha</span>
                   )}
@@ -120,7 +120,7 @@ export default function MaintenanceScreen() {
             </div>
             <button
               onClick={() => setShowModal(false)}
-              className="w-full bg-neon-purple text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-neon-purple-dim transition"
+              className="w-full bg-gta6-pink text-white rounded-lg py-3 mt-5 text-sm font-bold hover:bg-gta6-purple transition"
             >
               Fechar
             </button>
