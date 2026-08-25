@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* =========================================================
-   GTB — Grande Theft Brodis
+   GTB — Gang's Thief's Brodis
    Fonte oficial (estilo logo GTA) + efeitos que não são
    utilitários simples de Tailwind (vinheta, scanline, cross-fade).
    ========================================================= */
@@ -110,8 +110,33 @@ body {
 /* ---- Hero: imagem de fundo com fallback garantido ---- */
 .hero-bg {
   background:
-    linear-gradient(180deg, rgba(13, 13, 16, 0.2) 0%, rgba(13, 13, 16, 0.55) 55%, #0d0d10 100%),
+    linear-gradient(
+      180deg,
+      rgba(58, 26, 120, 0.35) 0%,
+      rgba(255, 47, 149, 0.12) 45%,
+      rgba(13, 13, 16, 0.65) 80%,
+      #0d0d10 100%
+    ),
     url('./assets/images/scene2.png') center 20% / cover no-repeat;
+}
+
+/* ---- Botão "pílula" no estilo do material promocional de GTA VI:
+   rosa neon, bem arredondado, texto escuro, sem relevo 3D pesado.
+   Uso: className="btn-pill-pink" ---- */
+.btn-pill-pink {
+  background: linear-gradient(180deg, #ff7fc2 0%, #ff2f95 100%);
+  color: #2b0a1c;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(255, 47, 149, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.btn-pill-pink:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 10px 24px rgba(255, 47, 149, 0.45);
+}
+.btn-pill-pink:active {
+  transform: translateY(0);
 }
 
 /* ---- Character card image hover zoom ---- */

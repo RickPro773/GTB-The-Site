@@ -40,12 +40,6 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
             Trailer
           </a>
           <Link
-            to="/blog"
-            className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-logo-purple"
-          >
-            Blog
-          </Link>
-          <Link
             to="/chat"
             className="text-paper no-underline text-sm tracking-[2px] uppercase ml-8 opacity-75 transition hover:opacity-100 hover:text-hood-green"
           >
@@ -119,13 +113,6 @@ export default function Header({ onQuadroClick, auth, onOpenAuth }) {
           >
             Trailer
           </a>
-          <Link
-            to="/blog"
-            onClick={() => setMobileOpen(false)}
-            className="text-paper no-underline text-sm tracking-[2px] uppercase opacity-80 hover:text-logo-purple"
-          >
-            Blog
-          </Link>
           <Link
             to="/chat"
             onClick={() => setMobileOpen(false)}

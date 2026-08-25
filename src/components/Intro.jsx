@@ -114,7 +114,7 @@ export default function Intro({ audio }) {
             Carregando o bairro...
           </div>
           <div className="mt-8 text-[0.6rem] tracking-[2px] text-paper/30 uppercase">
-            Intro Theme &middot; Grande Theft Brodis (Remix)
+            Intro Theme &middot; Gang's Thief's Brodis (Remix)
           </div>
         </div>
 

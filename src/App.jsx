@@ -13,7 +13,7 @@ import Footer from './components/Footer'
 import ComingSoonModal from './components/ComingSoonModal'
 import ErrorToast from './components/ErrorToast'
 import MaintenanceScreen from './components/MaintenanceScreen'
-import RadioSelector from './components/RadioSelector'
+import RadioComingSoon from './components/RadioComingSoon'
 import PatchNotes from './components/PatchNotes'
 import CharacterBio from './components/CharacterBio'
 import BlogList from './components/BlogList'
@@ -81,7 +81,7 @@ function SiteRoutes() {
 
                 <Hero />
                 <Characters />
-                <Reveal><RadioSelector audio={audio} /></Reveal>
+                <Reveal><RadioComingSoon /></Reveal>
                 <Reveal><CharacterPoll /></Reveal>
                 <Reveal><TrailerSection /></Reveal>
                 <Reveal><PatchNotes /></Reveal>

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import LogoGTB from './LogoGTB'
 
-// ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ OK OU EM ATUALIZAÇÃO:
+// ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ CAÍDO OU RODANDO:
 // true  = Operacional (verde)
-// false = Em Atualização (amarelo)
+// false = Com Falha (vermelho)
 const SERVICOS = [
-  { nome: 'Infraestrutura da Plataforma', ok: true },
+  { nome: 'Infraestrutura da Provedora', ok: true },
   { nome: 'Hospedagem Web (Vercel)', ok: true },
   { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
   { nome: 'API de Dados / Personagens', ok: false },
@@ -23,7 +23,7 @@ export default function MaintenanceScreen() {
     window.location.reload()
   }
 
-  const updatingCount = SERVICOS.filter((s) => !s.ok).length
+  const failCount = SERVICOS.filter((s) => !s.ok).length
 
   return (
     <div
@@ -38,31 +38,32 @@ export default function MaintenanceScreen() {
 
         <div className="inline-flex items-center gap-2 bg-warn-yellow/10 border border-warn-yellow/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-warn-yellow uppercase mb-6">
           <span className="w-2 h-2 rounded-full bg-warn-yellow animate-pulse" />
-          Atualização do sistema em andamento
+          Atualizações em andamento
         </div>
 
         <h1 className="font-display text-5xl text-paper mb-4">Manutenção</h1>
 
         <p className="text-paper/65 text-sm leading-relaxed mb-6">
-          Estamos aplicando novas melhorias na plataforma.{' '}
-          <strong className="text-paper">Isso não é uma falha na provedora</strong>, mas sim uma atualização programada do site. Voltamos em breve!
+          A plataforma está temporariamente indisponível por conta de atualizações de componentes{' '}
+          <strong className="text-paper">atualizações podem causar interrupções</strong>.
+          Estamos de olho e o site volta assim que normalizar.
         </p>
 
         <div className="bg-asphalt-2 border border-white/10 rounded-lg p-5 mb-4 text-left">
-          <Row label="Causa" value="Atualização e deploy de recursos" />
+          <Row label="Causa" value="Falha externa do provedor" />
           <Divider />
-          <Row label="Status atual" value="Aplicando novos componentes" valueClass="text-warn-yellow" />
+          <Row label="Status atual" value="Acompanhando resolução" valueClass="text-warn-yellow" />
           <Divider />
           <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
           <Divider />
-          <Row label="ID do evento" value="UPD-2026-SYS-MAINT" mono />
+          <Row label="ID do incidente" value="INC-205-UPD-OUTAGE" mono />
         </div>
 
         <button
           onClick={() => setShowModal(true)}
           className="w-full border border-white/15 text-paper/70 rounded-lg py-2.5 px-4 text-sm font-semibold mb-3 hover:bg-white/5 transition"
         >
-          🔍 Ver status dos serviços ({updatingCount} em atualização)
+          🔍 Ver status dos serviços ({failCount} com falha)
         </button>
 
         <button
@@ -73,11 +74,11 @@ export default function MaintenanceScreen() {
         </button>
 
         <p className="text-paper/40 text-xs leading-relaxed">
-          O acesso será restabelecido automaticamente assim que os novos recursos forem publicados.
+          O acesso será restabelecido automaticamente assim que as atualizações forem concluídas.
         </p>
 
         <div className="mt-6 pt-5 border-t border-white/10">
-          <span className="font-display text-lg text-logo-purple text-3d-purple">GRAND THEFT BRODIS</span>
+          <span className="font-display text-lg text-logo-purple text-3d-purple">GANG'S THIEF'S BRODIS</span>
         </div>
       </div>
 
@@ -100,7 +101,7 @@ export default function MaintenanceScreen() {
               </button>
             </div>
             <p className="text-paper/55 text-sm mb-4">
-              Estado individual dos módulos do GRAND THEFT BRODIS:
+              Estado individual dos módulos do GANG'S THIEF'S BRODIS:
             </p>
             <div className="flex flex-col gap-2.5">
               {SERVICOS.map((servico) => (
@@ -112,7 +113,7 @@ export default function MaintenanceScreen() {
                   {servico.ok ? (
                     <span className="text-hood-green text-xs font-bold">🟢 Operacional</span>
                   ) : (
-                    <span className="text-warn-yellow text-xs font-bold">🟡 Em atualização</span>
+                    <span className="text-red-500 text-xs font-bold">🔴 Com falha</span>
                   )}
                 </div>
               ))}

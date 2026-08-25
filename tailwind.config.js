@@ -28,6 +28,14 @@ export default {
           blue: '#0016f5',
           purple: '#8f13eb',
         },
+        // Paleta inspirada no visual promocional de GTA VI:
+        // rosa neon quente + roxo/azul de entardecer.
+        gta6: {
+          pink: '#ff5fae',
+          'pink-deep': '#ff2f95',
+          purple: '#6b2fd6',
+          violet: '#3a1a78',
+        },
         paper: '#e9e6df',
         warn: {
           yellow: '#ffcf3d',
