@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import LogoGTB from './LogoGTB'
 
-// ⚙️ ONDE VOCÊ CONFIGURA O QUE TÁ OK OU EM ATUALIZAÇÃO:
+// ⚙️ STATUS DOS SERVIÇOS DO PROJETO:
 // true  = Operacional (verde)
-// false = Em Atualização (amarelo)
+// false = Pausado / Desativado (vermelho)
 const SERVICOS = [
-  { nome: 'Infraestrutura da Plataforma', ok: true },
+  { nome: 'Infraestrutura da Plataforma', ok: false },
   { nome: 'Hospedagem Web (Vercel)', ok: true },
-  { nome: 'Servidor de Áudio (Menu Theme)', ok: true },
+  { nome: 'Servidor de Áudio (Menu Theme)', ok: false },
   { nome: 'API de Dados / Personagens', ok: false },
-  { nome: 'Integração com banco de dados', ok: true },
+  { nome: 'Integração com Banco de Dados', ok: false },
 ]
 
 export default function MaintenanceScreen() {
@@ -23,7 +23,7 @@ export default function MaintenanceScreen() {
     window.location.reload()
   }
 
-  const updatingCount = SERVICOS.filter((s) => !s.ok).length
+  const pausedCount = SERVICOS.filter((s) => !s.ok).length
 
   return (
     <div
@@ -36,44 +36,46 @@ export default function MaintenanceScreen() {
       <div className="max-w-md w-full text-center">
         <LogoGTB className="h-14 w-auto mx-auto mb-8" />
 
-        <div className="inline-flex items-center gap-2 bg-warn-yellow/10 border border-warn-yellow/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-warn-yellow uppercase mb-6">
-          <span className="w-2 h-2 rounded-full bg-warn-yellow animate-pulse" />
-          Atualização do sistema em andamento
+        <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/40 py-1.5 px-4 rounded-full text-[0.68rem] font-bold tracking-[1px] text-red-400 uppercase mb-6">
+          <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+          Serviços Pausados
         </div>
 
-        <h1 className="font-display text-5xl text-paper mb-4">Manutenção</h1>
+        <h1 className="font-display text-4xl text-paper mb-4">Atividades Encerradas</h1>
 
         <p className="text-paper/65 text-sm leading-relaxed mb-6">
-          Estamos aplicando novas melhorias na plataforma.{' '}
-          <strong className="text-paper">Isso não é uma falha na provedora</strong>, mas sim uma atualização programada do site. Voltamos em breve!
+          Devido aos <strong className="text-paper">altos custos para manter o servidor ativo</strong>, 
+          decidimos suspender as operações do site no momento. O projeto não foi abandonado em definitivo e <strong className="text-paper">existe a possibilidade de voltarmos no futuro</strong>!
         </p>
 
         <div className="bg-asphalt-2 border border-white/10 rounded-lg p-5 mb-4 text-left">
-          <Row label="Causa" value="Atualização e deploy de recursos" />
+          <Row label="Causa" value="Altos custos de servidor" valueClass="text-red-400" />
           <Divider />
-          <Row label="Status atual" value="Aplicando novos componentes" valueClass="text-warn-yellow" />
+          <Row label="Status atual" value="Operação suspensa" valueClass="text-warn-yellow" />
+          <Divider />
+          <Row label="Perspectiva" value="Possível retorno futuro" valueClass="text-paper/80" />
           <Divider />
           <Row label="Última checagem" value={`Hoje às ${lastChecked}`} />
           <Divider />
-          <Row label="ID do evento" value="UPD-2026-SYS-MAINT" mono />
+          <Row label="ID do evento" value="OFF-2026-SYS-PAUSED" mono />
         </div>
 
         <button
           onClick={() => setShowModal(true)}
           className="w-full border border-white/15 text-paper/70 rounded-lg py-2.5 px-4 text-sm font-semibold mb-3 hover:bg-white/5 transition"
         >
-          🔍 Ver status dos serviços ({updatingCount} em atualização)
+          🔍 Ver status dos módulos ({pausedCount} desativados)
         </button>
 
         <button
           onClick={handleReload}
           className="w-full bg-neon-purple text-white rounded-lg py-3 px-4 text-sm font-bold tracking-[0.5px] mb-5 hover:bg-neon-purple-dim transition"
         >
-          🔄 Tentar novamente
+          🔄 Verificar novamente
         </button>
 
         <p className="text-paper/40 text-xs leading-relaxed">
-          O acesso será restabelecido automaticamente assim que os novos recursos forem publicados.
+          Agradecemos pelo apoio de todos até aqui. Fiquem atentos para futuros retornos!
         </p>
 
         <div className="mt-6 pt-5 border-t border-white/10">
@@ -91,7 +93,7 @@ export default function MaintenanceScreen() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-start mb-1">
-              <h3 className="text-paper font-bold text-lg">Diagnóstico do sistema</h3>
+              <h3 className="text-paper font-bold text-lg">Diagnóstico do Sistema</h3>
               <button
                 onClick={() => setShowModal(false)}
                 className="text-paper/50 hover:text-paper transition text-lg leading-none"
@@ -100,7 +102,7 @@ export default function MaintenanceScreen() {
               </button>
             </div>
             <p className="text-paper/55 text-sm mb-4">
-              Estado individual dos módulos do GRAND THEFT BRODIS:
+              Estado atual dos módulos do GRAND THEFT BRODIS:
             </p>
             <div className="flex flex-col gap-2.5">
               {SERVICOS.map((servico) => (
@@ -112,7 +114,7 @@ export default function MaintenanceScreen() {
                   {servico.ok ? (
                     <span className="text-hood-green text-xs font-bold">🟢 Operacional</span>
                   ) : (
-                    <span className="text-warn-yellow text-xs font-bold">🟡 Em atualização</span>
+                    <span className="text-red-400 text-xs font-bold">🔴 Desativado</span>
                   )}
                 </div>
               ))}
