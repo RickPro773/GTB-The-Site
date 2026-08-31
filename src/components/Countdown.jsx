@@ -31,7 +31,7 @@ export default function Countdown() {
 
             <div>
               <div className="font-display text-sm text-paper">
-                Grand Theft Brodis
+                Gang's Thief's Brodis
               </div>
 
               <div className="text-xs text-paper/40">
@@ -66,7 +66,7 @@ export default function Countdown() {
               transition={{ delay: 0.45, duration: 0.6 }}
               className="font-display text-2xl leading-tight text-paper sm:text-3xl"
             >
-              Olá a todos!
+              Olá a todos,
             </motion.h1>
 
             <motion.div
