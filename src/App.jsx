@@ -1,6 +1,8 @@
+
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
+
 import StatusBar from './components/StatusBar'
 import ExperimentalBadge from './components/ExperimentalBadge'
 import Header from './components/Header'
@@ -23,15 +25,12 @@ import Countdown from './components/Countdown'
 import { useAudioPlayer } from './hooks/useAudioPlayer'
 import { useComingSoon } from './hooks/useComingSoon'
 
-// ⚙️ Troque para true quando o site precisar ficar em manutenção.
-// Com isso ativo, o site inteiro (intro, sons, tudo) para de
-// carregar e só a tela de aviso aparece. Tem prioridade sobre o
-// countdown — se os dois estiverem ativos, a manutenção vence.
+// ⚙️ Modo manutenção
 const IN_MAINTENANCE = false
 
-// ⚙️ Troque para false quando quiser pular o countdown direto pro
-// site (ex: enquanto você está testando/ajustando o resto do site
-// no dia a dia, sem precisar esperar o cronômetro de verdade).
+// ⚙️ Enquanto estiver true, somente o comunicado aparece.
+// O site inteiro NÃO é montado por baixo.
+// Isso também impede a intro e seus áudios de serem executados.
 const COUNTDOWN_ENABLED = true
 
 const SOCIAL_ERRORS = {
@@ -44,26 +43,14 @@ export default function App() {
     return <MaintenanceScreen />
   }
 
-  return <CountdownGate />
-}
+  // 🔒 Comunicado ativo:
+  // SiteRoutes nem chega a ser montado.
+  // Portanto Intro, AudioPlayer e qualquer áudio ficam desligados.
+  if (COUNTDOWN_ENABLED) {
+    return <Countdown />
+  }
 
-/**
- * Controla se o countdown ou o site de verdade está visível. O
- * site inteiro (SiteRoutes) já monta por baixo o tempo todo — ele
- * só fica coberto pelo <Countdown> em tela cheia até o tempo
- * zerar. Isso é proposital: quando o countdown termina, a
- * transição é instantânea (o site já estava pronto por baixo),
- * sem precisar carregar nada na hora.
- */
-function CountdownGate() {
-  const [revealed, setRevealed] = useState(!COUNTDOWN_ENABLED)
-
-  return (
-    <>
-      <SiteRoutes />
-      {!revealed && <Countdown onFinish={() => setRevealed(true)} />}
-    </>
-  )
+  return <SiteRoutes />
 }
 
 function SiteRoutes() {
@@ -87,6 +74,7 @@ function SiteRoutes() {
     <div className="bg-asphalt text-paper font-body overflow-x-hidden">
       <div className="site-grain" aria-hidden="true" />
       <ExperimentalBadge />
+
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route
@@ -99,16 +87,36 @@ function SiteRoutes() {
                 <Header onQuadroClick={handleQuadroClick} />
 
                 <Hero />
-                <Reveal><Characters /></Reveal>
-                <Reveal><CharacterPoll /></Reveal>
-                <Reveal><TrailerSection /></Reveal>
-                <Reveal><PatchNotes /></Reveal>
-                <Reveal><PlaySection /></Reveal>
+
+                <Reveal>
+                  <Characters />
+                </Reveal>
+
+                <Reveal>
+                  <CharacterPoll />
+                </Reveal>
+
+                <Reveal>
+                  <TrailerSection />
+                </Reveal>
+
+                <Reveal>
+                  <PatchNotes />
+                </Reveal>
+
+                <Reveal>
+                  <PlaySection />
+                </Reveal>
+
                 <Footer onSocialClick={handleSocialClick} />
               </PageTransition>
             }
           />
-          <Route path="/personagem/:slug" element={<CharacterBio audio={audio} />} />
+
+          <Route
+            path="/personagem/:slug"
+            element={<CharacterBio audio={audio} />}
+          />
         </Routes>
       </AnimatePresence>
 
@@ -125,7 +133,11 @@ function SiteRoutes() {
 
       <AnimatePresence>
         {socialError && (
-          <ErrorToast key="error-toast" message={socialError} onClose={() => setSocialError(null)} />
+          <ErrorToast
+            key="error-toast"
+            message={socialError}
+            onClose={() => setSocialError(null)}
+          />
         )}
       </AnimatePresence>
     </div>
