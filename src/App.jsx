@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import StatusBar from './components/StatusBar'
 import ExperimentalBadge from './components/ExperimentalBadge'
 import Header from './components/Header'
@@ -14,24 +15,24 @@ import Footer from './components/Footer'
 import ComingSoonModal from './components/ComingSoonModal'
 import ErrorToast from './components/ErrorToast'
 import MaintenanceScreen from './components/MaintenanceScreen'
-import RadioComingSoon from './components/RadioComingSoon'
 import PatchNotes from './components/PatchNotes'
 import CharacterBio from './components/CharacterBio'
-import BlogList from './components/BlogList'
-import BlogPost from './components/BlogPost'
-import ChatPage from './components/ChatPage'
 import PageTransition from './components/PageTransition'
 import Reveal from './components/Reveal'
-import AuthModal from './components/AuthModal'
+import Countdown from './components/Countdown'
 import { useAudioPlayer } from './hooks/useAudioPlayer'
 import { useComingSoon } from './hooks/useComingSoon'
-import { useAuth } from './hooks/useAuth'
-import { useState } from 'react'
 
 // ⚙️ Troque para true quando o site precisar ficar em manutenção.
 // Com isso ativo, o site inteiro (intro, sons, tudo) para de
-// carregar e só a tela de aviso aparece.
+// carregar e só a tela de aviso aparece. Tem prioridade sobre o
+// countdown — se os dois estiverem ativos, a manutenção vence.
 const IN_MAINTENANCE = false
+
+// ⚙️ Troque para false quando quiser pular o countdown direto pro
+// site (ex: enquanto você está testando/ajustando o resto do site
+// no dia a dia, sem precisar esperar o cronômetro de verdade).
+const COUNTDOWN_ENABLED = true
 
 const SOCIAL_ERRORS = {
   Discord: 'Servidor do Discord ainda não disponível. Volte em breve.',
@@ -39,20 +40,35 @@ const SOCIAL_ERRORS = {
 }
 
 export default function App() {
-  // Enquanto em manutenção, nenhum hook de áudio/intro roda — a
-  // tela de manutenção é tudo que existe, sem som nenhum.
   if (IN_MAINTENANCE) {
     return <MaintenanceScreen />
   }
 
-  return <SiteRoutes />
+  return <CountdownGate />
+}
+
+/**
+ * Controla se o countdown ou o site de verdade está visível. O
+ * site inteiro (SiteRoutes) já monta por baixo o tempo todo — ele
+ * só fica coberto pelo <Countdown> em tela cheia até o tempo
+ * zerar. Isso é proposital: quando o countdown termina, a
+ * transição é instantânea (o site já estava pronto por baixo),
+ * sem precisar carregar nada na hora.
+ */
+function CountdownGate() {
+  const [revealed, setRevealed] = useState(!COUNTDOWN_ENABLED)
+
+  return (
+    <>
+      <SiteRoutes />
+      {!revealed && <Countdown onFinish={() => setRevealed(true)} />}
+    </>
+  )
 }
 
 function SiteRoutes() {
   const audio = useAudioPlayer()
   const location = useLocation()
-  const auth = useAuth()
-  const [authModalOpen, setAuthModalOpen] = useState(false)
   const { content, showComingSoon, closeComingSoon } = useComingSoon()
   const [socialError, setSocialError] = useState(null)
 
@@ -80,11 +96,10 @@ function SiteRoutes() {
                 <StatusBar />
                 <Intro audio={audio} />
                 <NowPlayingToast label={audio.nowPlayingLabel} />
-                <Header onQuadroClick={handleQuadroClick} auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />
+                <Header onQuadroClick={handleQuadroClick} />
 
                 <Hero />
                 <Reveal><Characters /></Reveal>
-                <Reveal><RadioComingSoon /></Reveal>
                 <Reveal><CharacterPoll /></Reveal>
                 <Reveal><TrailerSection /></Reveal>
                 <Reveal><PatchNotes /></Reveal>
@@ -94,15 +109,6 @@ function SiteRoutes() {
             }
           />
           <Route path="/personagem/:slug" element={<CharacterBio audio={audio} />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route
-            path="/blog/:slug"
-            element={<BlogPost auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />}
-          />
-          <Route
-            path="/chat"
-            element={<ChatPage auth={auth} onOpenAuth={() => setAuthModalOpen(true)} />}
-          />
         </Routes>
       </AnimatePresence>
 
@@ -114,12 +120,6 @@ function SiteRoutes() {
             message={content.message}
             onClose={closeComingSoon}
           />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {authModalOpen && (
-          <AuthModal key="auth-modal" auth={auth} onClose={() => setAuthModalOpen(false)} />
         )}
       </AnimatePresence>
 
