@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import trailerImg from '../assets/images/trailer-img.png'
 
 export default function TrailerSection() {
@@ -10,7 +11,13 @@ export default function TrailerSection() {
         O primeiro vídeo do GTB tá sendo produzido pela nossa turma.
       </p>
 
-      <div className="panel-3d max-w-2xl mx-auto rounded-xl border border-white/10 bg-asphalt-2 overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ type: 'spring', stiffness: 80, damping: 18 }}
+        className="panel-3d max-w-2xl mx-auto rounded-xl border border-white/10 bg-asphalt-2 overflow-hidden"
+      >
         <div className="aspect-video flex items-center justify-center p-6 bg-gradient-to-b from-asphalt-2 to-asphalt">
           <img
             src={trailerImg}
@@ -22,7 +29,7 @@ export default function TrailerSection() {
           <span className="w-1.5 h-1.5 rounded-full bg-warn-yellow animate-pulse" />
           <span className="font-display text-lg text-warn-yellow tracking-wide">Em Breve</span>
         </div>
-      </div>
+      </motion.div>
     </section>
   )
 }

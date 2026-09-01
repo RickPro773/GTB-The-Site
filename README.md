@@ -44,6 +44,37 @@ preservados)" mais abaixo.
 - Sistema de votos (`/api/vote`, `/api/votes`) via Vercel KV —
   esse é o único endpoint de backend que sobrou
 
+## Vídeo de fundo do Hero (modular)
+
+O Hero suporta um vídeo de fundo em loop, no estilo dos sites de
+trailer de jogo AAA (fundo em movimento, texto por cima) — mas é
+totalmente opcional e detectado automaticamente: se não tiver
+vídeo nenhum, o Hero usa o fundo de imagem de sempre, sem quebrar
+nada.
+
+**Pra ativar o vídeo de fundo:** salve um único arquivo `.mp4`
+dentro de `src/assets/video/`. Recomendado: resolução 1920×1080,
+poucos segundos de duração, em loop, tamanho de arquivo pequeno
+(o ideal é bem abaixo de 10 MB pra não pesar o carregamento). O
+vídeo já sai mutado por padrão (necessário pra autoplay funcionar
+em qualquer navegador).
+
+Se colocar mais de um `.mp4` na pasta, só o primeiro encontrado é
+usado — melhor manter só um arquivo lá.
+
+## Parallax na rolagem
+
+Hero e a seção final (`PlaySection`) têm um leve efeito de
+parallax: o conteúdo se desloca numa velocidade ligeiramente
+diferente da rolagem da página, dando sensação de profundidade —
+efeito comum em sites de trailer imersivos. Implementado via
+`src/hooks/useParallax.js` (baseado no `useScroll`/`useTransform`
+do Framer Motion). Pra aplicar em uma seção nova:
+```js
+const [sectionRef, parallaxY] = useParallax(50) // 50 = intensidade em px
+// depois: <motion.div ref={sectionRef} style={{ y: parallaxY }}>...</motion.div>
+```
+
 ## Countdown
 
 O site inteiro fica coberto por uma tela de contagem regressiva
@@ -52,13 +83,14 @@ enquanto o tempo não zera. O resto do site (Hero, Personagens,
 etc) já carrega por baixo o tempo todo, só fica escondido atrás do
 countdown; assim, quando o tempo zera, a transição é instantânea.
 
-**Pra mudar a data/hora alvo:** edite a constante `TARGET_DATE` no
-topo de `src/components/Countdown.jsx`:
+**Data de lançamento confirmada: 04 de setembro de 2026, 16h
+(horário de Brasília).** Já está configurada em
+`src/components/Countdown.jsx`:
 ```js
-const TARGET_DATE = new Date('2026-09-15T20:00:00-03:00')
+const TARGET_DATE = new Date('2026-09-04T16:00:00-03:00')
 ```
 Formato: `AAAA-MM-DDTHH:MM:SS-03:00` (o `-03:00` é o fuso de
-Brasília — ajuste se quiser outro fuso).
+Brasília — ajuste se quiser outro fuso, ou se a data mudar).
 
 **Pra testar o site sem esperar o countdown zerar:** abra
 `src/App.jsx` e troque:
